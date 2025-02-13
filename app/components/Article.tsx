@@ -11,20 +11,17 @@ interface ArticleMetadata {
 }
 
 interface ArticleProps {
-  // Direct props
   title?: string;
   content?: string;
   image?: string;
   description?: string;
   date?: string;
   author?: string;
-  // Path-based props
   path?: string;
 }
 
 const BASE_URL = "https://cg-blog-articles.pages.dev";
 
-// Custom components for ReactMarkdown
 const components = {
   p: ({ children, ...props }: React.HTMLProps<HTMLParagraphElement>) => {
     const text = children?.toString() || "";
@@ -64,16 +61,33 @@ export function Article(props: ArticleProps) {
 
       try {
         setLoading(true);
-        // Fetch markdown content
         const markdownResponse = await fetch(`${BASE_URL}/${props.path}.md`);
         if (!markdownResponse.ok)
           throw new Error("Failed to fetch markdown content");
         const markdownContent = await markdownResponse.text();
 
-        // Fetch metadata
         const metadataResponse = await fetch(`${BASE_URL}/${props.path}.json`);
         if (!metadataResponse.ok) throw new Error("Failed to fetch metadata");
         const metadataContent = await metadataResponse.json();
+
+        // Image fallback check
+        if (!metadataContent.image) {
+          const extensions = [".jpg", ".jpeg", ".png", ".webp"];
+          let imageUrl: string | null = null;
+          for (const ext of extensions) {
+            const url = `${BASE_URL}/${props.path}${ext}`;
+            try {
+              const response = await fetch(url);
+              if (response.ok) {
+                imageUrl = url;
+                break;
+              }
+            } catch (err) {
+              // Ignore fetch errors
+            }
+          }
+          if (imageUrl) metadataContent.image = imageUrl;
+        }
 
         setContent(markdownContent);
         setMetadata(metadataContent);
@@ -86,9 +100,7 @@ export function Article(props: ArticleProps) {
       }
     }
 
-    if (props.path) {
-      fetchContent();
-    }
+    if (props.path) fetchContent();
   }, [props.path]);
 
   if (error) {
@@ -96,7 +108,14 @@ export function Article(props: ArticleProps) {
   }
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div
+          className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"
+          data-testid="loading-spinner"
+        />
+      </div>
+    );
   }
 
   if (!metadata || !content) {
@@ -105,15 +124,12 @@ export function Article(props: ArticleProps) {
 
   return (
     <article className="container mx-auto max-w-3xl px-4 py-8">
-      {/* Header Section */}
       <header className="mb-8">
         {metadata.title && (
           <h1 className="text-3xl font-bold mb-4 text-center">
             {metadata.title}
           </h1>
         )}
-
-        {/* Meta Information */}
         <div className="space-y-3">
           {(metadata.author || metadata.date) && (
             <div className="flex items-center justify-center gap-3 text-gray-600">
@@ -126,7 +142,6 @@ export function Article(props: ArticleProps) {
               )}
             </div>
           )}
-
           {metadata.description && (
             <p className="text-base text-gray-600 text-center">
               {metadata.description}
@@ -135,7 +150,6 @@ export function Article(props: ArticleProps) {
         </div>
       </header>
 
-      {/* Featured Image */}
       {metadata.image && (
         <div className="mb-8">
           <img
@@ -146,7 +160,6 @@ export function Article(props: ArticleProps) {
         </div>
       )}
 
-      {/* Article Content */}
       <div className="prose max-w-none">
         <ReactMarkdown components={components}>{content}</ReactMarkdown>
       </div>
