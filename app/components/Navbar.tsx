@@ -43,7 +43,7 @@ export function Navbar() {
                   About Me
                 </Link>
                 <a
-                  href="https://github.com"
+                  href="https://github.com/Creative-Geek"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 p-2 hover:bg-accent rounded-md"
@@ -52,7 +52,7 @@ export function Navbar() {
                   <span>GitHub Profile</span>
                 </a>
                 <a
-                  href="https://linkedin.com"
+                  href="https://www.linkedin.com/in/ahmed-taha-thecg"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 p-2 hover:bg-accent rounded-md"
