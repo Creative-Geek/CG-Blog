@@ -70,7 +70,18 @@ export function Article(props: ArticleProps) {
         if (!metadataResponse.ok) throw new Error("Failed to fetch metadata");
         const metadataContent = await metadataResponse.json();
 
-        // Image fallback check
+        // Ensure image path is absolute
+        if (
+          metadataContent.image &&
+          !metadataContent.image.startsWith("http")
+        ) {
+          metadataContent.image = `${BASE_URL}/${props.path
+            .split("/")
+            .slice(0, -1)
+            .join("/")}/${metadataContent.image}`;
+        }
+
+        // Image fallback check (keep existing behavior)
         if (!metadataContent.image) {
           const extensions = [".jpg", ".jpeg", ".png", ".webp"];
           let imageUrl: string | null = null;
