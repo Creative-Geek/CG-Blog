@@ -55,7 +55,7 @@ export function Article({
           )}
 
           {description && (
-            <p className="text-lg text-gray-600 text-center">{description}</p>
+            <p className="text-base text-gray-600 text-center">{description}</p>
           )}
         </div>
       </header>

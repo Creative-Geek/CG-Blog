@@ -30,9 +30,9 @@ export default function About() {
       title="About Creative Geek"
       content={sampleMarkdown}
       image="https://picsum.photos/800/400"
-      description="A creative developer passionate about building amazing web experiences"
-      author="John Doe"
-      date="February 13, 2024"
+      description="A creative developer passionate about building amazing experiences"
+      author="Ahmed Taha"
+      date="February 13, 2025"
     />
   );
 }
