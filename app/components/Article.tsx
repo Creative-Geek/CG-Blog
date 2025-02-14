@@ -20,7 +20,7 @@ interface ArticleProps {
   path?: string;
 }
 
-const BASE_URL = "https://cg-blog-articles.pages.dev";
+const BASE_URL = "http://192.168.1.30:8000";
 
 const components = {
   p: ({ children, ...props }: React.HTMLProps<HTMLParagraphElement>) => {
@@ -61,10 +61,17 @@ export function Article(props: ArticleProps) {
 
       try {
         setLoading(true);
+        // console.log(
+        //   "fetching content for",
+        //   props.path,
+        //   "at",
+        //   `${BASE_URL}/${props.path}.md`
+        // );
         const markdownResponse = await fetch(`${BASE_URL}/${props.path}.md`);
         if (!markdownResponse.ok)
           throw new Error("Failed to fetch markdown content");
         const markdownContent = await markdownResponse.text();
+        // console.log(markdownContent);
 
         const metadataResponse = await fetch(`${BASE_URL}/${props.path}.json`);
         if (!metadataResponse.ok) throw new Error("Failed to fetch metadata");
