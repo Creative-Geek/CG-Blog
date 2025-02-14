@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "../components/ui/card";
 
-const BASE_URL = "https://c82cbbf6.cg-blog-articles.pages.dev";
+import { BASE_URL } from "~/config/constants";
 
 interface ArticleCardProps {
   title?: string;

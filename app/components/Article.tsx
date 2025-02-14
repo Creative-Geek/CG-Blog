@@ -1,6 +1,7 @@
 import ReactMarkdown from "react-markdown";
 import { startsWithArabic, containsArabic } from "~/lib/utils";
 import { useEffect, useState } from "react";
+import { BASE_URL } from "~/config/constants";
 
 interface ArticleMetadata {
   title: string;
@@ -19,8 +20,6 @@ interface ArticleProps {
   author?: string;
   path?: string;
 }
-
-const BASE_URL = "https://c82cbbf6.cg-blog-articles.pages.dev";
 
 const components = {
   // Paragraph component
