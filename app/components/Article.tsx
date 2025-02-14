@@ -83,10 +83,13 @@ const components = {
     );
   },
   // List components
-  ul: ({ children, ...props }) => {
-    // Check the first list item's text for RTL
+  ul: ({ children, ...props }: React.HTMLProps<HTMLUListElement>) => {
+    // Check both first child and all children for Arabic content
     const firstChild = children?.[0]?.props?.children?.[0]?.toString() || "";
-    const isRTL = startsWithArabic(firstChild);
+    const isRTLFirst = startsWithArabic(firstChild);
+    const isRTLAll = containsArabic(children);
+    const isRTL = isRTLFirst || isRTLAll;
+
     return (
       <ul
         {...props}
@@ -113,21 +116,7 @@ const components = {
       </ol>
     );
   },
-  // Updated unordered list component:
-  ul: ({ children, ...props }: React.HTMLProps<HTMLUListElement>) => {
-    const isRTL = containsArabic(children);
-    return (
-      <ul
-        {...props}
-        dir={isRTL ? "rtl" : "ltr"}
-        className={`list-disc ${
-          isRTL ? "mr-6 text-right" : "ml-6 text-left"
-        } mb-4`}
-      >
-        {children}
-      </ul>
-    );
-  },
+
   // Updated list item component:
   li: ({ children, ...props }: React.HTMLProps<HTMLLIElement>) => {
     const isRTL = containsArabic(children);
