@@ -7,6 +7,7 @@ export default function Blog() {
         <h1 className="text-2xl font-bold">Blog</h1>
         <p>Welcome to the blog page!</p>
       </div> */}
+      <title>CG Blog</title>
       <div className="mx-auto max-w-3xl px-4 py-8">
         <h2 className="text-xl font-bold mb-5">Latest Posts</h2>
         <ArticleCard

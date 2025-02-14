@@ -1,5 +1,5 @@
 import ReactMarkdown from "react-markdown";
-import { startsWithArabic } from "~/lib/utils";
+import { startsWithArabic, containsArabic } from "~/lib/utils";
 import { useEffect, useState } from "react";
 
 interface ArticleMetadata {
@@ -20,13 +20,12 @@ interface ArticleProps {
   path?: string;
 }
 
-const BASE_URL = "http://192.168.1.30:8000";
+const BASE_URL = "https://cg-blog-articles.pages.dev";
 
 const components = {
+  // Paragraph component
   p: ({ children, ...props }: React.HTMLProps<HTMLParagraphElement>) => {
-    const text = children?.toString() || "";
-    const isRTL = startsWithArabic(text);
-
+    const isRTL = containsArabic(children);
     return (
       <p
         {...props}
@@ -35,6 +34,111 @@ const components = {
       >
         {children}
       </p>
+    );
+  },
+  // Heading components
+  h1: ({ children, ...props }) => {
+    const text = children?.toString() || "";
+    const isRTL = startsWithArabic(text);
+    return (
+      <h1
+        {...props}
+        dir={isRTL ? "rtl" : "ltr"}
+        className={`text-4xl font-bold mb-4 ${
+          isRTL ? "text-right" : "text-left"
+        }`}
+      >
+        {children}
+      </h1>
+    );
+  },
+  h2: ({ children, ...props }) => {
+    const text = children?.toString() || "";
+    const isRTL = startsWithArabic(text);
+    return (
+      <h2
+        {...props}
+        dir={isRTL ? "rtl" : "ltr"}
+        className={`text-3xl font-bold mb-3 ${
+          isRTL ? "text-right" : "text-left"
+        }`}
+      >
+        {children}
+      </h2>
+    );
+  },
+  h3: ({ children, ...props }) => {
+    const text = children?.toString() || "";
+    const isRTL = startsWithArabic(text);
+    return (
+      <h3
+        {...props}
+        dir={isRTL ? "rtl" : "ltr"}
+        className={`text-2xl font-bold mb-2 ${
+          isRTL ? "text-right" : "text-left"
+        }`}
+      >
+        {children}
+      </h3>
+    );
+  },
+  // List components
+  ul: ({ children, ...props }) => {
+    // Check the first list item's text for RTL
+    const firstChild = children?.[0]?.props?.children?.[0]?.toString() || "";
+    const isRTL = startsWithArabic(firstChild);
+    return (
+      <ul
+        {...props}
+        dir={isRTL ? "rtl" : "ltr"}
+        className={`list-disc ${
+          isRTL ? "mr-6 text-right" : "ml-6 text-left"
+        } mb-4`}
+      >
+        {children}
+      </ul>
+    );
+  },
+  ol: ({ children, ...props }: React.HTMLProps<HTMLOListElement>) => {
+    const isRTL = containsArabic(children);
+    return (
+      <ol
+        {...props}
+        dir={isRTL ? "rtl" : "ltr"}
+        className={`list-decimal ${
+          isRTL ? "mr-6 text-right" : "ml-6 text-left"
+        } mb-4`}
+      >
+        {children}
+      </ol>
+    );
+  },
+  // Updated unordered list component:
+  ul: ({ children, ...props }: React.HTMLProps<HTMLUListElement>) => {
+    const isRTL = containsArabic(children);
+    return (
+      <ul
+        {...props}
+        dir={isRTL ? "rtl" : "ltr"}
+        className={`list-disc ${
+          isRTL ? "mr-6 text-right" : "ml-6 text-left"
+        } mb-4`}
+      >
+        {children}
+      </ul>
+    );
+  },
+  // Updated list item component:
+  li: ({ children, ...props }: React.HTMLProps<HTMLLIElement>) => {
+    const isRTL = containsArabic(children);
+    return (
+      <li
+        {...props}
+        dir={isRTL ? "rtl" : "ltr"}
+        className={isRTL ? "text-right" : "text-left"}
+      >
+        {children}
+      </li>
     );
   },
 };
@@ -61,23 +165,15 @@ export function Article(props: ArticleProps) {
 
       try {
         setLoading(true);
-        // console.log(
-        //   "fetching content for",
-        //   props.path,
-        //   "at",
-        //   `${BASE_URL}/${props.path}.md`
-        // );
         const markdownResponse = await fetch(`${BASE_URL}/${props.path}.md`);
         if (!markdownResponse.ok)
           throw new Error("Failed to fetch markdown content");
         const markdownContent = await markdownResponse.text();
-        // console.log(markdownContent);
 
         const metadataResponse = await fetch(`${BASE_URL}/${props.path}.json`);
         if (!metadataResponse.ok) throw new Error("Failed to fetch metadata");
         const metadataContent = await metadataResponse.json();
 
-        // Ensure image path is absolute
         if (
           metadataContent.image &&
           !metadataContent.image.startsWith("http")
@@ -88,7 +184,6 @@ export function Article(props: ArticleProps) {
             .join("/")}/${metadataContent.image}`;
         }
 
-        // Image fallback check (keep existing behavior)
         if (!metadataContent.image) {
           const extensions = [".jpg", ".jpeg", ".png", ".webp"];
           let imageUrl: string | null = null;
@@ -140,47 +235,58 @@ export function Article(props: ArticleProps) {
     return <div>No content available</div>;
   }
 
+  const isRTLTitle = startsWithArabic(metadata.title);
+
   return (
-    <article className="container mx-auto max-w-3xl px-4 py-8">
-      <header className="mb-8">
-        {metadata.title && (
-          <h1 className="text-3xl font-bold mb-4 text-center">
-            {metadata.title}
-          </h1>
+    <>
+      <title>{metadata.title}</title>
+      <article className="container mx-auto max-w-3xl px-4 py-8">
+        <header className="mb-8">
+          {metadata.title && (
+            <h1
+              className="text-3xl font-bold mb-4 text-center"
+              dir={isRTLTitle ? "rtl" : "ltr"}
+            >
+              {metadata.title}
+            </h1>
+          )}
+          <div className="space-y-3">
+            {(metadata.author || metadata.date) && (
+              <div className="flex items-center justify-center gap-3 text-gray-600">
+                {metadata.author && (
+                  <span className="font-medium">{metadata.author}</span>
+                )}
+                {metadata.author && metadata.date && <span>•</span>}
+                {metadata.date && (
+                  <time className="text-sm">{metadata.date}</time>
+                )}
+              </div>
+            )}
+            {metadata.description && (
+              <p
+                className="text-base text-gray-600 text-center"
+                dir={startsWithArabic(metadata.description) ? "rtl" : "ltr"}
+              >
+                {metadata.description}
+              </p>
+            )}
+          </div>
+        </header>
+
+        {metadata.image && (
+          <div className="mb-8">
+            <img
+              src={metadata.image}
+              alt={metadata.title || "Article featured image"}
+              className="w-full h-auto rounded-lg shadow-md"
+            />
+          </div>
         )}
-        <div className="space-y-3">
-          {(metadata.author || metadata.date) && (
-            <div className="flex items-center justify-center gap-3 text-gray-600">
-              {metadata.author && (
-                <span className="font-medium">{metadata.author}</span>
-              )}
-              {metadata.author && metadata.date && <span>•</span>}
-              {metadata.date && (
-                <time className="text-sm">{metadata.date}</time>
-              )}
-            </div>
-          )}
-          {metadata.description && (
-            <p className="text-base text-gray-600 text-center">
-              {metadata.description}
-            </p>
-          )}
-        </div>
-      </header>
 
-      {metadata.image && (
-        <div className="mb-8">
-          <img
-            src={metadata.image}
-            alt={metadata.title || "Article featured image"}
-            className="w-full h-auto rounded-lg shadow-md"
-          />
+        <div className="prose max-w-none">
+          <ReactMarkdown components={components}>{content}</ReactMarkdown>
         </div>
-      )}
-
-      <div className="prose max-w-none">
-        <ReactMarkdown components={components}>{content}</ReactMarkdown>
-      </div>
-    </article>
+      </article>
+    </>
   );
 }
