@@ -10,14 +10,7 @@ export default function Blog() {
       <title>CG Blog</title>
       <div className="mx-auto max-w-3xl px-4 py-8">
         <h2 className="text-xl font-bold mb-5">Latest Posts</h2>
-        <ArticleCard
-          title="title"
-          description="description"
-          image="image"
-          date="date"
-          author="author"
-          path="fontpreviewer"
-        />
+        <ArticleCard path="Articles/Test" />
       </div>
     </>
   );

@@ -20,7 +20,7 @@ interface ArticleProps {
   path?: string;
 }
 
-const BASE_URL = "https://cg-blog-articles.pages.dev";
+const BASE_URL = "https://c82cbbf6.cg-blog-articles.pages.dev";
 
 const components = {
   // Paragraph component
