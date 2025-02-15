@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { useLocation } from "react-router-dom";
 import ArticleCard from "../components/articleCard";
-import { BASE_URL } from "~/config/constants";
+import { BASE_URL, NAME } from "~/config/constants";
 
 interface Article {
   name: string;
@@ -102,7 +102,7 @@ export default function Blog() {
 
   return (
     <>
-      <title>CG Blog</title>
+      <title>{`${NAME}'s Blog`}</title>
       <BlogContent key={location.key} />
     </>
   );
