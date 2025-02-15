@@ -237,7 +237,7 @@ export function Article(props: ArticleProps) {
         <header className="mb-8">
           {metadata.title && (
             <h1
-              className="text-3xl font-bold mb-4 text-center"
+              className="text-3xl font-bold mb-4 text-center text-foreground"
               dir={isRTLTitle ? "rtl" : "ltr"}
             >
               {metadata.title}
@@ -245,19 +245,19 @@ export function Article(props: ArticleProps) {
           )}
           <div className="space-y-3">
             {(metadata.author || metadata.date) && (
-              <div className="flex items-center justify-center gap-3 text-gray-600">
+              <div className="flex items-center justify-center gap-3 text-foreground/60">
                 {metadata.author && (
-                  <span className="font-medium">{metadata.author}</span>
+                  <span className="text-foreground/60">{metadata.author}</span>
                 )}
                 {metadata.author && metadata.date && <span>•</span>}
                 {metadata.date && (
-                  <time className="text-sm">{metadata.date}</time>
+                  <time className=" text-foreground/60">{metadata.date}</time>
                 )}
               </div>
             )}
             {metadata.description && (
               <p
-                className="text-base text-gray-600 text-center"
+                className="text-base text-foreground/80 text-center"
                 dir={startsWithArabic(metadata.description) ? "rtl" : "ltr"}
               >
                 {metadata.description}
