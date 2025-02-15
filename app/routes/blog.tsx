@@ -83,7 +83,11 @@ function BlogContent() {
           </div>
         )}
 
-        {error && <div className="text-red-500 text-center">{error}</div>}
+        {error && (
+          <div className="text-red-500 text-center">
+            {error}. Please try refreshing the page.
+          </div>
+        )}
 
         {!loading && !error && hasMore && <div ref={ref} className="h-10" />}
 
