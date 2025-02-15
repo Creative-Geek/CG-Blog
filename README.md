@@ -1,100 +1,77 @@
-# Welcome to React Router!
+# CG Blog :art:  
 
-A modern, production-ready template for building full-stack React applications using React Router.
+_Minimalist React blog engine with first-class RTL support. Your content, your hosting, no lock-in._
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-## Features
+## Features  
+🔁 Auto RTL layout switching (Arabic/Urdu/Persian ready)  
+🌐 Server-side rendering (React Router 7)  
+📡 Remote markdown content from any URL  
+♾️ Infinite scroll with loading states  
+🖼️ Graceful image fallbacks  
+🌗 Built-in dark mode (Shadcn/ui)  
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+## Get Started in 3 Steps  
+1. Clone:  
+```bash
+git clone https://github.com/Creative-Geek/cg-blog.git
+```
 
-## Getting Started
+2. Set content source in `src/constants.js`:  
+```js
+// Use GitHub raw URLs, CMS API, or your own server
+export const BASE_URL = "YOUR_MARKDOWN_FILES_URL";
+```
 
-### Installation
+3. Launch:  
+```bash
+npm install && npm run dev
+```
 
-Install the dependencies:
+## Content Structure Template  
+```tree
+Content Server/
+├── Articles
+│   ├── my-post.md     # Body content
+│   ├── my-post.json   # { "title": "...", "date": "2025-01-01", ... }
+│   └── my-post.jpg    # Optional cover
+└── Pages
+    ├── about.md       # Static page content
+    └── about.json     # { "title": "About Me" }
+```
+
+## Hosting Strategies  
+**Dynamic Mode (Recommended)**  
+- Frontend: Deploy to Netlify/Vercel  
+- Content: Host MD files on GitHub/S3/Cloudflare  
+*Edits appear live without redeploys*
+
+**Static Mode**  
+- Place content in `/public` folder  
+- Build with `npm run build`  
+*Requires rebuild on content changes*
+
+## Configuration Guide  
+- **RTL Support**: Set `"dir": "rtl"` in article JSON  
+- **SEO**: Edit `sitemap-generator.js`  
+- **Styling**: Modify `tailwind.config.js`  
+- **Empty States**: Customize `src/components/placeholder`
+
+## Why CG Blog?  
+- 🕋 Providing real RTL support to markdown content.  
+- 🚀 Content lives separately - no CMS wars
+- 🧩 Tested with 100+ articles (stress-free scroll)  
 
 ```bash
-npm install
+# Rebuild search index when adding content
+node generate-index.js
 ```
 
-### Development
+## Contribute  
+Help us improve:  
+- Add content migration guides  
+- Enhance image lazy-loading  
+- Develop Git-based CMS adapter  
 
-Start the development server with HMR:
-
-```bash
-npm run dev
-```
-
-Your application will be available at `http://localhost:5173`.
-
-## Building for Production
-
-Create a production build:
-
-```bash
-npm run build
-```
-
-## Deployment
-
-### Docker Deployment
-
-This template includes three Dockerfiles optimized for different package managers:
-
-- `Dockerfile` - for npm
-- `Dockerfile.pnpm` - for pnpm
-- `Dockerfile.bun` - for bun
-
-To build and run using Docker:
-
-```bash
-# For npm
-docker build -t my-app .
-
-# For pnpm
-docker build -f Dockerfile.pnpm -t my-app .
-
-# For bun
-docker build -f Dockerfile.bun -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
-```
-
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
-
----
-
-Built with ❤️ using React Router.
+License: MIT  
