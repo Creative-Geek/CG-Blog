@@ -23,7 +23,9 @@ export function containsArabic(node: React.ReactNode): boolean {
       if (arabicPattern.test(child)) {
         found = true;
       }
+      // @ts-ignore
     } else if (React.isValidElement(child) && child.props.children) {
+      // @ts-ignore
       if (containsArabic(child.props.children)) {
         found = true;
       }
