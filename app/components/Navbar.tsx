@@ -8,10 +8,11 @@ import {
 } from "../components/ui/navigation-menu";
 import { Button } from "../components/ui/button";
 import { Github, Linkedin, Search } from "lucide-react";
+import { ThemeToggle } from "./ThemeToggle";
 
 export function Navbar() {
   return (
-    <div className="w-full flex items-center justify-between border-b border-gray-200 px-6 py-4">
+    <div className="w-full flex items-center justify-between border-b border-border px-6 py-4">
       <div className="flex items-center">
         <Link to="/" className="text-xl font-bold">
           CG Blog
@@ -66,9 +67,12 @@ export function Navbar() {
         </NavigationMenuList>
       </NavigationMenu>
 
-      <Button variant="ghost" size="icon" className="w-9 h-9">
-        <Search className="h-4 w-4" />
-      </Button>
+      <div className="flex items-center gap-2">
+        <ThemeToggle />
+        <Button variant="ghost" size="icon" className="w-9 h-9">
+          <Search className="h-4 w-4" />
+        </Button>
+      </div>
     </div>
   );
 }

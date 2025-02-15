@@ -7,11 +7,6 @@
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
-html,
-body {
-  @apply bg-white text-gray-900;
-}
-
 :root {
   --background: hsl(0 0% 100%);
   --foreground: hsl(0 0% 3.9%);
@@ -38,6 +33,28 @@ body {
   --chart-4: hsl(43 74% 66%);
   --chart-5: hsl(27 87% 67%);
   --radius: 0.6rem;
+}
+
+[data-theme="dark"] {
+  --background: hsl(0 0% 3.9%);
+  --foreground: hsl(0 0% 98%);
+  --card: hsl(0 0% 3.9%);
+  --card-foreground: hsl(0 0% 98%);
+  --popover: hsl(0 0% 3.9%);
+  --popover-foreground: hsl(0 0% 98%);
+  --primary: hsl(0 0% 98%);
+  --primary-foreground: hsl(0 0% 9%);
+  --secondary: hsl(0 0% 14.9%);
+  --secondary-foreground: hsl(0 0% 98%);
+  --muted: hsl(0 0% 14.9%);
+  --muted-foreground: hsl(0 0% 63.9%);
+  --accent: hsl(0 0% 14.9%);
+  --accent-foreground: hsl(0 0% 98%);
+  --destructive: hsl(0 84.2% 60.2%);
+  --destructive-foreground: hsl(0 0% 98%);
+  --border: hsl(0 0% 14.9%);
+  --input: hsl(0 0% 14.9%);
+  --ring: hsl(0 0% 83.1%);
 }
 
 @theme inline {
@@ -80,17 +97,17 @@ body {
   }
 }
 
-/* Custom Markdown Styles */
+
 .prose h2 {
-  @apply text-2xl font-bold mt-8 mb-4 text-gray-900 border-b pb-2;
+  @apply text-2xl font-bold mt-8 mb-4 text-foreground border-b pb-2 border-border;
 }
 
 .prose h3 {
-  @apply text-xl font-semibold mt-6 mb-3 text-gray-800;
+  @apply text-xl font-semibold mt-6 mb-3 text-foreground/90;
 }
 
 .prose p {
-  @apply text-gray-700 leading-relaxed mb-4;
+  @apply text-foreground/80 leading-relaxed mb-4;
 }
 
 .prose ul {
@@ -98,9 +115,36 @@ body {
 }
 
 .prose li {
-  @apply text-gray-700 mb-2;
+  @apply text-foreground/80 mb-2;
 }
 
 .prose a {
-  @apply text-blue-600 hover:underline;
+  @apply text-blue-600 hover:underline dark:text-blue-400;
 }
+
+/* 
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+} */
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+::view-transition-new(root) {
+  z-index: 2;
+}
+
+.dark::view-transition-old(root) {
+  z-index: 2;
+}
+.dark::view-transition-new(root) {
+  z-index: 1;
+}
+
+
+* {
+  @apply transition-[background-color,color,border-color,scale] duration-100;
+} 
+
