@@ -140,6 +140,6 @@
   z-index: 1;
 }
 
-/* * {
-  @apply transition-[background-color,color,border-color,scale] duration-100;
-} */
+* {
+  transition: all 100ms ease;
+}
