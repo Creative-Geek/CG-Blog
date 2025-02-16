@@ -1,7 +1,7 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { startsWithArabic, containsArabic } from "~/lib/utils";
-import { BASE_URL } from "~/config/constants";
+import { BASE_URL, NAME } from "~/config/constants";
 import type { Components } from "react-markdown";
 import type { ReactNode, JSX } from "react";
 import { useState, useEffect } from "react";
@@ -78,7 +78,7 @@ const components: Components = {
   ul: ({ children, ...props }): JSX.Element => {
     const childrenArray = Array.isArray(children) ? children : [children];
     const firstChild = childrenArray[0];
-    const firstChildText = typeof firstChild === 'string' ? firstChild : '';
+    const firstChildText = typeof firstChild === "string" ? firstChild : "";
     const isRTLFirst = startsWithArabic(firstChildText);
     const isRTLAll = containsArabic(children);
     const isRTL = isRTLFirst || isRTLAll;
@@ -163,7 +163,7 @@ export function Article(props: ArticleProps): JSX.Element {
         setLoading(true);
         const [markdownResponse, metadataResponse] = await Promise.all([
           fetch(`${BASE_URL}/${props.path}.md`),
-          fetch(`${BASE_URL}/${props.path}.json`)
+          fetch(`${BASE_URL}/${props.path}.json`),
         ]);
 
         if (!markdownResponse.ok || !metadataResponse.ok) {
@@ -172,12 +172,15 @@ export function Article(props: ArticleProps): JSX.Element {
 
         const [content, metadata] = await Promise.all([
           markdownResponse.text(),
-          metadataResponse.json()
+          metadataResponse.json(),
         ]);
 
         // Handle image path relative to article location
         if (metadata.image && !metadata.image.startsWith("http")) {
-          metadata.image = `${BASE_URL}/${props.path.split("/").slice(0, -1).join("/")}/${metadata.image}`;
+          metadata.image = `${BASE_URL}/${props.path
+            .split("/")
+            .slice(0, -1)
+            .join("/")}/${metadata.image}`;
         }
 
         setArticle({ ...metadata, content });
@@ -218,7 +221,7 @@ export function Article(props: ArticleProps): JSX.Element {
 
   return (
     <>
-      <title>{article.title}</title>
+      <title>{article.title ? `${article.title} - ${NAME}` : NAME}</title>
       <article className="container mx-auto max-w-3xl px-4 py-8">
         <header className="mb-8">
           {article.title && (
