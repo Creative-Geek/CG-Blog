@@ -38,8 +38,9 @@ const ArticleCard = ({
   const [loading, setLoading] = useState(!!path);
   const [error, setError] = useState("");
   const navigation = useNavigation();
-  const isNavigating = navigation.state === "loading" && 
-    navigation.location.pathname === `/${path?.split("/")[1]}`;
+  const articlePath = path?.split("/")[1];
+  const isNavigating = navigation.state !== "idle" && 
+    navigation.location?.pathname === `/blog/${articlePath}`;
 
   useEffect(() => {
     async function fetchMetadata() {
@@ -112,23 +113,24 @@ const ArticleCard = ({
 
   return (
     <Link
-      to={path ? path.split("/")[1] || "#" : "#"}
+      to={`/blog/${articlePath}`}
       className="block no-underline transition-transform hover:scale-[1.02]"
       aria-disabled={isNavigating}
+      prefetch="intent"
     >
-      <Card className={`overflow-hidden ${isNavigating ? 'opacity-60' : ''}`}>
+      <Card className={`overflow-hidden relative ${isNavigating ? 'opacity-70 pointer-events-none' : ''}`}>
         {metadata.image && (
           <div className="relative">
             <img
               src={metadata.image}
               alt={metadata.title}
-              className="h-48 w-full object-cover"
+              className={`h-48 w-full object-cover ${isNavigating ? 'blur-[1px]' : ''}`}
             />
-            {isNavigating && (
-              <div className="absolute inset-0 flex items-center justify-center bg-background/50">
-                <Loader2 className="h-8 w-8 animate-spin text-foreground" />
-              </div>
-            )}
+          </div>
+        )}
+        {isNavigating && (
+          <div className="absolute inset-0 flex items-center justify-center bg-background/20 backdrop-blur-[1px] z-10">
+            <Loader2 className="h-8 w-8 animate-spin text-foreground" />
           </div>
         )}
         <CardHeader className="space-y-1">
@@ -152,11 +154,13 @@ const ArticleCard = ({
           >
             {truncatedDescription}
           </p>
-          {isNavigating ? (
-            <Loader2 className="h-5 w-5 flex-shrink-0 animate-spin text-muted-foreground" />
-          ) : (
-            <ArrowRight className="h-5 w-5 flex-shrink-0 text-muted-foreground" />
-          )}
+          <div className="flex-shrink-0">
+            {isNavigating ? (
+              <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+            ) : (
+              <ArrowRight className="h-5 w-5 text-muted-foreground" />
+            )}
+          </div>
         </CardContent>
       </Card>
     </Link>
