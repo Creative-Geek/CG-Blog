@@ -1,4 +1,5 @@
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { startsWithArabic, containsArabic } from "~/lib/utils";
 import { useEffect, useState } from "react";
 import { BASE_URL } from "~/config/constants";
@@ -44,9 +45,7 @@ const components = {
       <h1
         {...props}
         dir={isRTL ? "rtl" : "ltr"}
-        className={`text-4xl font-bold mb-4 ${
-          isRTL ? "text-right" : "text-left"
-        }`}
+        className={`text-4xl font-bold mb-6 text-foreground border-b pb-2 border-border`}
       >
         {children}
       </h1>
@@ -149,6 +148,18 @@ const components = {
       />
     );
   },
+  //@ts-ignore
+  a: ({ children, href, ...props }) => (
+    <a
+      href={href}
+      {...props}
+      className="text-blue-600 hover:underline dark:text-blue-400"
+      target={href?.startsWith("http") ? "_blank" : undefined}
+      rel={href?.startsWith("http") ? "noopener noreferrer" : undefined}
+    >
+      {children}
+    </a>
+  ),
 };
 
 export function Article(props: ArticleProps) {
@@ -291,9 +302,11 @@ export function Article(props: ArticleProps) {
           </div>
         )}
 
-        <div className="prose max-w-none">
+        <div className="prose prose-neutral dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-img:rounded-lg">
           {/* @ts-ignore */}
-          <ReactMarkdown components={components}>{content}</ReactMarkdown>
+          <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
+            {content}
+          </ReactMarkdown>
         </div>
       </article>
     </>
