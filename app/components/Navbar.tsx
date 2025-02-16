@@ -36,23 +36,23 @@ export function Navbar() {
               <SheetTitle>Menu</SheetTitle>
             </SheetHeader>
             <nav className="flex flex-col gap-4">
-              <Link 
-                to="/" 
-                className="text-sm font-medium p-2 hover:bg-accent rounded-md transition-colors" 
+              <Link
+                to="/"
+                className="text-sm font-medium p-2 hover:bg-accent rounded-md transition-colors"
                 onClick={() => setOpen(false)}
               >
                 Home
               </Link>
-              <Link 
-                to="/blog" 
-                className="text-sm font-medium p-2 hover:bg-accent rounded-md transition-colors" 
+              <Link
+                to="/blog"
+                className="text-sm font-medium p-2 hover:bg-accent rounded-md transition-colors"
                 onClick={() => setOpen(false)}
               >
                 Blog
               </Link>
-              <Link 
-                to="/about" 
-                className="text-sm font-medium p-2 hover:bg-accent rounded-md transition-colors" 
+              <Link
+                to="/about"
+                className="text-sm font-medium p-2 hover:bg-accent rounded-md transition-colors"
                 onClick={() => setOpen(false)}
               >
                 About Me
@@ -81,14 +81,14 @@ export function Navbar() {
       </div>
 
       {/* Logo - centered on mobile, left-aligned on desktop */}
-      <div className="flex-1 flex justify-center md:justify-start">
+      <div className="w-full md:w-auto flex justify-center md:justify-start">
         <Link to="/" className="text-xl font-bold">
           CG Blog
         </Link>
       </div>
 
       {/* Desktop Navigation - hidden on mobile */}
-      <NavigationMenu className="hidden md:flex flex-1 justify-center">
+      <NavigationMenu className="hidden md:flex justify-center">
         <NavigationMenuList className="flex gap-6">
           <NavigationMenuItem>
             <Link to="/" className="text-sm font-medium">
@@ -137,7 +137,7 @@ export function Navbar() {
       </NavigationMenu>
 
       {/* Theme Toggle and Search - always visible */}
-      <div className="flex items-center gap-2">
+      <div className="w-full md:w-auto flex justify-end items-center gap-2">
         <ThemeToggle />
         <Button variant="ghost" size="icon" className="w-9 h-9">
           <Search className="h-4 w-4" />
