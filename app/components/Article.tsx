@@ -4,14 +4,16 @@ import { startsWithArabic, containsArabic } from "~/lib/utils";
 import { BASE_URL } from "~/config/constants";
 import type { Components } from "react-markdown";
 import type { ReactNode, JSX } from "react";
+import { useState, useEffect } from "react";
 
 interface ArticleProps {
-  title: string;
-  content: string;
+  title?: string;
+  content?: string;
   image?: string;
   description?: string;
   date?: string;
   author?: string;
+  path?: string;
 }
 
 const components: Components = {
@@ -150,49 +152,111 @@ const components: Components = {
 };
 
 export function Article(props: ArticleProps): JSX.Element {
-  const isRTLTitle = startsWithArabic(props.title);
+  const [article, setArticle] = useState(props);
+  const [loading, setLoading] = useState(!!props.path);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    async function fetchArticle() {
+      if (!props.path) return;
+      try {
+        setLoading(true);
+        const [markdownResponse, metadataResponse] = await Promise.all([
+          fetch(`${BASE_URL}/${props.path}.md`),
+          fetch(`${BASE_URL}/${props.path}.json`)
+        ]);
+
+        if (!markdownResponse.ok || !metadataResponse.ok) {
+          throw new Error("Failed to fetch article");
+        }
+
+        const [content, metadata] = await Promise.all([
+          markdownResponse.text(),
+          metadataResponse.json()
+        ]);
+
+        // Handle image path relative to article location
+        if (metadata.image && !metadata.image.startsWith("http")) {
+          metadata.image = `${BASE_URL}/${props.path.split("/").slice(0, -1).join("/")}/${metadata.image}`;
+        }
+
+        setArticle({ ...metadata, content });
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Error fetching article");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (props.path) {
+      fetchArticle();
+    }
+  }, [props.path]);
+
+  if (loading) {
+    return (
+      <div className="container mx-auto max-w-3xl px-4 py-8 animate-pulse">
+        <div className="space-y-4">
+          <div className="h-8 bg-muted rounded w-3/4 mx-auto" />
+          <div className="h-4 bg-muted rounded w-1/2 mx-auto" />
+          <div className="h-64 bg-muted rounded" />
+          <div className="space-y-2">
+            <div className="h-4 bg-muted rounded" />
+            <div className="h-4 bg-muted rounded w-5/6" />
+            <div className="h-4 bg-muted rounded w-4/6" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return <div className="text-red-500 text-center py-8">{error}</div>;
+  }
+
+  const isRTLTitle = startsWithArabic(article.title || "");
 
   return (
     <>
-      <title>{props.title}</title>
+      <title>{article.title}</title>
       <article className="container mx-auto max-w-3xl px-4 py-8">
         <header className="mb-8">
-          {props.title && (
+          {article.title && (
             <h1
               className="text-3xl font-bold mb-4 text-center text-foreground"
               dir={isRTLTitle ? "rtl" : "ltr"}
             >
-              {props.title}
+              {article.title}
             </h1>
           )}
           <div className="space-y-3">
-            {(props.author || props.date) && (
+            {(article.author || article.date) && (
               <div className="flex items-center justify-center gap-3 text-foreground/60">
-                {props.author && (
-                  <span className="text-foreground/60">{props.author}</span>
+                {article.author && (
+                  <span className="text-foreground/60">{article.author}</span>
                 )}
-                {props.author && props.date && <span>•</span>}
-                {props.date && (
-                  <time className="text-foreground/60">{props.date}</time>
+                {article.author && article.date && <span>•</span>}
+                {article.date && (
+                  <time className="text-foreground/60">{article.date}</time>
                 )}
               </div>
             )}
-            {props.description && (
+            {article.description && (
               <p
                 className="text-base text-foreground/80 text-center"
-                dir={startsWithArabic(props.description) ? "rtl" : "ltr"}
+                dir={startsWithArabic(article.description) ? "rtl" : "ltr"}
               >
-                {props.description}
+                {article.description}
               </p>
             )}
           </div>
         </header>
 
-        {props.image && (
+        {article.image && (
           <div className="mb-8">
             <img
-              src={props.image}
-              alt={props.title || "Article featured image"}
+              src={article.image}
+              alt={article.title || "Article featured image"}
               className="w-full h-auto rounded-lg shadow-md"
             />
           </div>
@@ -200,7 +264,7 @@ export function Article(props: ArticleProps): JSX.Element {
 
         <div className="prose prose-neutral dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-img:rounded-lg">
           <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
-            {props.content}
+            {article.content}
           </ReactMarkdown>
         </div>
       </article>
