@@ -1,6 +1,7 @@
-import { useLoaderData, useParams } from "react-router-dom";
+import { useLoaderData, useNavigation } from "react-router-dom";
 import { Article } from "../components/Article";
 import { BASE_URL } from "~/config/constants";
+import { Loader2 } from "lucide-react";
 
 interface ArticleData {
   title: string;
@@ -55,7 +56,34 @@ export async function loader({ params }: { params: { path: string } }) {
   }
 }
 
+function LoadingArticle() {
+  return (
+    <article className="container mx-auto max-w-3xl px-4 py-8">
+      <div className="flex flex-col items-center space-y-8">
+        <div className="w-full space-y-4">
+          <div className="h-8 w-3/4 mx-auto bg-muted animate-pulse rounded" />
+          <div className="h-4 w-1/2 mx-auto bg-muted animate-pulse rounded" />
+        </div>
+        <div className="w-full h-64 bg-muted animate-pulse rounded-lg" />
+        <div className="w-full space-y-4">
+          <div className="h-4 w-full bg-muted animate-pulse rounded" />
+          <div className="h-4 w-5/6 bg-muted animate-pulse rounded" />
+          <div className="h-4 w-4/6 bg-muted animate-pulse rounded" />
+        </div>
+        <Loader2 className="h-8 w-8 animate-spin text-foreground" />
+      </div>
+    </article>
+  );
+}
+
 export default function ViewArticle() {
   const articleData = useLoaderData() as ArticleData;
+  const navigation = useNavigation();
+  const isLoading = navigation.state === "loading";
+
+  if (isLoading) {
+    return <LoadingArticle />;
+  }
+
   return <Article {...articleData} />;
 }

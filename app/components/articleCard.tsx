@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { Link, useNavigation } from "react-router-dom";
+import { ArrowRight, Loader2 } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -37,6 +37,9 @@ const ArticleCard = ({
   });
   const [loading, setLoading] = useState(!!path);
   const [error, setError] = useState("");
+  const navigation = useNavigation();
+  const isNavigating = navigation.state === "loading" && 
+    navigation.location.pathname === `/${path?.split("/")[1]}`;
 
   useEffect(() => {
     async function fetchMetadata() {
@@ -111,14 +114,22 @@ const ArticleCard = ({
     <Link
       to={path ? path.split("/")[1] || "#" : "#"}
       className="block no-underline transition-transform hover:scale-[1.02]"
+      aria-disabled={isNavigating}
     >
-      <Card className="overflow-hidden">
+      <Card className={`overflow-hidden ${isNavigating ? 'opacity-60' : ''}`}>
         {metadata.image && (
-          <img
-            src={metadata.image}
-            alt={metadata.title}
-            className="h-48 w-full object-cover"
-          />
+          <div className="relative">
+            <img
+              src={metadata.image}
+              alt={metadata.title}
+              className="h-48 w-full object-cover"
+            />
+            {isNavigating && (
+              <div className="absolute inset-0 flex items-center justify-center bg-background/50">
+                <Loader2 className="h-8 w-8 animate-spin text-foreground" />
+              </div>
+            )}
+          </div>
         )}
         <CardHeader className="space-y-1">
           <CardTitle className="text-xl" dir="auto">
@@ -141,7 +152,11 @@ const ArticleCard = ({
           >
             {truncatedDescription}
           </p>
-          <ArrowRight className="h-5 w-5 flex-shrink-0 text-muted-foreground" />
+          {isNavigating ? (
+            <Loader2 className="h-5 w-5 flex-shrink-0 animate-spin text-muted-foreground" />
+          ) : (
+            <ArrowRight className="h-5 w-5 flex-shrink-0 text-muted-foreground" />
+          )}
         </CardContent>
       </Card>
     </Link>
