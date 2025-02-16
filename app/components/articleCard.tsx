@@ -38,7 +38,8 @@ const ArticleCard = ({
   const [loading, setLoading] = useState(!!path);
   const [error, setError] = useState("");
   const navigation = useNavigation();
-  const isNavigating = navigation.state === "loading" && 
+  const isNavigating =
+    navigation.state === "loading" &&
     navigation.location.pathname === `/${path?.split("/")[1]}`;
 
   useEffect(() => {
@@ -116,7 +117,7 @@ const ArticleCard = ({
       className="block no-underline transition-transform hover:scale-[1.02]"
       aria-disabled={isNavigating}
     >
-      <Card className={`overflow-hidden ${isNavigating ? 'opacity-60' : ''}`}>
+      <Card className={`overflow-hidden ${isNavigating ? "opacity-60" : ""}`}>
         {metadata.image && (
           <div className="relative">
             <img
