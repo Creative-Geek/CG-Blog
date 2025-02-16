@@ -131,8 +131,14 @@ const ArticleCard = ({
             {metadata.author} • {metadata.date}
           </CardDescription>
         </CardHeader>
-        <CardContent className="flex items-start justify-between">
-          <p className="text-sm text-muted-foreground pr-4 pl-4" dir="auto">
+        <CardContent className="flex items-start gap-4">
+          <p
+            className="text-sm text-muted-foreground flex-1"
+            dir="auto"
+            style={{
+              textAlign: "inherit",
+            }}
+          >
             {truncatedDescription}
           </p>
           <ArrowRight className="h-5 w-5 flex-shrink-0 text-muted-foreground" />
