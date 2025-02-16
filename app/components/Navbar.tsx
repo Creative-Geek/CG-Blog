@@ -27,7 +27,7 @@ export function Navbar() {
       <div className="md:hidden">
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="w-9 h-9">
+            <Button variant="outline" size="icon" className="w-9 h-9">
               <Menu className="h-4 w-4" />
             </Button>
           </SheetTrigger>
@@ -139,7 +139,7 @@ export function Navbar() {
       {/* Theme Toggle and Search - always visible */}
       <div className="w-full md:w-auto flex justify-end items-center gap-2">
         <ThemeToggle />
-        <Button variant="ghost" size="icon" className="w-9 h-9">
+        <Button variant={"outline"} size="icon" className="w-9 h-9">
           <Search className="h-4 w-4" />
         </Button>
       </div>
