@@ -134,6 +134,21 @@ const components = {
       </li>
     );
   },
+
+  // Add image component
+  img: ({ src, alt, ...props }: React.ImgHTMLAttributes<HTMLImageElement>) => {
+    if (src?.startsWith("~/")) {
+      src = `${BASE_URL}${src.substring(1)}`;
+    }
+    return (
+      <img
+        src={src}
+        alt={alt}
+        {...props}
+        className="w-full h-auto rounded-lg my-4"
+      />
+    );
+  },
 };
 
 export function Article(props: ArticleProps) {
