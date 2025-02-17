@@ -9,20 +9,20 @@ interface Article {
 }
 
 interface BlogState {
-  scrollPosition: number;
+  scrollRatio: number;
   displayedArticles: Article[];
   page: number;
 }
 
 // Helper functions for state management
 const getBlogState = (): BlogState => {
-  if (typeof window === 'undefined') return { scrollPosition: 0, displayedArticles: [], page: 1 };
+  if (typeof window === 'undefined') return { scrollRatio: 0, displayedArticles: [], page: 1 };
   
   try {
     const state = sessionStorage.getItem('blogState');
-    return state ? JSON.parse(state) : { scrollPosition: 0, displayedArticles: [], page: 1 };
+    return state ? JSON.parse(state) : { scrollRatio: 0, displayedArticles: [], page: 1 };
   } catch {
-    return { scrollPosition: 0, displayedArticles: [], page: 1 };
+    return { scrollRatio: 0, displayedArticles: [], page: 1 };
   }
 };
 
@@ -33,6 +33,24 @@ const saveBlogState = (state: BlogState) => {
   } catch (error) {
     console.error('Failed to save blog state:', error);
   }
+};
+
+// Helper function to get scroll ratio
+const getScrollRatio = () => {
+  if (typeof window === 'undefined') return 0;
+  
+  const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+  if (scrollHeight <= 0) return 0;
+  return window.scrollY / scrollHeight;
+};
+
+// Helper function to restore scroll position from ratio
+const restoreScrollFromRatio = (ratio: number) => {
+  if (typeof window === 'undefined') return;
+  
+  const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const targetScroll = ratio * scrollHeight;
+  window.scrollTo(0, targetScroll);
 };
 
 export async function loader() {
@@ -55,6 +73,7 @@ function BlogContent() {
   
   const [isClient, setIsClient] = useState(false);
   const savedState = useRef(getBlogState());
+  const contentRef = useRef<HTMLDivElement>(null);
   
   const [displayedArticles, setDisplayedArticles] = useState<Article[]>(
     savedState.current.displayedArticles.length > 0 
@@ -76,19 +95,26 @@ function BlogContent() {
     setIsClient(true);
   }, []);
 
-  // Restore scroll position when component mounts on client
+  // Restore scroll position when component mounts on client and when articles update
   useEffect(() => {
-    if (isClient && savedState.current.scrollPosition > 0) {
-      window.scrollTo(0, savedState.current.scrollPosition);
-    }
-  }, [isClient]);
+    if (!isClient) return;
+
+    // Use requestAnimationFrame to ensure the DOM has updated
+    const timeoutId = setTimeout(() => {
+      if (savedState.current.scrollRatio > 0) {
+        restoreScrollFromRatio(savedState.current.scrollRatio);
+      }
+    }, 100); // Small delay to ensure content has rendered
+
+    return () => clearTimeout(timeoutId);
+  }, [isClient, displayedArticles]);
 
   // Save state when component updates
   useEffect(() => {
     if (!isClient) return;
 
     const currentState: BlogState = {
-      scrollPosition: window.scrollY,
+      scrollRatio: getScrollRatio(),
       displayedArticles,
       page,
     };
@@ -103,7 +129,7 @@ function BlogContent() {
       const currentState = getBlogState();
       saveBlogState({
         ...currentState,
-        scrollPosition: window.scrollY,
+        scrollRatio: getScrollRatio(),
       });
     };
 
@@ -135,7 +161,7 @@ function BlogContent() {
   }, [inView]);
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-8">
+    <div className="mx-auto max-w-3xl px-4 py-8" ref={contentRef}>
       <h2 className="text-xl font-bold mb-5">Latest Posts</h2>
       <div className="space-y-6">
         {displayedArticles.map((article, index) => (
