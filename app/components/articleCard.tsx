@@ -39,7 +39,8 @@ const ArticleCard = ({
   const [error, setError] = useState("");
   const navigation = useNavigation();
   const articlePath = path?.split("/")[1];
-  const isNavigating = navigation.state !== "idle" && 
+  const isNavigating =
+    navigation.state !== "idle" &&
     navigation.location?.pathname === `/blog/${articlePath}`;
 
   useEffect(() => {
@@ -118,18 +119,24 @@ const ArticleCard = ({
       aria-disabled={isNavigating}
       prefetch="intent"
     >
-      <Card className={`overflow-hidden relative ${isNavigating ? 'opacity-70 pointer-events-none' : ''}`}>
+      <Card
+        className={`overflow-hidden relative ${
+          isNavigating ? "opacity-70 pointer-events-none" : ""
+        }`}
+      >
         {metadata.image && (
           <div className="relative">
             <img
               src={metadata.image}
               alt={metadata.title}
-              className={`h-48 w-full object-cover ${isNavigating ? 'blur-[1px]' : ''}`}
+              className={`h-48 w-full object-cover ${
+                isNavigating ? "blur-[1px]" : ""
+              }`}
             />
           </div>
         )}
         {isNavigating && (
-          <div className="absolute inset-0 flex items-center justify-center bg-background/20 backdrop-blur-[1px] z-10">
+          <div className="absolute inset-0 flex items-center justify-center bg-background/20 backdrop-blur-[5px] z-10">
             <Loader2 className="h-8 w-8 animate-spin text-foreground" />
           </div>
         )}
@@ -156,7 +163,8 @@ const ArticleCard = ({
           </p>
           <div className="flex-shrink-0">
             {isNavigating ? (
-              <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+              // <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+              <ArrowRight className="h-5 w-5 text-muted-foreground" />
             ) : (
               <ArrowRight className="h-5 w-5 text-muted-foreground" />
             )}
