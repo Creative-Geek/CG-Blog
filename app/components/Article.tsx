@@ -17,11 +17,14 @@ interface ArticleProps {
 }
 
 function slugify(text: string) {
-  return text
+  let slug = text
     .trim()
     .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^\w-]+/g, "");
+    .replace(/[^\p{L}\p{N}]+/gu, "-") // keep letters & numbers
+    .replace(/^-+|-+$/g, "") // remove leading/trailing dashes
+    .replace(/-+/g, "-"); // collapse consecutive dashes
+
+  return slug || "heading";
 }
 
 const components: Components = {
