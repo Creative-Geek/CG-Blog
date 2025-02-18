@@ -16,6 +16,14 @@ interface ArticleProps {
   path?: string;
 }
 
+function slugify(text: string) {
+  return text
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w-]+/g, "");
+}
+
 const components: Components = {
   // Paragraph component
   p: ({ children, ...props }): JSX.Element => {
@@ -33,12 +41,19 @@ const components: Components = {
   // Heading components
   h1: ({ children, ...props }): JSX.Element => {
     const text = children?.toString() || "";
+    const slug = slugify(text);
     const isRTL = startsWithArabic(text);
     return (
       <h1
         {...props}
+        id={slug}
         dir={isRTL ? "rtl" : "ltr"}
-        className={`text-4xl font-bold mb-6 text-foreground border-b pb-2 border-border`}
+        onClick={() =>
+          navigator.clipboard.writeText(
+            `${window.location.href.split("#")[0]}#${slug}`
+          )
+        }
+        className="text-4xl font-bold mb-6 text-foreground border-b pb-2 border-border cursor-pointer hover:underline hover:text-blue-500"
       >
         {children}
       </h1>
@@ -46,14 +61,19 @@ const components: Components = {
   },
   h2: ({ children, ...props }): JSX.Element => {
     const text = children?.toString() || "";
+    const slug = slugify(text);
     const isRTL = startsWithArabic(text);
     return (
       <h2
         {...props}
+        id={slug}
         dir={isRTL ? "rtl" : "ltr"}
-        className={`text-3xl font-bold mb-3 ${
-          isRTL ? "text-right" : "text-left"
-        }`}
+        onClick={() =>
+          navigator.clipboard.writeText(
+            `${window.location.href.split("#")[0]}#${slug}`
+          )
+        }
+        className="text-3xl font-bold mb-3 cursor-pointer hover:underline hover:text-blue-500"
       >
         {children}
       </h2>
@@ -61,14 +81,19 @@ const components: Components = {
   },
   h3: ({ children, ...props }): JSX.Element => {
     const text = children?.toString() || "";
+    const slug = slugify(text);
     const isRTL = startsWithArabic(text);
     return (
       <h3
         {...props}
+        id={slug}
         dir={isRTL ? "rtl" : "ltr"}
-        className={`text-2xl font-bold mb-2 ${
-          isRTL ? "text-right" : "text-left"
-        }`}
+        onClick={() =>
+          navigator.clipboard.writeText(
+            `${window.location.href.split("#")[0]}#${slug}`
+          )
+        }
+        className="text-2xl font-bold mb-2 cursor-pointer hover:underline hover:text-blue-500"
       >
         {children}
       </h3>
