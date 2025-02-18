@@ -1,7 +1,9 @@
-import { useLoaderData, useNavigation } from "react-router-dom";
+import { useLoaderData, useNavigation, useLocation } from "react-router-dom";
 import { Article } from "../components/Article";
-import { BASE_URL } from "~/config/constants";
+import { BASE_URL, NAME } from "~/config/constants";
 import { Loader2 } from "lucide-react";
+import { useMetaTags } from "~/hooks/useMetaTags";
+import { useEffect, useState } from "react";
 
 interface ArticleData {
   title: string;
@@ -79,7 +81,24 @@ function LoadingArticle() {
 export default function ViewArticle() {
   const articleData = useLoaderData() as ArticleData;
   const navigation = useNavigation();
+  const location = useLocation();
   const isLoading = navigation.state === "loading";
+  const [url, setUrl] = useState(location.pathname);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setUrl(`${window.location.origin}${location.pathname}`);
+    }
+  }, [location.pathname]);
+
+  // Add meta tags for SEO
+  useMetaTags({
+    title: articleData.title,
+    description: articleData.description,
+    image: articleData.image,
+    author: articleData.author,
+    url: url,
+  });
 
   if (isLoading) {
     return <LoadingArticle />;
