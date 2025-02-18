@@ -2,7 +2,6 @@ import { useLoaderData, useNavigation, useLocation } from "react-router-dom";
 import { Article } from "../components/Article";
 import { BASE_URL, NAME } from "~/config/constants";
 import { Loader2 } from "lucide-react";
-import { useMetaTags } from "~/hooks/useMetaTags";
 import { useEffect, useState } from "react";
 
 interface ArticleData {
@@ -21,7 +20,7 @@ export async function loader({ params }: { params: { path: string } }) {
   try {
     const [markdownResponse, metadataResponse] = await Promise.all([
       fetch(`${BASE_URL}/${articlePath}.md`),
-      fetch(`${BASE_URL}/${articlePath}.json`)
+      fetch(`${BASE_URL}/${articlePath}.json`),
     ]);
 
     if (!markdownResponse.ok || !metadataResponse.ok) {
@@ -30,12 +29,15 @@ export async function loader({ params }: { params: { path: string } }) {
 
     const [content, metadata] = await Promise.all([
       markdownResponse.text(),
-      metadataResponse.json()
+      metadataResponse.json(),
     ]);
 
     // Handle image path
     if (metadata.image && !metadata.image.startsWith("http")) {
-      metadata.image = `${BASE_URL}/${articlePath.split("/").slice(0, -1).join("/")}/${metadata.image}`;
+      metadata.image = `${BASE_URL}/${articlePath
+        .split("/")
+        .slice(0, -1)
+        .join("/")}/${metadata.image}`;
     }
 
     if (!metadata.image) {
@@ -56,6 +58,13 @@ export async function loader({ params }: { params: { path: string } }) {
   } catch (error) {
     throw new Error("Failed to load article");
   }
+}
+
+export function meta({ data }: any) {
+  return [
+    { title: data?.title ? `${data.title} - ${NAME}` : NAME },
+    { name: "description", content: data?.description },
+  ];
 }
 
 function LoadingArticle() {
@@ -86,19 +95,10 @@ export default function ViewArticle() {
   const [url, setUrl] = useState(location.pathname);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       setUrl(`${window.location.origin}${location.pathname}`);
     }
   }, [location.pathname]);
-
-  // Add meta tags for SEO
-  useMetaTags({
-    title: articleData.title,
-    description: articleData.description,
-    image: articleData.image,
-    author: articleData.author,
-    url: url,
-  });
 
   if (isLoading) {
     return <LoadingArticle />;
