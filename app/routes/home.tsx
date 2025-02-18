@@ -5,7 +5,7 @@ import { NAME } from "../config/constants";
 export function meta({}: Route.MetaArgs) {
   return [
     { title: NAME },
-    { name: "description", content: "Welcome to React Router!" },
+    { name: "description", content: "Welcome to Creative Geek's Blog!" },
   ];
 }
 
