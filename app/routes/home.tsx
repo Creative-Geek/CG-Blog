@@ -103,13 +103,13 @@ export default function Home() {
           image={`${BASE_URL}/Pages/${data.about.image}`}
           text={data.about.text}
         />
-        <hr />
+        {data.about && data.about.text && <hr />}
         <ProjectsSection projects={data.projects} />
-        <hr />
+        {data.projects && data.projects.length > 0 && <hr />}
         <ExperienceSection skills={data.skills} experience={data.experience} />
-        <hr />
+        {data.experience && data.experience.length > 0 && <hr />}
         <BlogSection articles={articles} />
-        <hr />
+        {articles && articles.length > 0 && <hr />}
         <Contact {...data.contact} />
       </div>
     </div>
