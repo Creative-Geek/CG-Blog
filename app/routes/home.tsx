@@ -6,6 +6,7 @@ import Profile from "~/components/homePage/profile";
 import ProjectsSection from "~/components/homePage/projectsSection";
 import BlogSection from "~/components/homePage/blogSection";
 import Contact from "~/components/homePage/contact";
+import ExperienceSection from "~/components/homePage/experienceSection";
 
 interface HomeData {
   mainTitle: string;
@@ -16,6 +17,12 @@ interface HomeData {
     text: string;
   };
   projects: Array<{ path: string }>;
+  skills: string[];
+  experience: Array<{
+    title: string;
+    date: string;
+    description: string;
+  }>;
   contact: {
     title: string;
     text: string;
@@ -71,6 +78,8 @@ export default function Home() {
             <hr />
             <ProjectsSection loading={true} />
             <hr />
+            <ExperienceSection loading={true} />
+            <hr />
             <BlogSection loading={true} />
             <hr />
             <Contact loading={true} />
@@ -96,6 +105,8 @@ export default function Home() {
         />
         <hr />
         <ProjectsSection projects={data.projects} />
+        <hr />
+        <ExperienceSection skills={data.skills} experience={data.experience} />
         <hr />
         <BlogSection articles={articles} />
         <hr />
