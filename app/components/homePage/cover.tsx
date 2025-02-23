@@ -1,16 +1,21 @@
-// cover with title, subtitle, and image
-
-import { useEffect, useState } from "react";
-import { BASE_URL } from "~/config/constants";
+import { Button } from "../ui/button";
+import { Link } from "react-router-dom";
 
 interface CoverProps {
   loading?: boolean;
   mainTitle?: string;
   mainSubtitle?: string;
   coverImage?: string;
+  hasProjects?: boolean; // Add this prop
 }
 
-export default function Cover({ loading, mainTitle, mainSubtitle, coverImage }: CoverProps) {
+export default function Cover({
+  loading,
+  mainTitle,
+  mainSubtitle,
+  coverImage,
+  hasProjects = true, // Default to true
+}: CoverProps) {
   if (loading) {
     return (
       <section className="relative w-full h-[90vh] bg-gray-100 animate-pulse">
@@ -36,10 +41,23 @@ export default function Cover({ loading, mainTitle, mainSubtitle, coverImage }: 
       <div className="absolute inset-0 bg-black/40" />
       <div className="relative flex items-center justify-center h-full text-center text-white p-4">
         <div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            {mainTitle}
-          </h1>
-          <p className="text-xl md:text-2xl">{mainSubtitle}</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">{mainTitle}</h1>
+          <p className="text-xl md:text-2xl mb-4">{mainSubtitle}</p>
+          {hasProjects ? (
+            <Button
+              onClick={() => {
+                document.getElementById("projects-section")?.scrollIntoView({
+                  behavior: "smooth",
+                });
+              }}
+            >
+              View My Work
+            </Button>
+          ) : (
+            <Button asChild>
+              <Link to="/blog">View My Blog</Link>
+            </Button>
+          )}
         </div>
       </div>
     </section>

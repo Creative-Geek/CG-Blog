@@ -14,7 +14,7 @@ interface ProjectsSectionProps {
 export default function ProjectsSection({ loading, projects }: ProjectsSectionProps) {
   if (loading) {
     return (
-      <section className="container space-y-8 py-16">
+      <section id="projects-section" className="container space-y-8 py-16">
         <div className="space-y-2 text-center">
           <div className="h-8 w-64 animate-pulse rounded-md bg-muted mx-auto" />
         </div>
@@ -42,7 +42,7 @@ export default function ProjectsSection({ loading, projects }: ProjectsSectionPr
   if (!projects?.length) return null;
 
   return (
-    <section className="container space-y-8 py-16">
+    <section id="projects-section" className="container space-y-8 py-16">
       <div className="space-y-2 text-center">
         <h2 className="text-3xl font-bold tracking-tighter">
           Featured Projects

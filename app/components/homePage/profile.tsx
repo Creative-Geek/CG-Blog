@@ -31,8 +31,8 @@ export default function Profile({ loading, image, text }: ProfileProps) {
   if (!image || !text) return null;
 
   return (
-    <section className="container py-16">
-      <div className="flex flex-col md:flex-row items-center gap-8">
+    <section className="container py-16 w-3/4 ml-auto mr-auto">
+      <div className="flex flex-col md:flex-row items-center justify-center gap-8">
         <div className="w-64 h-64 rounded-full overflow-hidden flex-shrink-0 bg-muted">
           <img
             src={image}

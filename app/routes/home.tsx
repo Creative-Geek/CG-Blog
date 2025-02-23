@@ -40,7 +40,7 @@ export default function Home() {
       try {
         const [homeResponse, articlesResponse] = await Promise.all([
           fetch(`${BASE_URL}/Pages/home.json`),
-          fetch(`${BASE_URL}/Articles/index.json`)
+          fetch(`${BASE_URL}/Articles/index.json`),
         ]);
 
         if (!homeResponse.ok) throw new Error("Failed to fetch home data");
@@ -86,6 +86,7 @@ export default function Home() {
         mainTitle={data.mainTitle}
         mainSubtitle={data.mainSubtitle}
         coverImage={`${BASE_URL}/Pages/${data.coverImage}`}
+        hasProjects={data.projects && data.projects.length > 0}
       />
       <hr />
       <div className="container mx-auto px-4">
