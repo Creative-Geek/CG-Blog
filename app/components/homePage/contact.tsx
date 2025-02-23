@@ -2,32 +2,14 @@ import { useEffect, useState } from "react";
 import { BASE_URL } from "~/config/constants";
 import { Button } from "~/components/ui/button";
 
-interface ContactData {
-  title: string;
-  text: string;
-  buttonLink: string;
+interface ContactProps {
+  loading?: boolean;
+  title?: string;
+  text?: string;
+  buttonLink?: string;
 }
 
-export default function Contact() {
-  const [data, setData] = useState<ContactData | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch(`${BASE_URL}/Pages/home.json`);
-        if (!response.ok) throw new Error("Failed to fetch home data");
-        const jsonData = await response.json();
-        setData(jsonData.contact);
-      } catch (error) {
-        console.error("Error fetching contact data:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchData();
-  }, []);
-
+export default function Contact({ loading, title, text, buttonLink }: ContactProps) {
   if (loading) {
     return (
       <section className="container py-16">
@@ -40,15 +22,15 @@ export default function Contact() {
     );
   }
 
-  if (!data) return null;
+  if (!title || !text || !buttonLink) return null;
 
   return (
     <section className="container py-16">
       <div className="mx-auto max-w-3xl text-center space-y-6">
-        <h2 className="text-3xl font-bold tracking-tighter">{data.title}</h2>
-        <p className="text-lg text-muted-foreground">{data.text}</p>
+        <h2 className="text-3xl font-bold tracking-tighter">{title}</h2>
+        <p className="text-lg text-muted-foreground">{text}</p>
         <Button asChild size="lg">
-          <a href={data.buttonLink}>Contact Me</a>
+          <a href={buttonLink}>Contact Me</a>
         </Button>
       </div>
     </section>

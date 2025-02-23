@@ -6,26 +6,12 @@ interface Project {
   path: string;
 }
 
-export default function ProjectsSection() {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
+interface ProjectsSectionProps {
+  loading?: boolean;
+  projects?: Array<{ path: string }>;
+}
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch(`${BASE_URL}/Pages/home.json`);
-        if (!response.ok) throw new Error("Failed to fetch home data");
-        const jsonData = await response.json();
-        setProjects(jsonData.projects);
-      } catch (error) {
-        console.error("Error fetching projects:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchData();
-  }, []);
-
+export default function ProjectsSection({ loading, projects }: ProjectsSectionProps) {
   if (loading) {
     return (
       <section className="container space-y-8 py-16">
@@ -52,6 +38,8 @@ export default function ProjectsSection() {
       </section>
     );
   }
+
+  if (!projects?.length) return null;
 
   return (
     <section className="container space-y-8 py-16">
