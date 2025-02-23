@@ -33,17 +33,15 @@ export default function Profile() {
 
   if (loading) {
     return (
-      <section className="bg-card py-16">
-        <div className="container mx-auto max-w-5xl px-4">
-          <div className="flex flex-col md:flex-row items-center gap-8">
-            <div className="w-64 h-64 rounded-full bg-gray-200 animate-pulse" />
-            <div className="flex-1 space-y-4">
-              <div className="h-8 w-48 bg-gray-200 rounded animate-pulse" />
-              <div className="space-y-2">
-                <div className="h-4 w-full bg-gray-200 rounded animate-pulse" />
-                <div className="h-4 w-full bg-gray-200 rounded animate-pulse" />
-                <div className="h-4 w-3/4 bg-gray-200 rounded animate-pulse" />
-              </div>
+      <section className="container py-16">
+        <div className="flex flex-col md:flex-row items-center gap-8">
+          <div className="w-64 h-64 rounded-full animate-pulse bg-muted" />
+          <div className="flex-1 space-y-4">
+            <div className="h-8 w-48 animate-pulse rounded-md bg-muted" />
+            <div className="space-y-2">
+              <div className="h-4 w-full animate-pulse rounded-md bg-muted" />
+              <div className="h-4 w-full animate-pulse rounded-md bg-muted" />
+              <div className="h-4 w-3/4 animate-pulse rounded-md bg-muted" />
             </div>
           </div>
         </div>
@@ -54,20 +52,18 @@ export default function Profile() {
   if (!data) return null;
 
   return (
-    <section className="bg-card py-16">
-      <div className="container mx-auto max-w-5xl px-4">
-        <div className="flex flex-col md:flex-row items-center gap-8">
-          <div className="w-64 h-64 rounded-full overflow-hidden flex-shrink-0">
-            <img
-              src={data.image}
-              alt="Profile"
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <div className="flex-1">
-            <h2 className="text-3xl font-bold mb-6">About Me</h2>
-            <p className=" text-lg">{data.text}</p>
-          </div>
+    <section className="container py-16">
+      <div className="flex flex-col md:flex-row items-center gap-8">
+        <div className="w-64 h-64 rounded-full overflow-hidden flex-shrink-0 border bg-muted">
+          <img
+            src={data.image}
+            alt="Profile"
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <div className="flex-1">
+          <h2 className="text-3xl font-bold tracking-tighter mb-6">About Me</h2>
+          <p className="text-muted-foreground text-lg leading-relaxed">{data.text}</p>
         </div>
       </div>
     </section>

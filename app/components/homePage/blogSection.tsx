@@ -17,7 +17,7 @@ export default function BlogSection() {
         if (!response.ok) throw new Error("Failed to fetch articles");
         const allArticles = await response.json();
         // Get the latest 3 articles
-        setArticles(allArticles.slice(0, 3));
+        setArticles(allArticles.slice(0, 4));
       } catch (error) {
         console.error("Error fetching articles:", error);
       } finally {
@@ -29,14 +29,17 @@ export default function BlogSection() {
 
   if (loading) {
     return (
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto max-w-6xl px-4">
-          <div className="text-center mb-12">
-            <div className="h-8 w-64 bg-gray-200 rounded animate-pulse mx-auto" />
+      <section className="container py-16">
+        <div className="space-y-8">
+          <div className="space-y-2 text-center">
+            <div className="h-8 w-64 animate-pulse rounded-md bg-muted mx-auto" />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-[300px] bg-gray-200 rounded animate-pulse" />
+              <div
+                key={i}
+                className="rounded-lg border bg-card text-card-foreground shadow-sm h-[300px] animate-pulse"
+              />
             ))}
           </div>
         </div>
@@ -45,15 +48,16 @@ export default function BlogSection() {
   }
 
   return (
-    <section className="py-16 bg-gray-50">
-      <div className="container mx-auto max-w-6xl px-4">
-        <h2 className="text-3xl font-bold text-center mb-12">Latest Blog Posts</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <section className="container py-16">
+      <div className="space-y-8">
+        <div className="space-y-2 text-center">
+          <h2 className="text-3xl font-bold tracking-tighter">
+            Latest Blog Posts
+          </h2>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {articles.map((article, index) => (
-            <ArticleCard
-              key={index}
-              path={`Articles/${article.name}`}
-            />
+            <ArticleCard key={index} path={`Articles/${article.name}`} />
           ))}
         </div>
       </div>

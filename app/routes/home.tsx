@@ -17,14 +17,16 @@ export default function Home() {
   return (
     <div className="flex-1 flex flex-col min-h-0">
       <Cover />
-      <hr></hr>
-      <Profile />
-      <hr></hr>
-      <ProjectsSection />
-      <hr></hr>
-      <BlogSection />
-      <hr></hr>
-      <Contact />
+      <hr />
+      <div className="container mx-auto px-4">
+        <Profile />
+        <hr />
+        <ProjectsSection />
+        <hr />
+        <BlogSection />
+        <hr />
+        <Contact />
+      </div>
     </div>
   );
 }

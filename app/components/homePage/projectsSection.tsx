@@ -28,42 +28,40 @@ export default function ProjectsSection() {
 
   if (loading) {
     return (
-      <section className="py-16">
-        <div className="container mx-auto max-w-6xl px-4">
-          <div className="text-center mb-12">
-            <div className="h-8 w-64 bg-gray-200 rounded animate-pulse mx-auto" />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-white rounded-lg overflow-hidden shadow-lg">
-                <div className="h-48 bg-gray-200 animate-pulse" />
-                <div className="p-6 space-y-4">
-                  <div className="h-6 w-3/4 bg-gray-200 rounded animate-pulse" />
-                  <div className="space-y-2">
-                    <div className="h-4 w-full bg-gray-200 rounded animate-pulse" />
-                    <div className="h-4 w-2/3 bg-gray-200 rounded animate-pulse" />
-                  </div>
+      <section className="container space-y-8 py-16">
+        <div className="space-y-2 text-center">
+          <div className="h-8 w-64 animate-pulse rounded-md bg-muted mx-auto" />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="rounded-lg border bg-card text-card-foreground shadow-sm">
+              <div className="h-48 animate-pulse bg-muted" />
+              <div className="p-6 space-y-4">
+                <div className="h-6 w-3/4 animate-pulse rounded-md bg-muted" />
+                <div className="space-y-2">
+                  <div className="h-4 w-full animate-pulse rounded-md bg-muted" />
+                  <div className="h-4 w-2/3 animate-pulse rounded-md bg-muted" />
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </section>
     );
   }
 
   return (
-    <section className="py-16">
-      <div className="container mx-auto max-w-6xl px-4">
-        <h2 className="text-3xl font-bold text-center mb-12">Featured Projects</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project, index) => (
-            <ArticleCard
-              key={index}
-              path={project.path}
-            />
-          ))}
-        </div>
+    <section className="container space-y-8 py-16">
+      <div className="space-y-2 text-center">
+        <h2 className="text-3xl font-bold tracking-tighter">Featured Projects</h2>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {projects.map((project, index) => (
+          <ArticleCard
+            key={index}
+            path={project.path}
+          />
+        ))}
       </div>
     </section>
   );

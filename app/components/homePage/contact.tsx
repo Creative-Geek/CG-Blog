@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { BASE_URL } from "~/config/constants";
+import { Button } from "~/components/ui/button";
 
 interface ContactData {
   title: string;
@@ -29,13 +30,11 @@ export default function Contact() {
 
   if (loading) {
     return (
-      <section className="py-16 bg-gray-900 text-white">
-        <div className="container mx-auto max-w-3xl px-4 text-center">
-          <div className="space-y-6">
-            <div className="h-8 w-64 bg-gray-700 rounded animate-pulse mx-auto" />
-            <div className="h-4 w-96 bg-gray-700 rounded animate-pulse mx-auto" />
-            <div className="h-10 w-32 bg-gray-700 rounded animate-pulse mx-auto" />
-          </div>
+      <section className="container py-16">
+        <div className="mx-auto max-w-3xl text-center space-y-6">
+          <div className="h-8 w-64 animate-pulse rounded-md bg-muted mx-auto" />
+          <div className="h-4 w-96 animate-pulse rounded-md bg-muted mx-auto" />
+          <div className="h-10 w-32 animate-pulse rounded-md bg-muted mx-auto" />
         </div>
       </section>
     );
@@ -44,16 +43,13 @@ export default function Contact() {
   if (!data) return null;
 
   return (
-    <section className="py-16 bg-gray-900 text-white">
-      <div className="container mx-auto max-w-3xl px-4 text-center">
-        <h2 className="text-3xl font-bold mb-6">{data.title}</h2>
-        <p className="text-lg text-gray-300 mb-8">{data.text}</p>
-        <a
-          href={data.buttonLink}
-          className="inline-block px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          Contact Me
-        </a>
+    <section className="container py-16">
+      <div className="mx-auto max-w-3xl text-center space-y-6">
+        <h2 className="text-3xl font-bold tracking-tighter">{data.title}</h2>
+        <p className="text-lg text-muted-foreground">{data.text}</p>
+        <Button asChild size="lg">
+          <a href={data.buttonLink}>Contact Me</a>
+        </Button>
       </div>
     </section>
   );
