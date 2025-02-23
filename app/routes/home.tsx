@@ -1,6 +1,10 @@
 import type { Route } from "./+types/home";
-import { Link } from "react-router-dom";
 import { NAME } from "../config/constants";
+import Cover from "~/components/homePage/cover";
+import Profile from "~/components/homePage/profile";
+import ProjectsSection from "~/components/homePage/projectsSection";
+import BlogSection from "~/components/homePage/blogSection";
+import Contact from "~/components/homePage/contact";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -11,17 +15,12 @@ export function meta({}: Route.MetaArgs) {
 
 export default function Home() {
   return (
-    <div className="flex-1 flex flex-col items-center gap-16 min-h-0">
-      <header className="flex flex-col items-center gap-9">
-        <div className="w-[500px] max-w-[100vw] p-4 text-center">
-          <p>Hey There! This page is under construction🚧</p>
-          <p>I'm currently working on it and will be back soon.</p>
-          <p>
-            In the meantime, you can check out my <Link to="/blog">blog</Link>.
-          </p>
-        </div>
-      </header>
-      <div className="max-w-[300px] w-full space-y-6 px-4"></div>
+    <div className="flex-1 flex flex-col min-h-0">
+      <Cover />
+      <Profile />
+      <ProjectsSection />
+      <BlogSection />
+      <Contact />
     </div>
   );
 }
