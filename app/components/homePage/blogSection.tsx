@@ -34,8 +34,8 @@ export default function BlogSection() {
           <div className="space-y-2 text-center">
             <div className="h-8 w-64 animate-pulse rounded-md bg-muted mx-auto" />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[1, 2, 3].map((i) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {[1, 2, 3, 4].map((i) => (
               <div
                 key={i}
                 className="rounded-lg border bg-card text-card-foreground shadow-sm h-[300px] animate-pulse"
@@ -55,7 +55,7 @@ export default function BlogSection() {
             Latest Blog Posts
           </h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           {articles.map((article, index) => (
             <ArticleCard key={index} path={`Articles/${article.name}`} />
           ))}

@@ -54,7 +54,7 @@ export default function Profile() {
   return (
     <section className="container py-16">
       <div className="flex flex-col md:flex-row items-center gap-8">
-        <div className="w-64 h-64 rounded-full overflow-hidden flex-shrink-0 border bg-muted">
+        <div className="w-64 h-64 rounded-full overflow-hidden flex-shrink-0 bg-muted">
           <img
             src={data.image}
             alt="Profile"
@@ -63,7 +63,9 @@ export default function Profile() {
         </div>
         <div className="flex-1">
           <h2 className="text-3xl font-bold tracking-tighter mb-6">About Me</h2>
-          <p className="text-muted-foreground text-lg leading-relaxed">{data.text}</p>
+          <p className="text-muted-foreground text-lg leading-relaxed">
+            {data.text}
+          </p>
         </div>
       </div>
     </section>
