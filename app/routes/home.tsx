@@ -97,7 +97,7 @@ export default function Home() {
         coverImage={`${BASE_URL}/Pages/${data.coverImage}`}
         hasProjects={data.projects && data.projects.length > 0}
       />
-      <hr />
+
       <div className="container mx-auto px-4">
         <Profile
           image={`${BASE_URL}/Pages/${data.about.image}`}
