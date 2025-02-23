@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { BASE_URL } from "~/config/constants";
-import { Card, CardHeader, CardTitle, CardContent } from "~/components/ui/card";
 import ArticleCard from "../articleCard";
 
 interface Project {
@@ -36,16 +35,16 @@ export default function ProjectsSection() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[1, 2, 3].map((i) => (
-              <Card key={i} className="bg-white rounded-lg shadow-lg animate-pulse">
-                <div className="h-48 bg-gray-200" />
-                <CardContent className="p-6 space-y-4">
-                  <CardTitle className="h-6 w-3/4 bg-gray-200 rounded animate-pulse" />
+              <div key={i} className="bg-white rounded-lg overflow-hidden shadow-lg">
+                <div className="h-48 bg-gray-200 animate-pulse" />
+                <div className="p-6 space-y-4">
+                  <div className="h-6 w-3/4 bg-gray-200 rounded animate-pulse" />
                   <div className="space-y-2">
                     <div className="h-4 w-full bg-gray-200 rounded animate-pulse" />
                     <div className="h-4 w-2/3 bg-gray-200 rounded animate-pulse" />
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             ))}
           </div>
         </div>

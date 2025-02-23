@@ -37,7 +37,7 @@ export default function Cover() {
     return (
       <section className="relative w-full h-[90vh] bg-gray-100 animate-pulse">
         <div className="absolute inset-0 bg-black/40" />
-        <div className="relative z-10 flex items-center justify-center h-full text-center text-white p-4">
+        <div className="relative flex items-center justify-center h-full text-center text-white p-4">
           <div className="space-y-4">
             <div className="h-12 w-96 bg-gray-200 rounded" />
             <div className="h-6 w-80 bg-gray-200 rounded" />
@@ -56,7 +56,7 @@ export default function Cover() {
         style={{ backgroundImage: `url(${data.coverImage})` }}
       />
       <div className="absolute inset-0 bg-black/40" />
-      <div className="relative z-10 flex items-center justify-center h-full text-center text-white p-4">
+      <div className="relative flex items-center justify-center h-full text-center text-white p-4">
         <div>
           <h1 className="text-4xl md:text-5xl font-bold mb-4">{data.mainTitle}</h1>
           <p className="text-xl md:text-2xl">{data.mainSubtitle}</p>
