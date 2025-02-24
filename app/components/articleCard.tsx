@@ -117,7 +117,7 @@ const ArticleCard = ({
     <Card
       className={`overflow-hidden relative ${
         isNavigating
-          ? "opacity-70 pointer-events-none"
+          ? "opacity-70 pointer-events-none scale-[1.04] "
           : "transition-transform hover:scale-[1.02]"
       }`}
     >
