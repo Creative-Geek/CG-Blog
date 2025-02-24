@@ -114,16 +114,18 @@ const ArticleCard = ({
       : metadata.description;
 
   return (
-    <Link
-      to={`/blog/${articlePath}`}
-      className="block no-underline transition-transform hover:scale-[1.02]"
-      aria-disabled={isNavigating}
-      prefetch="intent"
+    <Card
+      className={`overflow-hidden relative ${
+        isNavigating
+          ? "opacity-70 pointer-events-none"
+          : "transition-transform hover:scale-[1.02]"
+      }`}
     >
-      <Card
-        className={`overflow-hidden relative ${
-          isNavigating ? "opacity-70 pointer-events-none" : ""
-        }`}
+      <Link
+        to={`/blog/${articlePath}`}
+        className="block no-underline"
+        aria-disabled={isNavigating}
+        prefetch="intent"
       >
         {metadata.image && (
           <div className="relative">
@@ -171,8 +173,8 @@ const ArticleCard = ({
             )}
           </div>
         </CardContent>
-      </Card>
-    </Link>
+      </Link>
+    </Card>
   );
 };
 
