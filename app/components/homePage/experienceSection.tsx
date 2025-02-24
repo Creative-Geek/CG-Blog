@@ -71,7 +71,9 @@ export default function ExperienceSection({
 
         {experience && experience.length > 0 && (
           <div className="space-y-6">
-            <h2 className="text-3xl font-bold tracking-tighter">Experience</h2>
+            <h2 className="text-3xl font-bold tracking-tighter text-center">
+              Experience
+            </h2>
             {experience.map((job, index) => (
               <div key={index} className="space-y-2">
                 <h3 className="text-xl font-semibold text-primary">
