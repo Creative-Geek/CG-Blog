@@ -45,6 +45,7 @@ export default function Cover({
           <p className="text-xl md:text-2xl mb-4">{mainSubtitle}</p>
           {hasProjects ? (
             <Button
+              className="cursor-pointer"
               onClick={() => {
                 document.getElementById("projects-section")?.scrollIntoView({
                   behavior: "smooth",
