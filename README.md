@@ -5,12 +5,12 @@ _Minimalist React blog engine with first-class RTL support. Your content, your h
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 ## Features  
-🔁 Auto RTL layout switching (Arabic/Urdu/Persian ready)  
-🌐 Server-side rendering (React Router 7)  
-📡 Remote markdown content from any URL  
-♾️ Infinite scroll with loading states  
-🖼️ Graceful image fallbacks  
-🌗 Built-in dark mode (Shadcn/ui)  
+🔁 Auto RTL Article switching (Arabic/Urdu/Persian ready)
+🌐 Server-side rendering (React Router 7)
+📡 Remote markdown content from any URL
+♾️ Infinite scroll with loading states
+🖼️ Graceful fallbacks for missing data
+🌗 Built-in dark mode (Shadcn/ui)
 
 ## Get Started in 3 Steps  
 1. Clone:  
