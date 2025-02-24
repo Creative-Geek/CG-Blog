@@ -17,17 +17,6 @@ interface ArticleProps {
   path?: string;
 }
 
-// function slugify(text: string) {
-//   let slug = text
-//     .trim()
-//     .toLowerCase()
-//     .replace(/[^\p{L}\p{N}]+/gu, "-") // keep letters & numbers
-//     .replace(/^-+|-+$/g, "") // remove leading/trailing dashes
-//     .replace(/-+/g, "-"); // collapse consecutive dashes
-
-//   return slug || "heading";
-// }
-
 const components: Components = {
   // Paragraph component
   p: ({ children, ...props }): JSX.Element => {

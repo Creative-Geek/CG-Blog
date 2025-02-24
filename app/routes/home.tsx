@@ -107,9 +107,12 @@ export default function Home() {
         <hr />
         <ProjectsSection projects={data.projects} />
         <hr />
-        <ExperienceSection experience={data.experience} />
+        <ExperienceSection experience={data.experience} skills={data.skills} />
         <hr />
-        <BlogSection articles={articles} featuredArticles={data.featuredArticles} />
+        <BlogSection
+          articles={articles}
+          featuredArticles={data.featuredArticles}
+        />
         <hr />
         <Contact {...data.contact} />
       </div>
