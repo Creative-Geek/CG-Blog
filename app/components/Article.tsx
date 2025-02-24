@@ -1,6 +1,6 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { startsWithArabic, containsArabic } from "~/lib/utils";
+import { startsWithArabic, containsArabic, extractText } from "~/lib/utils";
 import { BASE_URL, NAME } from "~/config/constants";
 import type { Components } from "react-markdown";
 import type { ReactNode, JSX } from "react";
@@ -30,7 +30,8 @@ function slugify(text: string) {
 const components: Components = {
   // Paragraph component
   p: ({ children, ...props }): JSX.Element => {
-    const isRTL = containsArabic(children);
+    const text = extractText(children);
+    const isRTL = startsWithArabic(text);
     return (
       <p
         {...props}

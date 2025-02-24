@@ -6,11 +6,30 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+// Helper to extract text from React nodes
+export function extractText(node: React.ReactNode): string {
+  let result = "";
+  React.Children.forEach(node, (child) => {
+    if (typeof child === "string" || typeof child === "number") {
+      result += child;
+    } else if (React.isValidElement(child)) {
+      result += extractText(child.props.children);
+    }
+  });
+  return result;
+}
+
+// Updated startsWithArabic to ignore non-lingual characters
 export function startsWithArabic(text: string): boolean {
   if (!text) return false;
+  const trimmedText = text.trim();
+  // Find the first Unicode letter in the string.
+  const firstLetterMatch = trimmedText.match(/\p{L}/u);
+  if (!firstLetterMatch) return false;
+  const firstLetter = firstLetterMatch[0];
   // Arabic Unicode range: \u0600-\u06FF
   const arabicPattern = /^[\u0600-\u06FF]/;
-  return arabicPattern.test(text.trim());
+  return arabicPattern.test(firstLetter);
 }
 
 // Recursive helper function to check for Arabic characters in any nested text.
