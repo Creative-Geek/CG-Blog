@@ -13,7 +13,8 @@ export function extractText(node: React.ReactNode): string {
     if (typeof child === "string" || typeof child === "number") {
       result += child;
     } else if (React.isValidElement(child)) {
-      result += extractText(child.props.children);
+      const element = child as React.ReactElement<any>; // Add <any> to specify the type of props
+      result += extractText(element.props.children);
     }
   });
   return result;
