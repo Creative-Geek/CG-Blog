@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import type { Route } from "./+types/home";
+import { useLoaderData } from "react-router-dom";
 import { NAME, BASE_URL } from "../config/constants";
 import Cover from "~/components/homePage/cover";
 import Profile from "~/components/homePage/profile";
@@ -31,90 +30,68 @@ interface HomeData {
   featuredArticles?: Array<{ path: string }>;
 }
 
-export function meta({}: Route.MetaArgs) {
+export async function loader() {
+  const [homeResponse, articlesResponse] = await Promise.all([
+    fetch(`${BASE_URL}/Pages/home.json`),
+    fetch(`${BASE_URL}/Articles/index.json`),
+  ]);
+
+  if (!homeResponse.ok) throw new Error("Failed to fetch home data");
+  if (!articlesResponse.ok) throw new Error("Failed to fetch articles");
+
+  const homeData: HomeData = await homeResponse.json();
+  // Process cover image as in viewArticle loader
+  if (homeData.coverImage && !homeData.coverImage.startsWith("http")) {
+    homeData.coverImage = `${BASE_URL}/Pages/${homeData.coverImage}`;
+  }
+  const allArticles = await articlesResponse.json();
+  const articles = allArticles.slice(0, 3);
+
+  return { homeData, articles };
+}
+
+export function meta({ data }: { data: { homeData: HomeData } }) {
   return [
     { title: NAME },
     { name: "description", content: `Welcome to ${NAME}'s Blog!` },
+    { property: "og:image", content: data.homeData.coverImage },
   ];
 }
 
 export default function Home() {
-  const [data, setData] = useState<HomeData | null>(null);
-  const [articles, setArticles] = useState<Array<{ name: string }>>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const [homeResponse, articlesResponse] = await Promise.all([
-          fetch(`${BASE_URL}/Pages/home.json`),
-          fetch(`${BASE_URL}/Articles/index.json`),
-        ]);
-
-        if (!homeResponse.ok) throw new Error("Failed to fetch home data");
-        if (!articlesResponse.ok) throw new Error("Failed to fetch articles");
-
-        const homeData = await homeResponse.json();
-        const allArticles = await articlesResponse.json();
-
-        setData(homeData);
-        setArticles(allArticles.slice(0, 3)); // Get latest 3 articles
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchData();
-  }, []);
-
-  if (loading || !data) {
-    return (
-      <div className="flex-1 flex flex-col min-h-0">
-        <div className="animate-pulse">
-          <Cover loading={true} />
-          <hr />
-          <div className="container mx-auto px-4">
-            <Profile loading={true} />
-            <hr />
-            <ProjectsSection loading={true} />
-            <hr />
-            <ExperienceSection loading={true} />
-            <hr />
-            <BlogSection loading={true} />
-            <hr />
-            <Contact loading={true} />
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const { homeData, articles } = useLoaderData() as {
+    homeData: HomeData;
+    articles: Array<{ name: string }>;
+  };
 
   return (
     <div className="flex-1 flex flex-col min-h-0">
       <Cover
-        mainTitle={data.mainTitle}
-        mainSubtitle={data.mainSubtitle}
-        coverImage={`${BASE_URL}/Pages/${data.coverImage}`}
-        hasProjects={data.projects && data.projects.length > 0}
+        mainTitle={homeData.mainTitle}
+        mainSubtitle={homeData.mainSubtitle}
+        coverImage={homeData.coverImage}
+        hasProjects={homeData.projects && homeData.projects.length > 0}
       />
 
       <div className="container mx-auto px-4">
         <Profile
-          image={`${BASE_URL}/Pages/${data.about.image}`}
-          text={data.about.text}
+          image={`${BASE_URL}/Pages/${homeData.about.image}`}
+          text={homeData.about.text}
         />
         <hr />
-        <ProjectsSection projects={data.projects} />
+        <ProjectsSection projects={homeData.projects} />
         <hr />
-        <ExperienceSection experience={data.experience} skills={data.skills} />
+        <ExperienceSection
+          experience={homeData.experience}
+          skills={homeData.skills}
+        />
         <hr />
         <BlogSection
           articles={articles}
-          featuredArticles={data.featuredArticles}
+          featuredArticles={homeData.featuredArticles}
         />
         <hr />
-        <Contact {...data.contact} />
+        <Contact {...homeData.contact} />
       </div>
     </div>
   );
