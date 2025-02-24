@@ -28,12 +28,13 @@ interface HomeData {
     text: string;
     buttonLink: string;
   };
+  featuredArticles?: Array<{ path: string }>;
 }
 
 export function meta({}: Route.MetaArgs) {
   return [
     { title: NAME },
-    { name: "description", content: "Welcome to Creative Geek's Blog!" },
+    { name: "description", content: `Welcome to ${NAME}'s Blog!` },
   ];
 }
 
@@ -103,13 +104,13 @@ export default function Home() {
           image={`${BASE_URL}/Pages/${data.about.image}`}
           text={data.about.text}
         />
-        {data.about && data.about.text && <hr />}
+        <hr />
         <ProjectsSection projects={data.projects} />
-        {data.projects && data.projects.length > 0 && <hr />}
-        <ExperienceSection skills={data.skills} experience={data.experience} />
-        {data.experience && data.experience.length > 0 && <hr />}
-        <BlogSection articles={articles} />
-        {articles && articles.length > 0 && <hr />}
+        <hr />
+        <ExperienceSection experience={data.experience} />
+        <hr />
+        <BlogSection articles={articles} featuredArticles={data.featuredArticles} />
+        <hr />
         <Contact {...data.contact} />
       </div>
     </div>
