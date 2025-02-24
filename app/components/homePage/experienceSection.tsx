@@ -20,7 +20,7 @@ export default function ExperienceSection({
       <section className="container py-16 w-3/4 ml-auto mr-auto">
         <div className="space-y-8">
           <div className="space-y-4">
-            <div className="h-8 w-48 animate-pulse rounded-md bg-muted" />
+            <div className="h-8 w-48 animate-pulse rounded-md bg-muted mx-auto" />
             <div className="flex flex-wrap gap-2">
               {Array.from({ length: 8 }).map((_, i) => (
                 <div
@@ -52,7 +52,9 @@ export default function ExperienceSection({
       <div className="space-y-8">
         {skills && skills.length > 0 && (
           <div className="space-y-4">
-            <h2 className="text-3xl font-bold tracking-tighter">Skills</h2>
+            <h2 className="text-3xl font-bold tracking-tighter text-center">
+              Skills
+            </h2>
             <div className="flex flex-wrap gap-2">
               {skills.map((skill, index) => (
                 <Badge
