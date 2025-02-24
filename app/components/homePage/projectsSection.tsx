@@ -11,7 +11,10 @@ interface ProjectsSectionProps {
   projects?: Array<{ path: string }>;
 }
 
-export default function ProjectsSection({ loading, projects }: ProjectsSectionProps) {
+export default function ProjectsSection({
+  loading,
+  projects,
+}: ProjectsSectionProps) {
   if (loading) {
     return (
       <section id="projects-section" className="container space-y-8 py-16">
@@ -22,7 +25,7 @@ export default function ProjectsSection({ loading, projects }: ProjectsSectionPr
           {Array.from({ length: 3 }).map((_, i) => (
             <div
               key={i}
-              className="rounded-lg border bg-card text-card-foreground shadow-sm"
+              className="rounded-lg bg-card text-card-foreground shadow-sm"
             >
               <div className="h-48 animate-pulse bg-muted" />
               <div className="p-6 space-y-4">
