@@ -80,6 +80,7 @@ const ArticleCard = ({
           author: data.author || author,
         });
       } catch (err) {
+        console.error(err);
         setError(
           err instanceof Error ? err.message : "Error fetching metadata"
         );
@@ -91,7 +92,7 @@ const ArticleCard = ({
   }, [path, title, description, image, date, author]);
 
   if (error) {
-    return <div className="text-red-500">Error: {error}</div>;
+    return null;
   }
 
   if (loading) {
