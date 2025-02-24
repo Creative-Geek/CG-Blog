@@ -55,7 +55,7 @@ export default function ExperienceSection({
             <h2 className="text-3xl font-bold tracking-tighter text-center">
               Skills
             </h2>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2 content-center justify-center">
               {skills.map((skill, index) => (
                 <Badge
                   key={index}
