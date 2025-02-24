@@ -5,6 +5,7 @@ import { BASE_URL, NAME } from "~/config/constants";
 import type { Components } from "react-markdown";
 import type { ReactNode, JSX } from "react";
 import { useState, useEffect } from "react";
+import slugify from "@sindresorhus/slugify";
 
 interface ArticleProps {
   title?: string;
@@ -16,16 +17,16 @@ interface ArticleProps {
   path?: string;
 }
 
-function slugify(text: string) {
-  let slug = text
-    .trim()
-    .toLowerCase()
-    .replace(/[^\p{L}\p{N}]+/gu, "-") // keep letters & numbers
-    .replace(/^-+|-+$/g, "") // remove leading/trailing dashes
-    .replace(/-+/g, "-"); // collapse consecutive dashes
+// function slugify(text: string) {
+//   let slug = text
+//     .trim()
+//     .toLowerCase()
+//     .replace(/[^\p{L}\p{N}]+/gu, "-") // keep letters & numbers
+//     .replace(/^-+|-+$/g, "") // remove leading/trailing dashes
+//     .replace(/-+/g, "-"); // collapse consecutive dashes
 
-  return slug || "heading";
-}
+//   return slug || "heading";
+// }
 
 const components: Components = {
   // Paragraph component
@@ -57,7 +58,7 @@ const components: Components = {
             `${window.location.href.split("#")[0]}#${slug}`
           )
         }
-        className="text-4xl font-bold mb-6 text-foreground border-b pb-2 border-border cursor-pointer hover:underline hover:text-blue-500"
+        className="text-4xl font-bold mb-6 text-foreground border-b pb-2 border-border cursor-pointer hover:underline "
       >
         {children}
       </h1>
