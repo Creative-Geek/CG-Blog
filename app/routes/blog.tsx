@@ -3,6 +3,7 @@ import { useInView } from "react-intersection-observer";
 import { useLocation, useLoaderData } from "react-router-dom";
 import ArticleCard from "../components/articleCard";
 import { BASE_URL, NAME } from "~/config/constants";
+import { motion } from "framer-motion";
 
 interface Article {
   name: string;
@@ -168,37 +169,44 @@ function BlogContent() {
   }, [inView]);
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-8" ref={contentRef}>
-      <h2 className="text-xl font-bold mb-5">Latest Posts</h2>
-      <div className="space-y-6">
-        {displayedArticles.map((article, index) => (
-          <ArticleCard
-            key={`${article.name}-${index}`}
-            path={`Articles/${article.name}`}
-          />
-        ))}
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="mx-auto max-w-3xl px-4 py-8" ref={contentRef}>
+        <h2 className="text-xl font-bold mb-5">Latest Posts</h2>
+        <div className="space-y-6">
+          {displayedArticles.map((article, index) => (
+            <ArticleCard
+              key={`${article.name}-${index}`}
+              path={`Articles/${article.name}`}
+            />
+          ))}
 
-        {loading && (
-          <div className="text-center">
-            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" />
-          </div>
-        )}
+          {loading && (
+            <div className="text-center">
+              <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" />
+            </div>
+          )}
 
-        {error && (
-          <div className="text-red-500 text-center">
-            {error}. Please try refreshing the page.
-          </div>
-        )}
+          {error && (
+            <div className="text-red-500 text-center">
+              {error}. Please try refreshing the page.
+            </div>
+          )}
 
-        {!loading && !error && hasMore && <div ref={ref} className="h-10" />}
+          {!loading && !error && hasMore && <div ref={ref} className="h-10" />}
 
-        {!hasMore && !error && (
-          <div className="text-center text-gray-500">
-            No more articles to load 🎉
-          </div>
-        )}
+          {!hasMore && !error && (
+            <div className="text-center text-gray-500">
+              No more articles to load 🎉
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -206,7 +214,14 @@ export default function Blog() {
   return (
     <>
       <title>{`${NAME}'s Blog`}</title>
-      <BlogContent />
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <BlogContent />
+      </motion.div>
     </>
   );
 }
