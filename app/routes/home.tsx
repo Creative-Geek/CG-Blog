@@ -89,13 +89,14 @@ export default function Home() {
 
   return (
     <>
-      <Cover
-        mainTitle={homeData.mainTitle}
-        mainSubtitle={homeData.mainSubtitle}
-        coverImage={homeData.coverImage}
-        hasProjects={homeData.projects && homeData.projects.length > 0}
-      />
-
+      <FadeInSection>
+        <Cover
+          mainTitle={homeData.mainTitle}
+          mainSubtitle={homeData.mainSubtitle}
+          coverImage={homeData.coverImage}
+          hasProjects={homeData.projects && homeData.projects.length > 0}
+        />
+      </FadeInSection>
       <div className="container mx-auto px-4">
         <FadeInSection>
           <Profile
