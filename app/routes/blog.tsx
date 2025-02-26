@@ -3,7 +3,6 @@ import { useInView } from "react-intersection-observer";
 import { useLocation, useLoaderData } from "react-router-dom";
 import ArticleCard from "../components/articleCard";
 import { BASE_URL, NAME } from "~/config/constants";
-import { PageTransition } from "~/components/PageTransition";
 
 interface Article {
   name: string;
@@ -198,9 +197,9 @@ function BlogContent() {
 
 export default function Blog() {
   return (
-    <PageTransition>
+    <>
       <title>{`${NAME}'s Blog`}</title>
       <BlogContent />
-    </PageTransition>
+    </>
   );
 }

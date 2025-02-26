@@ -3,7 +3,6 @@ import { Article } from "../components/Article";
 import { BASE_URL, NAME } from "~/config/constants";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { PageTransition } from "~/components/PageTransition";
 
 interface ArticleData {
   title: string;
@@ -105,9 +104,5 @@ export default function ViewArticle() {
     return <LoadingArticle />;
   }
 
-  return (
-    <PageTransition>
-      <Article {...articleData} />
-    </PageTransition>
-  );
+  return <Article {...articleData} />;
 }
