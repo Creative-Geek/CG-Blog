@@ -3,6 +3,7 @@ import { Article } from "../components/Article";
 import { BASE_URL, NAME } from "~/config/constants";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 interface ArticleData {
   title: string;
@@ -100,9 +101,23 @@ export default function ViewArticle() {
     }
   }, [location.pathname]);
 
-  if (isLoading) {
-    return <LoadingArticle />;
-  }
+  // if (isLoading) {
+  //   return <LoadingArticle />;
+  // }
 
-  return <Article {...articleData} />;
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 50 }}
+      transition={{
+        type: "spring",
+        stiffness: 100,
+        damping: 20,
+        duration: 0.6,
+      }}
+    >
+      <Article {...articleData} />
+    </motion.div>
+  );
 }

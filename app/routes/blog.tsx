@@ -16,39 +16,44 @@ interface BlogState {
 
 // Helper functions for state management
 const getBlogState = (): BlogState => {
-  if (typeof window === 'undefined') return { scrollRatio: 0, displayedArticles: [], page: 1 };
-  
+  if (typeof window === "undefined")
+    return { scrollRatio: 0, displayedArticles: [], page: 1 };
+
   try {
-    const state = sessionStorage.getItem('blogState');
-    return state ? JSON.parse(state) : { scrollRatio: 0, displayedArticles: [], page: 1 };
+    const state = sessionStorage.getItem("blogState");
+    return state
+      ? JSON.parse(state)
+      : { scrollRatio: 0, displayedArticles: [], page: 1 };
   } catch {
     return { scrollRatio: 0, displayedArticles: [], page: 1 };
   }
 };
 
 const saveBlogState = (state: BlogState) => {
-  if (typeof window === 'undefined') return;
+  if (typeof window === "undefined") return;
   try {
-    sessionStorage.setItem('blogState', JSON.stringify(state));
+    sessionStorage.setItem("blogState", JSON.stringify(state));
   } catch (error) {
-    console.error('Failed to save blog state:', error);
+    console.error("Failed to save blog state:", error);
   }
 };
 
 // Helper function to get scroll ratio
 const getScrollRatio = () => {
-  if (typeof window === 'undefined') return 0;
-  
-  const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+  if (typeof window === "undefined") return 0;
+
+  const scrollHeight =
+    document.documentElement.scrollHeight - window.innerHeight;
   if (scrollHeight <= 0) return 0;
   return window.scrollY / scrollHeight;
 };
 
 // Helper function to restore scroll position from ratio
 const restoreScrollFromRatio = (ratio: number) => {
-  if (typeof window === 'undefined') return;
-  
-  const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+  if (typeof window === "undefined") return;
+
+  const scrollHeight =
+    document.documentElement.scrollHeight - window.innerHeight;
   const targetScroll = ratio * scrollHeight;
   window.scrollTo(0, targetScroll);
 };
@@ -66,24 +71,26 @@ export async function loader() {
 }
 
 function BlogContent() {
-  const { initialArticles, totalArticles } = useLoaderData() as { 
-    initialArticles: Article[], 
-    totalArticles: Article[] 
+  const { initialArticles, totalArticles } = useLoaderData() as {
+    initialArticles: Article[];
+    totalArticles: Article[];
   };
-  
+
   const [isClient, setIsClient] = useState(false);
   const savedState = useRef(getBlogState());
   const contentRef = useRef<HTMLDivElement>(null);
-  
+
   const [displayedArticles, setDisplayedArticles] = useState<Article[]>(
-    savedState.current.displayedArticles.length > 0 
-      ? savedState.current.displayedArticles 
+    savedState.current.displayedArticles.length > 0
+      ? savedState.current.displayedArticles
       : initialArticles
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [page, setPage] = useState(savedState.current.page);
-  const [hasMore, setHasMore] = useState(totalArticles.length > displayedArticles.length);
+  const [hasMore, setHasMore] = useState(
+    totalArticles.length > displayedArticles.length
+  );
   const articlesPerPage = 5;
 
   const { ref, inView } = useInView({
@@ -133,8 +140,8 @@ function BlogContent() {
       });
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [isClient]);
 
   const loadMore = () => {
@@ -187,7 +194,7 @@ function BlogContent() {
 
         {!hasMore && !error && (
           <div className="text-center text-gray-500">
-            No more articles to load
+            No more articles to load 🎉
           </div>
         )}
       </div>

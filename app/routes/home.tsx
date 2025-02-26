@@ -1,4 +1,5 @@
 import { useLoaderData } from "react-router-dom";
+import React from "react";
 import { NAME, BASE_URL } from "../config/constants";
 import Cover from "~/components/homePage/cover";
 import Profile from "~/components/homePage/profile";
@@ -6,6 +7,7 @@ import ProjectsSection from "~/components/homePage/projectsSection";
 import BlogSection from "~/components/homePage/blogSection";
 import Contact from "~/components/homePage/contact";
 import ExperienceSection from "~/components/homePage/experienceSection";
+import { motion, useInView } from "framer-motion";
 
 interface HomeData {
   mainTitle: string;
@@ -28,6 +30,27 @@ interface HomeData {
     buttonLink: string;
   };
   featuredArticles?: Array<{ path: string }>;
+}
+
+function FadeInSection({ children }: { children: React.ReactNode }) {
+  const ref = React.useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.3 });
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 50 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+      transition={{
+        type: "spring",
+        stiffness: 100,
+        damping: 20,
+        duration: 0.6,
+      }}
+    >
+      {children}
+    </motion.div>
+  );
 }
 
 export async function loader() {
@@ -65,7 +88,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex-1 flex flex-col min-h-0">
+    <>
       <Cover
         mainTitle={homeData.mainTitle}
         mainSubtitle={homeData.mainSubtitle}
@@ -74,25 +97,35 @@ export default function Home() {
       />
 
       <div className="container mx-auto px-4">
-        <Profile
-          image={`${BASE_URL}/Pages/${homeData.about.image}`}
-          text={homeData.about.text}
-        />
+        <FadeInSection>
+          <Profile
+            image={`${BASE_URL}/Pages/${homeData.about.image}`}
+            text={homeData.about.text}
+          />
+        </FadeInSection>
         <hr />
-        <ProjectsSection projects={homeData.projects} />
+        <FadeInSection>
+          <ProjectsSection projects={homeData.projects} />
+        </FadeInSection>
         <hr />
-        <ExperienceSection
-          experience={homeData.experience}
-          skills={homeData.skills}
-        />
+        <FadeInSection>
+          <ExperienceSection
+            experience={homeData.experience}
+            skills={homeData.skills}
+          />
+        </FadeInSection>
         <hr />
-        <BlogSection
-          articles={articles}
-          featuredArticles={homeData.featuredArticles}
-        />
+        <FadeInSection>
+          <BlogSection
+            articles={articles}
+            featuredArticles={homeData.featuredArticles}
+          />
+        </FadeInSection>
         <hr />
-        <Contact {...homeData.contact} />
+        <FadeInSection>
+          <Contact {...homeData.contact} />
+        </FadeInSection>
       </div>
-    </div>
+    </>
   );
 }
