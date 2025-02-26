@@ -6,6 +6,7 @@ import ProjectsSection from "~/components/homePage/projectsSection";
 import BlogSection from "~/components/homePage/blogSection";
 import Contact from "~/components/homePage/contact";
 import ExperienceSection from "~/components/homePage/experienceSection";
+import { PageTransition } from "~/components/PageTransition";
 
 interface HomeData {
   mainTitle: string;
@@ -65,34 +66,36 @@ export default function Home() {
   };
 
   return (
-    <div className="flex-1 flex flex-col min-h-0">
-      <Cover
-        mainTitle={homeData.mainTitle}
-        mainSubtitle={homeData.mainSubtitle}
-        coverImage={homeData.coverImage}
-        hasProjects={homeData.projects && homeData.projects.length > 0}
-      />
+    <PageTransition>
+      <div className="flex-1 flex flex-col min-h-0">
+        <Cover
+          mainTitle={homeData.mainTitle}
+          mainSubtitle={homeData.mainSubtitle}
+          coverImage={homeData.coverImage}
+          hasProjects={homeData.projects && homeData.projects.length > 0}
+        />
 
-      <div className="container mx-auto px-4">
-        <Profile
-          image={`${BASE_URL}/Pages/${homeData.about.image}`}
-          text={homeData.about.text}
-        />
-        <hr />
-        <ProjectsSection projects={homeData.projects} />
-        <hr />
-        <ExperienceSection
-          experience={homeData.experience}
-          skills={homeData.skills}
-        />
-        <hr />
-        <BlogSection
-          articles={articles}
-          featuredArticles={homeData.featuredArticles}
-        />
-        <hr />
-        <Contact {...homeData.contact} />
+        <div className="container mx-auto px-4">
+          <Profile
+            image={`${BASE_URL}/Pages/${homeData.about.image}`}
+            text={homeData.about.text}
+          />
+          <hr />
+          <ProjectsSection projects={homeData.projects} />
+          <hr />
+          <ExperienceSection
+            experience={homeData.experience}
+            skills={homeData.skills}
+          />
+          <hr />
+          <BlogSection
+            articles={articles}
+            featuredArticles={homeData.featuredArticles}
+          />
+          <hr />
+          <Contact {...homeData.contact} />
+        </div>
       </div>
-    </div>
+    </PageTransition>
   );
 }

@@ -5,7 +5,9 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLocation,
 } from "react-router";
+import { AnimatePresence } from "framer-motion";
 
 import type { Route } from "./+types/root";
 import "./app.css";
@@ -46,10 +48,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  const location = useLocation();
+
   return (
     <>
       <Navbar />
-      <Outlet />
+      <AnimatePresence mode="wait" initial={false}>
+        <Outlet key={location.pathname} />
+      </AnimatePresence>
     </>
   );
 }
