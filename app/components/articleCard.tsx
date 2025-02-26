@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import React from "react";
 import { Link, useNavigation } from "react-router-dom";
 import { ArrowRight, Loader2 } from "lucide-react";
 import {
@@ -10,6 +11,7 @@ import {
 } from "../components/ui/card";
 
 import { BASE_URL } from "~/config/constants";
+import { motion, useInView } from "framer-motion";
 
 interface ArticleCardProps {
   title?: string;
@@ -94,7 +96,26 @@ const ArticleCard = ({
   if (error) {
     return null;
   }
+  function FadeInSection({ children }: { children: React.ReactNode }) {
+    const ref = React.useRef(null);
+    const isInView = useInView(ref, { once: true, amount: 0.3 });
 
+    return (
+      <motion.div
+        ref={ref}
+        initial={{ opacity: 0, y: 50 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+        transition={{
+          type: "spring",
+          stiffness: 100,
+          damping: 20,
+          duration: 0.6,
+        }}
+      >
+        {children}
+      </motion.div>
+    );
+  }
   if (loading) {
     return (
       <div className="block no-underline transition-transform hover:scale-[1.02]">
@@ -114,67 +135,69 @@ const ArticleCard = ({
       : metadata.description;
 
   return (
-    <Card
-      className={`overflow-hidden relative ${
-        isNavigating
-          ? "opacity-70 pointer-events-none scale-[1.04] "
-          : "transition-transform hover:scale-[1.02]"
-      }`}
-    >
-      <Link
-        to={`/blog/${articlePath}`}
-        className="block no-underline"
-        aria-disabled={isNavigating}
-        prefetch="intent"
+    <FadeInSection>
+      <Card
+        className={`overflow-hidden relative ${
+          isNavigating
+            ? "opacity-70 pointer-events-none scale-[1.04] "
+            : "transition-transform hover:scale-[1.02]"
+        }`}
       >
-        {metadata.image && (
-          <div className="relative">
-            <img
-              src={metadata.image}
-              alt={metadata.title}
-              className={`h-48 w-full object-cover ${
-                isNavigating ? "blur-[1px]" : ""
-              }`}
-            />
-          </div>
-        )}
-        {isNavigating && (
-          <div className="absolute inset-0 flex items-center justify-center bg-background/20 backdrop-blur-[5px] z-10">
-            <Loader2 className="h-8 w-8 animate-spin text-foreground" />
-          </div>
-        )}
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-xl" dir="auto">
-            {metadata.title}
-          </CardTitle>
-          <CardDescription
-            dir="auto"
-            className="flex items-center text-sm text-muted-foreground"
-          >
-            {metadata.author} • {metadata.date}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="flex items-start gap-4">
-          <p
-            className="text-sm text-muted-foreground flex-1"
-            dir="auto"
-            style={{
-              textAlign: "inherit",
-            }}
-          >
-            {truncatedDescription}
-          </p>
-          <div className="flex-shrink-0">
-            {isNavigating ? (
-              // <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
-              <ArrowRight className="h-5 w-5 text-muted-foreground" />
-            ) : (
-              <ArrowRight className="h-5 w-5 text-muted-foreground" />
-            )}
-          </div>
-        </CardContent>
-      </Link>
-    </Card>
+        <Link
+          to={`/blog/${articlePath}`}
+          className="block no-underline"
+          aria-disabled={isNavigating}
+          prefetch="intent"
+        >
+          {metadata.image && (
+            <div className="relative">
+              <img
+                src={metadata.image}
+                alt={metadata.title}
+                className={`h-48 w-full object-cover ${
+                  isNavigating ? "blur-[1px]" : ""
+                }`}
+              />
+            </div>
+          )}
+          {isNavigating && (
+            <div className="absolute inset-0 flex items-center justify-center bg-background/20 backdrop-blur-[5px] z-10">
+              <Loader2 className="h-8 w-8 animate-spin text-foreground" />
+            </div>
+          )}
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-xl" dir="auto">
+              {metadata.title}
+            </CardTitle>
+            <CardDescription
+              dir="auto"
+              className="flex items-center text-sm text-muted-foreground"
+            >
+              {metadata.author} • {metadata.date}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex items-start gap-4">
+            <p
+              className="text-sm text-muted-foreground flex-1"
+              dir="auto"
+              style={{
+                textAlign: "inherit",
+              }}
+            >
+              {truncatedDescription}
+            </p>
+            <div className="flex-shrink-0">
+              {isNavigating ? (
+                // <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+                <ArrowRight className="h-5 w-5 text-muted-foreground" />
+              ) : (
+                <ArrowRight className="h-5 w-5 text-muted-foreground" />
+              )}
+            </div>
+          </CardContent>
+        </Link>
+      </Card>
+    </FadeInSection>
   );
 };
 
