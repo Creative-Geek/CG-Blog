@@ -66,22 +66,10 @@ export async function loader() {
 }
 
 function BlogContent() {
-  const data = useLoaderData() as { articles: Article[] } | null;
-  
-  if (!data) {
-    return (
-      <div className="mx-auto max-w-3xl px-4 py-8">
-        <h2 className="text-xl font-bold mb-5">Latest Posts</h2>
-        <div className="space-y-6">
-          {[...Array(5)].map((_, i) => (
-            <ArticleCard key={i} loading />
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  const { articles } = data;
+  const { initialArticles, totalArticles } = useLoaderData() as { 
+    initialArticles: Article[], 
+    totalArticles: Article[] 
+  };
   
   const [isClient, setIsClient] = useState(false);
   const savedState = useRef(getBlogState());
@@ -90,12 +78,12 @@ function BlogContent() {
   const [displayedArticles, setDisplayedArticles] = useState<Article[]>(
     savedState.current.displayedArticles.length > 0 
       ? savedState.current.displayedArticles 
-      : articles
+      : initialArticles
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [page, setPage] = useState(savedState.current.page);
-  const [hasMore, setHasMore] = useState(articles.length > displayedArticles.length);
+  const [hasMore, setHasMore] = useState(totalArticles.length > displayedArticles.length);
   const articlesPerPage = 5;
 
   const { ref, inView } = useInView({
@@ -155,9 +143,9 @@ function BlogContent() {
     setLoading(true);
     const start = page * articlesPerPage;
     const end = start + articlesPerPage;
-    const newArticles = articles.slice(start, end);
+    const newArticles = totalArticles.slice(start, end);
 
-    if (newArticles.length < articlesPerPage || end >= articles.length) {
+    if (newArticles.length < articlesPerPage || end >= totalArticles.length) {
       setHasMore(false);
     }
 

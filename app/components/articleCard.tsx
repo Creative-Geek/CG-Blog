@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { Link, useNavigation } from "react-router-dom";
+import { ArrowRight, Loader2 } from "lucide-react";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "./ui/card";
-import { motion } from "framer-motion";
+} from "../components/ui/card";
+
 import { BASE_URL } from "~/config/constants";
 
 interface ArticleCardProps {
@@ -18,7 +18,6 @@ interface ArticleCardProps {
   date?: string;
   author?: string;
   path?: string;
-  loading?: boolean;
 }
 
 const ArticleCard = ({
@@ -28,7 +27,6 @@ const ArticleCard = ({
   date = "",
   author = "",
   path,
-  loading = false,
 }: ArticleCardProps) => {
   const [metadata, setMetadata] = useState({
     title,
@@ -37,21 +35,41 @@ const ArticleCard = ({
     date,
     author,
   });
+  const [loading, setLoading] = useState(!!path);
   const [error, setError] = useState("");
+  const navigation = useNavigation();
+  const articlePath = path?.split("/")[1];
+  const isNavigating =
+    navigation.state !== "idle" &&
+    navigation.location?.pathname === `/blog/${articlePath}`;
 
   useEffect(() => {
     async function fetchMetadata() {
       if (!path) return;
       try {
+        setLoading(true);
         const res = await fetch(`${BASE_URL}/${path}.json`);
         if (!res.ok) throw new Error("Failed to fetch metadata");
         const data = await res.json();
 
-        // Handle image path
         if (data.image && !data.image.startsWith("http")) {
           data.image = `${BASE_URL}/${path.split("/").slice(0, -1).join("/")}/${
             data.image
           }`;
+        }
+
+        if (!data.image) {
+          const extensions = [".jpg", ".jpeg", ".png", ".webp"];
+          for (const ext of extensions) {
+            const url = `${BASE_URL}/${path}${ext}`;
+            try {
+              const response = await fetch(url);
+              if (response.ok) {
+                data.image = url;
+                break;
+              }
+            } catch (_) {}
+          }
         }
 
         setMetadata({
@@ -66,6 +84,8 @@ const ArticleCard = ({
         setError(
           err instanceof Error ? err.message : "Error fetching metadata"
         );
+      } finally {
+        setLoading(false);
       }
     }
     fetchMetadata();
@@ -77,14 +97,14 @@ const ArticleCard = ({
 
   if (loading) {
     return (
-      <Card className="overflow-hidden">
-        <div className="h-48 w-full bg-muted animate-pulse" />
+      <div className="block no-underline transition-transform hover:scale-[1.02]">
+        <div className="h-48 w-full bg-gray-200 animate-pulse" />
         <div className="p-4 space-y-2">
-          <div className="h-6 w-3/4 bg-muted animate-pulse rounded" />
-          <div className="h-4 w-1/2 bg-muted animate-pulse rounded" />
-          <div className="h-4 w-full bg-muted animate-pulse rounded" />
+          <div className="h-6 w-3/4 bg-gray-200 animate-pulse rounded" />
+          <div className="h-4 w-1/2 bg-gray-200 animate-pulse rounded" />
+          <div className="h-4 w-full bg-gray-200 animate-pulse rounded" />
         </div>
-      </Card>
+      </div>
     );
   }
 
@@ -93,60 +113,68 @@ const ArticleCard = ({
       ? `${metadata.description.substring(0, 150)}...`
       : metadata.description;
 
-  // Generate article path for the route
-  const articlePath = path?.split("/").slice(1).join("/");
-
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.2 }}
+    <Card
+      className={`overflow-hidden relative ${
+        isNavigating
+          ? "opacity-70 pointer-events-none scale-[1.04] "
+          : "transition-transform hover:scale-[1.02]"
+      }`}
     >
-      <Card className="overflow-hidden transition-transform hover:scale-[1.02]">
-        <Link
-          to={`/article/${encodeURIComponent(articlePath || "")}`}
-          className="block no-underline"
-          prefetch="intent"
-          preventScrollReset
-        >
-          {metadata.image && (
-            <div className="relative h-48">
-              <img
-                src={metadata.image}
-                alt={metadata.title}
-                className="h-full w-full object-cover"
-              />
-            </div>
-          )}
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-xl" dir="auto">
-              {metadata.title}
-            </CardTitle>
-            <CardDescription
-              dir="auto"
-              className="flex items-center text-sm text-muted-foreground"
-            >
-              {metadata.author} • {metadata.date}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex items-start gap-4">
-            <p
-              className="text-sm text-muted-foreground flex-1"
-              dir="auto"
-              style={{
-                textAlign: "inherit",
-              }}
-            >
-              {truncatedDescription}
-            </p>
-            <div className="flex-shrink-0">
+      <Link
+        to={`/blog/${articlePath}`}
+        className="block no-underline"
+        aria-disabled={isNavigating}
+        prefetch="intent"
+      >
+        {metadata.image && (
+          <div className="relative">
+            <img
+              src={metadata.image}
+              alt={metadata.title}
+              className={`h-48 w-full object-cover ${
+                isNavigating ? "blur-[1px]" : ""
+              }`}
+            />
+          </div>
+        )}
+        {isNavigating && (
+          <div className="absolute inset-0 flex items-center justify-center bg-background/20 backdrop-blur-[5px] z-10">
+            <Loader2 className="h-8 w-8 animate-spin text-foreground" />
+          </div>
+        )}
+        <CardHeader className="space-y-1">
+          <CardTitle className="text-xl" dir="auto">
+            {metadata.title}
+          </CardTitle>
+          <CardDescription
+            dir="auto"
+            className="flex items-center text-sm text-muted-foreground"
+          >
+            {metadata.author} • {metadata.date}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex items-start gap-4">
+          <p
+            className="text-sm text-muted-foreground flex-1"
+            dir="auto"
+            style={{
+              textAlign: "inherit",
+            }}
+          >
+            {truncatedDescription}
+          </p>
+          <div className="flex-shrink-0">
+            {isNavigating ? (
+              // <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
               <ArrowRight className="h-5 w-5 text-muted-foreground" />
-            </div>
-          </CardContent>
-        </Link>
-      </Card>
-    </motion.div>
+            ) : (
+              <ArrowRight className="h-5 w-5 text-muted-foreground" />
+            )}
+          </div>
+        </CardContent>
+      </Link>
+    </Card>
   );
 };
 

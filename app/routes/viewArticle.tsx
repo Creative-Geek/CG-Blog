@@ -1,7 +1,8 @@
-import { useLoaderData } from "react-router-dom";
-import { Article } from "~/components/Article";
+import { useLoaderData, useNavigation, useLocation } from "react-router-dom";
+import { Article } from "../components/Article";
 import { BASE_URL, NAME } from "~/config/constants";
 import { Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface ArticleData {
   title: string;
@@ -13,13 +14,8 @@ interface ArticleData {
 }
 
 export async function loader({ params }: { params: { path: string } }) {
-  if (!params.path) {
-    throw new Error("Article path is required");
-  }
-
-  // Decode the URL-encoded path
-  const decodedPath = decodeURIComponent(params.path);
-  const articlePath = `Articles/${decodedPath}`;
+  const { path } = params;
+  const articlePath = `Articles/${path}`;
 
   try {
     const [markdownResponse, metadataResponse] = await Promise.all([
@@ -64,7 +60,7 @@ export async function loader({ params }: { params: { path: string } }) {
   }
 }
 
-export function meta({ data }: { data: ArticleData | undefined }) {
+export function meta({ data }: any) {
   return [
     { title: data?.title ? `${data.title} - ${NAME}` : NAME },
     { name: "description", content: data?.description },
@@ -91,7 +87,22 @@ function LoadingArticle() {
   );
 }
 
-export default function ArticlePage() {
+export default function ViewArticle() {
   const articleData = useLoaderData() as ArticleData;
+  const navigation = useNavigation();
+  const location = useLocation();
+  const isLoading = navigation.state === "loading";
+  const [url, setUrl] = useState(location.pathname);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setUrl(`${window.location.origin}${location.pathname}`);
+    }
+  }, [location.pathname]);
+
+  if (isLoading) {
+    return <LoadingArticle />;
+  }
+
   return <Article {...articleData} />;
-} 
+}
