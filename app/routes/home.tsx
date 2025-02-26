@@ -59,10 +59,31 @@ export function meta({ data }: { data: { homeData: HomeData } }) {
 }
 
 export default function Home() {
-  const { homeData, articles } = useLoaderData() as {
+  const data = useLoaderData() as {
     homeData: HomeData;
     articles: Array<{ name: string }>;
-  };
+  } | null;
+
+  if (!data) {
+    return (
+      <div className="flex-1 flex flex-col min-h-0">
+        <Cover loading />
+        <div className="container mx-auto px-4">
+          <Profile loading />
+          <hr />
+          <ProjectsSection loading />
+          <hr />
+          <ExperienceSection loading />
+          <hr />
+          <BlogSection loading />
+          <hr />
+          <Contact loading />
+        </div>
+      </div>
+    );
+  }
+
+  const { homeData, articles } = data;
 
   return (
     <div className="flex-1 flex flex-col min-h-0">

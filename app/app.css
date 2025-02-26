@@ -206,5 +206,37 @@
 }
 
 * {
-  transition: all 100ms ease;
+  transition: background-color 0.2s ease;
+}
+
+/* Prevent layout shifts during page transitions */
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ensure content takes full height */
+.page-content {
+  flex: 1;
+  position: relative;
+}
+
+/* Prevent FOUC during page transitions */
+.page-transition-enter {
+  opacity: 0;
+}
+
+.page-transition-enter-active {
+  opacity: 1;
+  transition: opacity 200ms ease;
+}
+
+.page-transition-exit {
+  opacity: 1;
+}
+
+.page-transition-exit-active {
+  opacity: 0;
+  transition: opacity 200ms ease;
 }

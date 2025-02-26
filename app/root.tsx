@@ -2,15 +2,14 @@ import {
   isRouteErrorResponse,
   Links,
   Meta,
-  Outlet,
   Scripts,
   ScrollRestoration,
 } from "react-router";
-
 import type { Route } from "./+types/root";
 import "./app.css";
 import { Navbar } from "./components/Navbar";
 import { ThemeProvider } from "./components/ThemeProvider";
+import { PageTransition } from "./components/PageTransition";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -36,8 +35,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <ThemeProvider>
-          {children}
-          <ScrollRestoration />
+          <div className="min-h-screen flex flex-col">
+            {children}
+          </div>
+          <ScrollRestoration getKey={(location) => {
+            // Preserve scroll position for blog and article pages
+            const isBlogOrArticle = location.pathname.startsWith('/blog') || 
+                                  location.pathname.startsWith('/article');
+            return isBlogOrArticle ? location.pathname : location.key;
+          }} />
           <Scripts />
         </ThemeProvider>
       </body>
@@ -49,7 +55,9 @@ export default function App() {
   return (
     <>
       <Navbar />
-      <Outlet />
+      <main className="flex-1 relative">
+        <PageTransition />
+      </main>
     </>
   );
 }
