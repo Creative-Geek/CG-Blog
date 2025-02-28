@@ -23,10 +23,10 @@ export function Toast({ message, duration = 2000, isVisible, onClose }: ToastPro
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 50 }}
-          className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-black border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground  text-white px-4 py-2 rounded-md shadow-md z-50"
+          exit={{ opacity: 0, y: -50 }}
+          className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-black border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground  text-white px-4 py-2 rounded-md shadow-md z-50"
         >
           {message}
         </motion.div>
