@@ -17,6 +17,7 @@ import {
   SheetTrigger,
 } from "../components/ui/sheet";
 import { useState } from "react";
+import SearchCommand from "./SearchCommand";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
@@ -139,9 +140,7 @@ export function Navbar() {
       {/* Theme Toggle and Search - always visible */}
       <div className="w-full md:w-auto flex justify-end items-center gap-2">
         <ThemeToggle />
-        <Button variant={"outline"} size="icon" className="w-9 h-9">
-          <Search className="h-4 w-4" />
-        </Button>
+        <SearchCommand />
       </div>
     </div>
   );
