@@ -6,6 +6,7 @@ import type { Components } from "react-markdown";
 import type { ReactNode, JSX } from "react";
 import { useState, useEffect } from "react";
 import slugify from "@sindresorhus/slugify";
+import { useToast } from "./ui/Toast";
 
 interface ArticleProps {
   title?: string;
@@ -34,6 +35,7 @@ const components: Components = {
   },
   // Heading components
   h1: ({ children, ...props }): JSX.Element => {
+    const { showToast } = useToast();
     const text = children?.toString() || "";
     const slug = slugify(text);
     const isRTL = startsWithArabic(text);
@@ -42,11 +44,12 @@ const components: Components = {
         {...props}
         id={slug}
         dir={isRTL ? "rtl" : "ltr"}
-        onClick={() =>
+        onClick={() => {
           navigator.clipboard.writeText(
             `${window.location.href.split("#")[0]}#${slug}`
-          )
-        }
+          );
+          showToast("Link copied!");
+        }}
         className="text-4xl font-bold mb-6 text-foreground border-b pb-2 border-border cursor-pointer hover:underline "
       >
         {children}
@@ -54,6 +57,7 @@ const components: Components = {
     );
   },
   h2: ({ children, ...props }): JSX.Element => {
+    const { showToast } = useToast();
     const text = children?.toString() || "";
     const slug = slugify(text);
     const isRTL = startsWithArabic(text);
@@ -62,11 +66,12 @@ const components: Components = {
         {...props}
         id={slug}
         dir={isRTL ? "rtl" : "ltr"}
-        onClick={() =>
+        onClick={() => {
           navigator.clipboard.writeText(
             `${window.location.href.split("#")[0]}#${slug}`
-          )
-        }
+          );
+          showToast("Link copied!");
+        }}
         className="text-3xl font-bold mb-3 cursor-pointer hover:underline hover:text-blue-500"
       >
         {children}
@@ -74,6 +79,7 @@ const components: Components = {
     );
   },
   h3: ({ children, ...props }): JSX.Element => {
+    const { showToast } = useToast();
     const text = children?.toString() || "";
     const slug = slugify(text);
     const isRTL = startsWithArabic(text);
@@ -82,11 +88,12 @@ const components: Components = {
         {...props}
         id={slug}
         dir={isRTL ? "rtl" : "ltr"}
-        onClick={() =>
+        onClick={() => {
           navigator.clipboard.writeText(
             `${window.location.href.split("#")[0]}#${slug}`
-          )
-        }
+          );
+          showToast("Link copied!");
+        }}
         className="text-2xl font-bold mb-2 cursor-pointer hover:underline hover:text-blue-500"
       >
         {children}
