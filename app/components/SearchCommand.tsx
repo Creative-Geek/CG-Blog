@@ -15,6 +15,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/
 import { BASE_URL } from "../config/constants";
 import { Link } from "react-router-dom";
 
+// Types
 type Article = {
   name: string;
   title: string;
@@ -25,16 +26,16 @@ type Article = {
   content?: string;
 };
 
-export default function SearchCommand() {
-  const [open, setOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchInContent, setSearchInContent] = useState(false);
+// Custom hook for article search functionality
+const useArticleSearch = () => {
   const [articles, setArticles] = useState<Article[]>([]);
   const [filteredArticles, setFilteredArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchInContent, setSearchInContent] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Fetch all articles on component mount
+  // Fetch all articles on hook initialization
   useEffect(() => {
     const fetchArticles = async () => {
       try {
@@ -167,82 +168,165 @@ export default function SearchCommand() {
     };
   }, [searchTerm, searchInContent, debouncedSearch]);
 
+  return {
+    articles,
+    filteredArticles,
+    isLoading,
+    searchTerm,
+    setSearchTerm,
+    searchInContent,
+    setSearchInContent
+  };
+};
+
+// SearchButton component
+const SearchButton = ({ onClick }: { onClick: () => void }) => (
+  <Button
+    variant="outline"
+    size="icon"
+    className="w-9 h-9"
+    onClick={onClick}
+  >
+    <Search className="h-4 w-4" />
+  </Button>
+);
+
+// ArticleCard component
+const ArticleCard = ({ article }: { article: Article }) => (
+  <Card className="w-full hover:bg-accent/50 transition-colors">
+    <CardHeader className="flex flex-row items-start gap-4 p-4">
+      <img
+        src={`${BASE_URL}/Articles/${article.image}`}
+        alt={article.title}
+        className="w-16 h-16 object-cover rounded-md"
+      />
+      <div className="space-y-1">
+        <CardTitle className="text-base">{article.title}</CardTitle>
+        <CardDescription className="line-clamp-2 text-xs">
+          {article.description}
+        </CardDescription>
+      </div>
+    </CardHeader>
+  </Card>
+);
+
+// ArticleList component
+const ArticleList = ({ 
+  filteredArticles, 
+  isLoading, 
+  searchTerm, 
+  onArticleSelect 
+}: { 
+  filteredArticles: Article[], 
+  isLoading: boolean, 
+  searchTerm: string,
+  onArticleSelect: () => void
+}) => (
+  <CommandList>
+    {isLoading && (
+      <div className="py-6 text-center text-sm">
+        <div className="flex justify-center items-center">
+          <div className="animate-spin h-5 w-5 mr-2 border-2 border-primary rounded-full border-t-transparent"></div>
+          Searching...
+        </div>
+      </div>
+    )}
+    <CommandEmpty>
+      {!isLoading && (searchTerm.trim() ? "No results found." : "Start typing to search...")}
+    </CommandEmpty>
+    <CommandGroup heading="Articles">
+      {filteredArticles.map((article) => (
+        <CommandItem
+          key={article.name}
+          onSelect={onArticleSelect}
+          className="p-2"
+        >
+          <Link
+            to={`/blog/${article.name}`}
+            className="w-full"
+            onClick={onArticleSelect}
+          >
+            <ArticleCard article={article} />
+          </Link>
+        </CommandItem>
+      ))}
+    </CommandGroup>
+  </CommandList>
+);
+
+// ArticleSearchDialog component
+const ArticleSearchDialog = ({ 
+  open, 
+  onOpenChange,
+  searchTerm,
+  setSearchTerm,
+  searchInContent,
+  setSearchInContent,
+  filteredArticles,
+  isLoading
+}: { 
+  open: boolean, 
+  onOpenChange: (open: boolean) => void,
+  searchTerm: string,
+  setSearchTerm: (term: string) => void,
+  searchInContent: boolean,
+  setSearchInContent: (inContent: boolean) => void,
+  filteredArticles: Article[],
+  isLoading: boolean
+}) => (
+  <CommandDialog open={open} onOpenChange={onOpenChange}>
+    <Command className="rounded-lg border shadow-md">
+      <CommandInput
+        placeholder="Search articles..."
+        value={searchTerm}
+        onValueChange={setSearchTerm}
+        className="flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+      />
+
+      <div className="flex items-center px-3 pt-2">
+        <span className="text-xs text-muted-foreground mr-2">Search in article content</span>
+        <Switch
+          checked={searchInContent}
+          onCheckedChange={setSearchInContent}
+        />
+      </div>
+      
+      <ArticleList 
+        filteredArticles={filteredArticles}
+        isLoading={isLoading}
+        searchTerm={searchTerm}
+        onArticleSelect={() => onOpenChange(false)}
+      />
+    </Command>
+  </CommandDialog>
+);
+
+// Main SearchCommand component
+export default function SearchCommand() {
+  const [open, setOpen] = useState(false);
+  const { 
+    filteredArticles, 
+    isLoading, 
+    searchTerm, 
+    setSearchTerm, 
+    searchInContent, 
+    setSearchInContent 
+  } = useArticleSearch();
+
   return (
     <>
-      <Button
-        variant="outline"
-        size="icon"
-        className="w-9 h-9"
-        onClick={() => setOpen(true)}
-      >
-        <Search className="h-4 w-4" />
-      </Button>
-      <CommandDialog open={open} onOpenChange={setOpen}>
-        <Command className="rounded-lg border shadow-md">
-
-          <CommandInput
-            placeholder="Search articles..."
-            value={searchTerm}
-            onValueChange={setSearchTerm}
-            className="flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
-          />
-
-          <div className="flex items-center px-3 pt-2">
-            <span className="text-xs text-muted-foreground mr-2">Search in article content</span>
-            <Switch
-              checked={searchInContent}
-              onCheckedChange={setSearchInContent}
-            />
-          </div>
-          <CommandList>
-            {isLoading && (
-              <div className="py-6 text-center text-sm">
-                <div className="flex justify-center items-center">
-                  <div className="animate-spin h-5 w-5 mr-2 border-2 border-primary rounded-full border-t-transparent"></div>
-                  Searching...
-                </div>
-              </div>
-            )}
-            <CommandEmpty>
-              {!isLoading && (searchTerm.trim() ? "No results found." : "Start typing to search...")}
-            </CommandEmpty>
-            <CommandGroup heading="Articles">
-              {filteredArticles.map((article) => (
-                <CommandItem
-                  key={article.name}
-                  onSelect={() => {
-                    setOpen(false);
-                    // This will navigate to the article page
-                  }}
-                  className="p-2"
-                >
-                  <Link
-                    to={`/blog/${article.name}`}
-                    className="w-full"
-                    onClick={() => setOpen(false)}
-                  >
-                    <Card className="w-full hover:bg-accent/50 transition-colors">
-                      <CardHeader className="flex flex-row items-start gap-4 p-4">
-                        <img
-                          src={`${BASE_URL}/Articles/${article.image}`}
-                          alt={article.title}
-                          className="w-16 h-16 object-cover rounded-md"
-                        />
-                        <div className="space-y-1">
-                          <CardTitle className="text-base">{article.title}</CardTitle>
-                          <CardDescription className="line-clamp-2 text-xs">
-                            {article.description}
-                          </CardDescription>
-                        </div>
-                      </CardHeader>
-                    </Card>
-                  </Link>
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </CommandDialog>
+      <SearchButton onClick={() => setOpen(true)} />
+      
+      <ArticleSearchDialog
+        open={open}
+        onOpenChange={setOpen}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        searchInContent={searchInContent}
+        setSearchInContent={setSearchInContent}
+        filteredArticles={filteredArticles}
+        isLoading={isLoading}
+      />
     </>
   );
 }
