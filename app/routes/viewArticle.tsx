@@ -101,9 +101,9 @@ export default function ViewArticle() {
     }
   }, [location.pathname]);
 
-  // if (isLoading) {
-  //   return <LoadingArticle />;
-  // }
+  if (isLoading) {
+    return <LoadingArticle />;
+  }
 
   return (
     <motion.div

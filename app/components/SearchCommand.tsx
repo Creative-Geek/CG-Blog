@@ -11,7 +11,13 @@ import {
   CommandList,
 } from "./ui/command";
 import { Switch } from "./ui/switch";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
 import { BASE_URL } from "../config/constants";
 import { Link } from "react-router-dom";
 
@@ -42,7 +48,9 @@ export default function SearchCommand() {
         // Fetch the index of all articles
         const indexResponse = await fetch(`${BASE_URL}/Articles/index.json`);
         if (!indexResponse.ok) {
-          throw new Error(`Failed to fetch articles index: ${indexResponse.status}`);
+          throw new Error(
+            `Failed to fetch articles index: ${indexResponse.status}`
+          );
         }
 
         const articleList = await indexResponse.json();
@@ -52,9 +60,13 @@ export default function SearchCommand() {
 
         for (const article of articleList) {
           try {
-            const metadataResponse = await fetch(`${BASE_URL}/Articles/${article.name}.json`);
+            const metadataResponse = await fetch(
+              `${BASE_URL}/Articles/${article.name}.json`
+            );
             if (!metadataResponse.ok) {
-              console.warn(`Failed to fetch metadata for ${article.name}: ${metadataResponse.status}`);
+              console.warn(
+                `Failed to fetch metadata for ${article.name}: ${metadataResponse.status}`
+              );
               continue;
             }
 
@@ -64,7 +76,10 @@ export default function SearchCommand() {
               ...metadata,
             });
           } catch (articleError) {
-            console.error(`Error processing article ${article.name}:`, articleError);
+            console.error(
+              `Error processing article ${article.name}:`,
+              articleError
+            );
           }
         }
 
@@ -84,7 +99,9 @@ export default function SearchCommand() {
     try {
       const response = await fetch(`${BASE_URL}/Articles/${articleName}.md`);
       if (!response.ok) {
-        throw new Error(`Failed to fetch content for ${articleName}: ${response.status}`);
+        throw new Error(
+          `Failed to fetch content for ${articleName}: ${response.status}`
+        );
       }
       const content = await response.text();
       return content;
@@ -95,45 +112,50 @@ export default function SearchCommand() {
   };
 
   // Custom debounce function using useCallback and setTimeout
-  const debouncedSearch = useCallback(async (term: string, inContent: boolean) => {
-    setIsLoading(true);
+  const debouncedSearch = useCallback(
+    async (term: string, inContent: boolean) => {
+      setIsLoading(true);
 
-    // Handle empty search term - don't clear results immediately
-    if (!term.trim()) {
-      setFilteredArticles([]);
-      setIsLoading(false);
-      return;
-    }
-
-    const lowerCaseTerm = term.toLowerCase();
-
-    // Search in titles and descriptions
-    let results = articles.filter(article =>
-      article.title.toLowerCase().includes(lowerCaseTerm) ||
-      article.description.toLowerCase().includes(lowerCaseTerm)
-    );
-
-    // If search in content is enabled, fetch and search in article content
-    if (inContent && term.trim().length > 2) { // Only search in content for terms longer than 2 chars
-      try {
-        const articlesToSearch = articles.filter(article =>
-          !results.some(a => a.name === article.name)
-        );
-
-        for (const article of articlesToSearch) {
-          const content = await fetchArticleContent(article.name);
-          if (content.toLowerCase().includes(lowerCaseTerm)) {
-            results.push({ ...article, content });
-          }
-        }
-      } catch (error) {
-        console.error("Error searching in content:", error);
+      // Handle empty search term - don't clear results immediately
+      if (!term.trim()) {
+        setFilteredArticles([]);
+        setIsLoading(false);
+        return;
       }
-    }
 
-    setFilteredArticles(results);
-    setIsLoading(false);
-  }, [articles]);
+      const lowerCaseTerm = term.toLowerCase();
+
+      // Search in titles and descriptions
+      let results = articles.filter(
+        (article) =>
+          article.title.toLowerCase().includes(lowerCaseTerm) ||
+          article.description.toLowerCase().includes(lowerCaseTerm)
+      );
+
+      // If search in content is enabled, fetch and search in article content
+      if (inContent && term.trim().length > 2) {
+        // Only search in content for terms longer than 2 chars
+        try {
+          const articlesToSearch = articles.filter(
+            (article) => !results.some((a) => a.name === article.name)
+          );
+
+          for (const article of articlesToSearch) {
+            const content = await fetchArticleContent(article.name);
+            if (content.toLowerCase().includes(lowerCaseTerm)) {
+              results.push({ ...article, content });
+            }
+          }
+        } catch (error) {
+          console.error("Error searching in content:", error);
+        }
+      }
+
+      setFilteredArticles(results);
+      setIsLoading(false);
+    },
+    [articles]
+  );
 
   // Handle search with debouncing
   useEffect(() => {
@@ -179,7 +201,6 @@ export default function SearchCommand() {
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
         <Command className="rounded-lg border shadow-md">
-
           <CommandInput
             placeholder="Search articles..."
             value={searchTerm}
@@ -188,7 +209,9 @@ export default function SearchCommand() {
           />
 
           <div className="flex items-center px-3 pt-2">
-            <span className="text-xs text-muted-foreground mr-2">Search in article content</span>
+            <span className="text-xs text-muted-foreground mr-2">
+              Search in article content
+            </span>
             <Switch
               checked={searchInContent}
               onCheckedChange={setSearchInContent}
@@ -204,12 +227,16 @@ export default function SearchCommand() {
               </div>
             )}
             <CommandEmpty>
-              {!isLoading && (searchTerm.trim() ? "No results found." : "Start typing to search...")}
+              {!isLoading &&
+                (searchTerm.trim()
+                  ? "No results found."
+                  : "Start typing to search...")}
             </CommandEmpty>
             <CommandGroup heading="Articles">
               {filteredArticles.map((article) => (
                 <CommandItem
                   key={article.name}
+                  value={article.name}
                   onSelect={() => {
                     setOpen(false);
                     // This will navigate to the article page
@@ -229,7 +256,9 @@ export default function SearchCommand() {
                           className="w-16 h-16 object-cover rounded-md"
                         />
                         <div className="space-y-1">
-                          <CardTitle className="text-base">{article.title}</CardTitle>
+                          <CardTitle className="text-base">
+                            {article.title}
+                          </CardTitle>
                           <CardDescription className="line-clamp-2 text-xs">
                             {article.description}
                           </CardDescription>

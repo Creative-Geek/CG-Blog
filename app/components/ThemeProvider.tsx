@@ -14,18 +14,19 @@ type ThemeContextType = {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(() => {
-    // Check for saved theme preference
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("theme") as Theme;
-      if (saved) return saved;
-      
-      // Check system preference
-      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      return prefersDark ? "dark" : "light";
+  const [theme, setTheme] = useState<Theme>("dark"); // Start with light theme on server
+  useEffect(() => {
+    // Move client-side logic here
+    const saved = localStorage.getItem("theme") as Theme;
+    if (saved) {
+      setTheme(saved);
+    } else {
+      const prefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches;
+      setTheme(prefersDark ? "dark" : "light");
     }
-    return "light";
-  });
+  }, []);
 
   useEffect(() => {
     const root = window.document.documentElement;
@@ -46,4 +47,4 @@ export function useTheme() {
     throw new Error("useTheme must be used within a ThemeProvider");
   }
   return context;
-} 
+}
