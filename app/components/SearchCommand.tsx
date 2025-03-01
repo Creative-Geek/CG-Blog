@@ -210,6 +210,7 @@ export default function SearchCommand() {
               {filteredArticles.map((article) => (
                 <CommandItem
                   key={article.name}
+                  value={article.name}
                   onSelect={() => {
                     setOpen(false);
                     // This will navigate to the article page
