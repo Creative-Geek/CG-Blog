@@ -7,6 +7,7 @@ interface ExperienceSectionProps {
     title: string;
     date: string;
     description: string;
+    link?: string;
   }>;
 }
 
@@ -76,9 +77,11 @@ export default function ExperienceSection({
             </h2>
             {experience.map((job, index) => (
               <div key={index} className="space-y-2">
+                <a href={job.link} >
                 <h3 className="text-xl font-semibold text-primary">
                   {job.title}
                 </h3>
+                </a>
                 <p className="text-sm text-muted-foreground">{job.date}</p>
                 <p className="text-muted-foreground">{job.description}</p>
               </div>
