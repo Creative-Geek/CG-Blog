@@ -175,11 +175,83 @@ const components: Components = {
       {children}
     </a>
   ),
-  pre: ({ children, ...props }): JSX.Element => (
-    <pre {...props} className="mb-4">
-      {children}
-    </pre>
-  ),
+  pre: ({ children, ...props }): JSX.Element => {
+    const [copied, setCopied] = useState(false);
+
+    const handleCopy = async () => {
+      // Find code element and get its text content
+      const codeElement = document.querySelector(".group:hover pre code");
+      const code = codeElement?.textContent || "";
+      await navigator.clipboard.writeText(code);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    };
+
+    return (
+      <div className="relative group">
+        <button
+          onClick={handleCopy}
+          className="absolute right-2 top-2 p-2 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors"
+          aria-label="Copy code"
+        >
+          {copied ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+          )}
+        </button>
+        <pre {...props} className="mb-4">
+          {children}
+        </pre>
+      </div>
+    );
+  },
+  code: ({ children, ...props }): JSX.Element => {
+    const { showToast } = useToast();
+    const isInPre = props.className?.includes("language-");
+
+    const handleClick = async () => {
+      if (isInPre) return;
+      const text = children?.toString() || "";
+      await navigator.clipboard.writeText(text);
+      showToast("Code copied!");
+    };
+
+    return (
+      <code
+        {...props}
+        onClick={handleClick}
+        className={isInPre ? "" : "cursor-pointer hover:bg-foreground/10"}
+      >
+        {children}
+      </code>
+    );
+  },
 };
 
 export function Article(props: ArticleProps): JSX.Element {
