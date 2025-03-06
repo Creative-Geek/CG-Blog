@@ -39,18 +39,25 @@ const components: Components = {
     const text = children?.toString() || "";
     const slug = slugify(text);
     const isRTL = startsWithArabic(text);
+
+    const handleClick = (e: React.MouseEvent) => {
+      e.preventDefault();
+      const url = `${window.location.href.split("#")[0]}#${slug}`;
+      navigator.clipboard.writeText(url);
+      showToast("Link copied!");
+      document.getElementById(slug)?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    };
+
     return (
       <h1
         {...props}
         id={slug}
         dir={isRTL ? "rtl" : "ltr"}
-        onClick={() => {
-          navigator.clipboard.writeText(
-            `${window.location.href.split("#")[0]}#${slug}`
-          );
-          showToast("Link copied!");
-        }}
-        className="text-4xl font-bold mb-6 text-foreground border-b pb-2 border-border cursor-pointer hover:underline "
+        onClick={handleClick}
+        className="text-4xl font-bold mb-6 text-foreground border-b pb-2 border-border cursor-pointer hover:underline"
       >
         {children}
       </h1>
@@ -61,17 +68,24 @@ const components: Components = {
     const text = children?.toString() || "";
     const slug = slugify(text);
     const isRTL = startsWithArabic(text);
+
+    const handleClick = (e: React.MouseEvent) => {
+      e.preventDefault();
+      const url = `${window.location.href.split("#")[0]}#${slug}`;
+      navigator.clipboard.writeText(url);
+      showToast("Link copied!");
+      document.getElementById(slug)?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    };
+
     return (
       <h2
         {...props}
         id={slug}
         dir={isRTL ? "rtl" : "ltr"}
-        onClick={() => {
-          navigator.clipboard.writeText(
-            `${window.location.href.split("#")[0]}#${slug}`
-          );
-          showToast("Link copied!");
-        }}
+        onClick={handleClick}
         className="text-3xl font-bold mb-3 cursor-pointer hover:underline hover:text-blue-500"
       >
         {children}
@@ -83,17 +97,24 @@ const components: Components = {
     const text = children?.toString() || "";
     const slug = slugify(text);
     const isRTL = startsWithArabic(text);
+
+    const handleClick = (e: React.MouseEvent) => {
+      e.preventDefault();
+      const url = `${window.location.href.split("#")[0]}#${slug}`;
+      navigator.clipboard.writeText(url);
+      showToast("Link copied!");
+      document.getElementById(slug)?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    };
+
     return (
       <h3
         {...props}
         id={slug}
         dir={isRTL ? "rtl" : "ltr"}
-        onClick={() => {
-          navigator.clipboard.writeText(
-            `${window.location.href.split("#")[0]}#${slug}`
-          );
-          showToast("Link copied!");
-        }}
+        onClick={handleClick}
         className="text-2xl font-bold mb-2 cursor-pointer hover:underline hover:text-blue-500"
       >
         {children}
