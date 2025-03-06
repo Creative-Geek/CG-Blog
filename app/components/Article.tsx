@@ -175,6 +175,11 @@ const components: Components = {
       {children}
     </a>
   ),
+  pre: ({ children, ...props }): JSX.Element => (
+    <pre {...props} className="mb-4">
+      {children}
+    </pre>
+  ),
 };
 
 export function Article(props: ArticleProps): JSX.Element {
