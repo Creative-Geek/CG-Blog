@@ -7,7 +7,7 @@ import {
   NavigationMenuTrigger,
 } from "../components/ui/navigation-menu";
 import { Button } from "../components/ui/button";
-import { Github, Linkedin, Menu, Search, X } from "lucide-react";
+import { Download, Github, Linkedin, Menu, Search, X } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import {
   Sheet,
@@ -16,11 +16,30 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../components/ui/sheet";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SearchCommand from "./SearchCommand";
+import { BASE_URL } from "../config/constants";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
+  const [resumeExists, setResumeExists] = useState(false);
+
+  useEffect(() => {
+    // Check if resume file exists
+    const checkResumeExists = async () => {
+      try {
+        const response = await fetch(`${BASE_URL}/Pages/resume.pdf`, {
+          method: "HEAD",
+        });
+        setResumeExists(response.ok);
+      } catch (error) {
+        console.error("Error checking resume:", error);
+        setResumeExists(false);
+      }
+    };
+
+    checkResumeExists();
+  }, []);
 
   return (
     <div className="w-full flex items-center justify-between border-b border-border px-6 py-4">
@@ -139,6 +158,22 @@ export function Navbar() {
 
       {/* Theme Toggle and Search - always visible */}
       <div className="w-full md:w-auto flex justify-end items-center gap-2">
+        {resumeExists && (
+          <Button>
+            <a
+              href={`${BASE_URL}/Pages/resume.pdf`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex"
+            >
+              <span className="md:hidden">Résumé</span>
+              <span className="hidden md:flex items-center">
+                <Download className="mr-2 h-4 w-4" />
+                Download My Resume
+              </span>
+            </a>
+          </Button>
+        )}
         <ThemeToggle />
         <SearchCommand />
       </div>
