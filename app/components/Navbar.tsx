@@ -100,15 +100,15 @@ export function Navbar() {
         </Sheet>
       </div>
 
-      {/* Logo - centered on mobile, left-aligned on desktop */}
-      <div className="w-full md:w-auto flex justify-center md:justify-start">
+      {/* Logo - centered on mobile, left section on desktop */}
+      <div className="w-full md:w-[33%] flex justify-center md:justify-start">
         <Link to="/" className="text-xl font-bold">
           CG Blog
         </Link>
       </div>
 
-      {/* Desktop Navigation - hidden on mobile */}
-      <NavigationMenu className="hidden md:flex justify-center">
+      {/* Desktop Navigation - center section */}
+      <NavigationMenu className="hidden md:flex md:w-[33%] md:justify-center">
         <NavigationMenuList className="flex gap-6">
           <NavigationMenuItem>
             <Link to="/" className="text-sm font-medium">
@@ -156,8 +156,8 @@ export function Navbar() {
         </NavigationMenuList>
       </NavigationMenu>
 
-      {/* Theme Toggle and Search - always visible */}
-      <div className="w-full md:w-auto flex justify-end items-center gap-2">
+      {/* Theme Toggle and Search - right section */}
+      <div className="w-full md:w-[33%] flex justify-end items-center gap-2">
         {resumeExists && (
           <Button>
             <a
