@@ -1,16 +1,18 @@
 # CG Blog :art:  
 
-_Minimalist React blog engine with first-class RTL support. Your content, your hosting, no lock-in._
+![image](https://github.com/user-attachments/assets/819fe6a2-05bc-4303-aeca-72d766d337ac)
+
+_Minimalist React blog engine with first-class RTL support. Your content, any hosting, no lock-in._
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 ## Features  
-🔁 Auto RTL Article switching (Arabic/Urdu/Persian ready)
-🌐 Server-side rendering (React Router 7)
-📡 Remote markdown content from any URL
-♾️ Infinite scroll with loading states
-🖼️ Graceful fallbacks for missing data
-🌗 Built-in dark mode (Shadcn/ui)
+🔁 Auto RTL Article switching (Arabic/Urdu/Persian ready)  
+🌐 Server-side rendering (React Router 7)  
+📡 Remote markdown content from any URL  
+♾️ Infinite scroll with loading states  
+🖼️ Graceful fallbacks for missing data  
+🌗 Built-in dark mode (Shadcn/ui)  
 
 ## Get Started in 3 Steps  
 1. Clone:  
