@@ -5,4 +5,5 @@ export default [
   route("blog", "routes/blog.tsx"),
   route("about", "routes/about.tsx"),
   route("blog/:path", "routes/viewArticle.tsx"),
+  route("sitemap.xml", "routes/sitemap.xml.tsx"),
 ] satisfies RouteConfig;
