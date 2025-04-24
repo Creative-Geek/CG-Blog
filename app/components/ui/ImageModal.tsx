@@ -144,7 +144,7 @@ export function ImageModal({ isOpen, onClose, src, alt }: ImageModalProps) {
         "fixed inset-0 z-[100] flex items-center justify-center bg-black/90",
         "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
       )}
-      onClick={onClose}
+      onClick={onClose} // Close when clicking the backdrop
       data-state={isOpen ? "open" : "closed"}
     >
       {/* Close button */}
@@ -153,7 +153,7 @@ export function ImageModal({ isOpen, onClose, src, alt }: ImageModalProps) {
         size="icon"
         className="absolute top-4 right-4 z-[101] text-white hover:bg-white/20"
         onClick={(e) => {
-          e.stopPropagation();
+          e.stopPropagation(); // Prevent backdrop click
           onClose();
         }}
       >
@@ -163,7 +163,10 @@ export function ImageModal({ isOpen, onClose, src, alt }: ImageModalProps) {
 
       {/* Image info */}
       <div className="absolute bottom-4 left-0 right-0 z-[101] flex flex-col items-center gap-2 pointer-events-none">
-        <div className="text-white/70 text-xs bg-black/50 px-3 py-1 rounded-full pointer-events-auto">
+        <div
+          className="text-white/70 text-xs bg-black/50 px-3 py-1 rounded-full pointer-events-auto"
+          onClick={(e) => e.stopPropagation()} // Stop propagation
+        >
           {imageDimensions.width > 0 && (
             <>
               {imageDimensions.width} × {imageDimensions.height}px
@@ -174,17 +177,17 @@ export function ImageModal({ isOpen, onClose, src, alt }: ImageModalProps) {
 
         {/* Help text - always show when zoomed in */}
         {scale > 1 && (
-          <div className="text-white/70 text-xs bg-black/50 px-3 py-1 rounded-full pointer-events-auto">
+          <div
+            className="text-white/70 text-xs bg-black/50 px-3 py-1 rounded-full pointer-events-auto"
+            onClick={(e) => e.stopPropagation()} // Stop propagation
+          >
             Drag to pan • Double-click to reset
           </div>
         )}
       </div>
 
       {/* Image container */}
-      <div
-        className="h-full w-full overflow-hidden flex items-center justify-center"
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className="h-full w-full overflow-hidden flex items-center justify-center">
         <div className="relative">
           <img
             ref={imageRef}
@@ -199,6 +202,7 @@ export function ImageModal({ isOpen, onClose, src, alt }: ImageModalProps) {
               transform: `translate(${position.x}px, ${position.y}px) scale(${scale})`,
               transformOrigin: "center",
             }}
+            onClick={(e) => e.stopPropagation()} // Stop propagation for image click
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
