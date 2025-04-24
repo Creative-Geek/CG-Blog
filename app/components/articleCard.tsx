@@ -131,12 +131,12 @@ const ArticleCard = ({
         prefetch="intent"
       >
         {metadata.image && (
-          <div className="relative h-48 w-full bg-gray-200">
+          <div className="relative">
             <img
               src={metadata.image}
               alt={metadata.title}
               className={cn(
-                "h-48 w-full object-cover transition-opacity duration-300 absolute inset-0",
+                "h-48 w-full object-cover transition-opacity duration-300",
                 isNavigating ? "blur-[1px]" : "",
                 imageLoaded ? "opacity-100" : "opacity-0"
               )}
