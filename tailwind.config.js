@@ -3,19 +3,15 @@ export default {
   content: ["./app/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
-      // animation: {
-      //   shimmer: "shimmer 2s linear infinite"
-      // },
-      // keyframes: {
-      //   shimmer: {
-      //     from: {
-      //       "backgroundPosition": "0 0"
-      //     },
-      //     to: {
-      //       "backgroundPosition": "-200% 0"
-      //     }
-      //   }
-      // }
+      animation: {
+        "fade-out": "fadeOut 3s ease-in-out forwards 1s",
+      },
+      keyframes: {
+        fadeOut: {
+          "0%": { opacity: "1" },
+          "100%": { opacity: "0" },
+        },
+      },
     },
   },
   plugins: [require("@tailwindcss/typography")],

@@ -7,9 +7,9 @@ import type { ReactNode, JSX } from "react";
 import { useState, useEffect } from "react";
 import slugify from "@sindresorhus/slugify";
 import { useToast } from "./ui/Toast";
-import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog"; // Import from shadcn ui path
 import { Button } from "./ui/button";
 import { Maximize2 } from "lucide-react";
+import { ImageModal, useImageModal } from "./ui/ImageModal";
 
 interface ArticleProps {
   title?: string;
@@ -174,43 +174,44 @@ const components: Components = {
     );
   },
 
-  // Add image component with enlarge functionality
+  // Custom image component with full-size modal
   img: ({ src, alt, ...props }): JSX.Element => {
-    if (src?.startsWith("~/")) {
-      src = `${BASE_URL}${src.substring(1)}`;
+    const { isOpen, openModal, closeModal, imageProps } = useImageModal();
+
+    // Ensure src is a string
+    let imgSrc = src || "";
+    if (imgSrc.startsWith("~/")) {
+      imgSrc = `${BASE_URL}${imgSrc.substring(1)}`;
     }
+
     return (
-      <Dialog modal={false}>
-        {" "}
-        {/* Allow background scroll */}
+      <>
         <div className="relative group my-4">
           <img
-            src={src}
+            src={imgSrc}
             alt={alt}
             {...props}
             className="w-full h-auto rounded-lg shadow-md" // Added shadow
           />
-          <DialogTrigger asChild>
-            <Button
-              variant="secondary"
-              size="icon"
-              className="absolute top-2 right-2 opacity-0 md:group-hover:opacity-100 transition-opacity duration-200" // Hidden by default, fade in on hover on desktop (md+)
-              aria-label="Enlarge image"
-            >
-              <Maximize2 className="h-4 w-4" />
-            </Button>
-          </DialogTrigger>
+          <Button
+            variant="secondary"
+            size="icon"
+            className="absolute top-2 right-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200" // Always visible on mobile, hidden by default on desktop but visible on hover
+            aria-label="Enlarge image"
+            onClick={() => openModal(imgSrc, alt || "")}
+          >
+            <Maximize2 className="h-4 w-4" />
+          </Button>
         </div>
-        <DialogContent className="w-auto h-auto max-w-[95vw] max-h-[95vh] p-0 overflow-auto border-0">
-          {" "}
-          {/* Adjusted size constraints and overflow */}
-          <img
-            src={src}
-            alt={alt}
-            className="block max-w-full max-h-full object-contain" // Ensure image fits modal content area
-          />
-        </DialogContent>
-      </Dialog>
+
+        {/* Custom Image Modal */}
+        <ImageModal
+          isOpen={isOpen}
+          onClose={closeModal}
+          src={imageProps.src}
+          alt={imageProps.alt}
+        />
+      </>
     );
   },
   a: ({ children, href, ...props }): JSX.Element => (
