@@ -180,7 +180,9 @@ const components: Components = {
       src = `${BASE_URL}${src.substring(1)}`;
     }
     return (
-      <Dialog>
+      <Dialog modal={false}>
+        {" "}
+        {/* Allow background scroll */}
         <div className="relative group my-4">
           <img
             src={src}
