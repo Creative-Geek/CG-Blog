@@ -10,6 +10,7 @@ import {
 } from "../components/ui/card";
 
 import { BASE_URL } from "~/config/constants";
+import { cn } from "~/lib/utils";
 
 interface ArticleCardProps {
   title?: string;
@@ -37,6 +38,7 @@ const ArticleCard = ({
   });
   const [loading, setLoading] = useState(!!path);
   const [error, setError] = useState("");
+  const [imageLoaded, setImageLoaded] = useState(false);
   const navigation = useNavigation();
   const articlePath = path?.split("/")[1];
   const isNavigating =
@@ -48,6 +50,7 @@ const ArticleCard = ({
       if (!path) return;
       try {
         setLoading(true);
+        setImageLoaded(false); // Reset image loaded state when fetching new data
         const res = await fetch(`${BASE_URL}/${path}.json`);
         if (!res.ok) throw new Error("Failed to fetch metadata");
         const data = await res.json();
@@ -128,13 +131,16 @@ const ArticleCard = ({
         prefetch="intent"
       >
         {metadata.image && (
-          <div className="relative">
+          <div className="relative h-48 w-full bg-gray-200">
             <img
               src={metadata.image}
               alt={metadata.title}
-              className={`h-48 w-full object-cover ${
-                isNavigating ? "blur-[1px]" : ""
-              }`}
+              className={cn(
+                "h-48 w-full object-cover transition-opacity duration-300 absolute inset-0",
+                isNavigating ? "blur-[1px]" : "",
+                imageLoaded ? "opacity-100" : "opacity-0"
+              )}
+              onLoad={() => setImageLoaded(true)}
             />
           </div>
         )}
