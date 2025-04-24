@@ -7,6 +7,9 @@ import type { ReactNode, JSX } from "react";
 import { useState, useEffect } from "react";
 import slugify from "@sindresorhus/slugify";
 import { useToast } from "./ui/Toast";
+import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog"; // Import from shadcn ui path
+import { Button } from "./ui/button";
+import { Maximize2 } from "lucide-react";
 
 interface ArticleProps {
   title?: string;
@@ -171,18 +174,41 @@ const components: Components = {
     );
   },
 
-  // Add image component
+  // Add image component with enlarge functionality
   img: ({ src, alt, ...props }): JSX.Element => {
     if (src?.startsWith("~/")) {
       src = `${BASE_URL}${src.substring(1)}`;
     }
     return (
-      <img
-        src={src}
-        alt={alt}
-        {...props}
-        className="w-full h-auto rounded-lg my-4"
-      />
+      <Dialog>
+        <div className="relative group my-4">
+          <img
+            src={src}
+            alt={alt}
+            {...props}
+            className="w-full h-auto rounded-lg shadow-md" // Added shadow
+          />
+          <DialogTrigger asChild>
+            <Button
+              variant="secondary"
+              size="icon"
+              className="absolute top-2 right-2 opacity-0 md:group-hover:opacity-100 transition-opacity duration-200" // Hidden by default, fade in on hover on desktop (md+)
+              aria-label="Enlarge image"
+            >
+              <Maximize2 className="h-4 w-4" />
+            </Button>
+          </DialogTrigger>
+        </div>
+        <DialogContent className="w-auto h-auto max-w-[95vw] max-h-[95vh] p-0 overflow-auto border-0">
+          {" "}
+          {/* Adjusted size constraints and overflow */}
+          <img
+            src={src}
+            alt={alt}
+            className="block max-w-full max-h-full object-contain" // Ensure image fits modal content area
+          />
+        </DialogContent>
+      </Dialog>
     );
   },
   a: ({ children, href, ...props }): JSX.Element => (
