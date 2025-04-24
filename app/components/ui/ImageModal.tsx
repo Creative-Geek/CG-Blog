@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { createPortal } from "react-dom";
-import { XIcon, ZoomInIcon, ZoomOutIcon } from "lucide-react";
+import { XIcon } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { Button } from "./button";
 
@@ -68,15 +68,6 @@ export function ImageModal({ isOpen, onClose, src, alt }: ImageModalProps) {
       img.src = src;
     }
   }, [isOpen, src]);
-
-  // Handle zoom in/out
-  const handleZoomIn = () => {
-    setScale((prev) => Math.min(prev + 0.5, 5));
-  };
-
-  const handleZoomOut = () => {
-    setScale((prev) => Math.max(prev - 0.5, 0.5));
-  };
 
   // Handle drag start
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -149,23 +140,30 @@ export function ImageModal({ isOpen, onClose, src, alt }: ImageModalProps) {
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90"
+      className={cn(
+        "fixed inset-0 z-[100] flex items-center justify-center bg-black/90",
+        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
+      )}
       onClick={onClose}
+      data-state={isOpen ? "open" : "closed"}
     >
       {/* Close button */}
       <Button
         variant="ghost"
         size="icon"
         className="absolute top-4 right-4 z-[101] text-white hover:bg-white/20"
-        onClick={onClose}
+        onClick={(e) => {
+          e.stopPropagation();
+          onClose();
+        }}
       >
         <XIcon className="h-6 w-6" />
         <span className="sr-only">Close</span>
       </Button>
 
-      {/* Zoom controls and image info */}
-      <div className="absolute bottom-4 left-0 right-0 z-[101] flex flex-col items-center gap-2">
-        <div className="text-white/70 text-xs bg-black/50 px-3 py-1 rounded-full">
+      {/* Image info */}
+      <div className="absolute bottom-4 left-0 right-0 z-[101] flex flex-col items-center gap-2 pointer-events-none">
+        <div className="text-white/70 text-xs bg-black/50 px-3 py-1 rounded-full pointer-events-auto">
           {imageDimensions.width > 0 && (
             <>
               {imageDimensions.width} × {imageDimensions.height}px
@@ -174,33 +172,12 @@ export function ImageModal({ isOpen, onClose, src, alt }: ImageModalProps) {
           )}
         </div>
 
-        {/* Help text - only show briefly when modal first opens */}
+        {/* Help text - always show when zoomed in */}
         {scale > 1 && (
-          <div className="text-white/70 text-xs bg-black/50 px-3 py-1 rounded-full animate-fade-out">
+          <div className="text-white/70 text-xs bg-black/50 px-3 py-1 rounded-full pointer-events-auto">
             Drag to pan • Double-click to reset
           </div>
         )}
-
-        <div className="flex gap-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-white hover:bg-white/20"
-            onClick={handleZoomOut}
-          >
-            <ZoomOutIcon className="h-5 w-5" />
-            <span className="sr-only">Zoom out</span>
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-white hover:bg-white/20"
-            onClick={handleZoomIn}
-          >
-            <ZoomInIcon className="h-5 w-5" />
-            <span className="sr-only">Zoom in</span>
-          </Button>
-        </div>
       </div>
 
       {/* Image container */}
@@ -208,31 +185,32 @@ export function ImageModal({ isOpen, onClose, src, alt }: ImageModalProps) {
         className="h-full w-full overflow-hidden flex items-center justify-center"
         onClick={(e) => e.stopPropagation()}
       >
-        <img
-          ref={imageRef}
-          src={src}
-          alt={alt}
-          className={cn(
-            "h-auto w-auto max-w-none cursor-move transition-transform duration-100",
-            isDragging ? "transition-none" : ""
-          )}
-          style={{
-            transform: `translate(${position.x}px, ${position.y}px) scale(${scale})`,
-            transformOrigin: "center",
-            maxHeight: scale === 1 ? "none" : "none", // Remove height constraints
-            maxWidth: scale === 1 ? "none" : "none", // Remove width constraints
-          }}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseUp}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-          onDoubleClick={handleDoubleClick}
-          onWheel={handleWheel}
-          draggable="false"
-        />
+        <div className="relative">
+          <img
+            ref={imageRef}
+            src={src}
+            alt={alt}
+            className={cn(
+              "h-auto w-auto cursor-move transition-transform duration-100",
+              isDragging ? "transition-none" : "",
+              scale === 1 ? "max-h-[95vh]" : "max-w-none" // Only constrain height when not zoomed
+            )}
+            style={{
+              transform: `translate(${position.x}px, ${position.y}px) scale(${scale})`,
+              transformOrigin: "center",
+            }}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            onDoubleClick={handleDoubleClick}
+            onWheel={handleWheel}
+            draggable="false"
+          />
+        </div>
       </div>
     </div>,
     document.body
