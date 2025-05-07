@@ -1,0 +1,57 @@
+{
+    "mainTitle": "Your Name's Portfolio & Blog",
+    "mainSubtitle": "Your Main Skills • Areas of Expertise • Professional Focus",
+    "coverImage": "cover.jpg",
+    "about": {
+        "image": "profile.jpg",
+        "text": "Write a brief introduction about yourself, your expertise, and what you do. This will be displayed prominently on your homepage."
+    },
+    "projects": [
+        {
+            "path": "Articles/your-project-1"
+        },
+        {
+            "path": "Articles/your-project-2"
+        },
+        {
+            "path": "Articles/your-project-3"
+        }
+    ],
+    "skills": [
+        "Skill 1",
+        "Skill 2",
+        "Skill 3",
+        "Skill 4",
+        "Skill 5"
+    ],
+    "experience": [
+        {
+            "title": "Your Job Title - Company Name",
+            "date": "Month Year - Present",
+            "description": "Brief description of your role and achievements.",
+            "link": "https://company-website.com/"
+        },
+        {
+            "title": "Previous Job Title - Previous Company",
+            "date": "Month Year - Month Year",
+            "description": "Description of your responsibilities and accomplishments.",
+            "link": "https://previous-company.com/"
+        }
+    ],
+    "featuredArticles": [
+        {
+            "path": "Articles/your-featured-article-1"
+        },
+        {
+            "path": "Articles/your-featured-article-2"
+        },
+        {
+            "path": "Articles/your-featured-article-3"
+        }
+    ],
+    "contact": {
+        "title": "Ready to Connect?",
+        "text": "Get in touch to discuss projects, collaborations, or just to say hello!",
+        "buttonLink": "mailto:your.email@example.com"
+    }
+}

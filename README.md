@@ -1,4 +1,4 @@
-# CG Blog :art:  
+# CG Blog :art:
 
 ![image](https://github.com/user-attachments/assets/819fe6a2-05bc-4303-aeca-72d766d337ac)
 
@@ -6,74 +6,103 @@ _Minimalist React blog engine with first-class RTL support. Your content, any ho
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-## Features  
+## Features
+
 🔁 Auto RTL Article switching (Arabic/Urdu/Persian ready)  
 🌐 Server-side rendering (React Router 7)  
 📡 Remote markdown content from any URL  
 ♾️ Infinite scroll with loading states  
 🖼️ Graceful fallbacks for missing data  
-🌗 Built-in dark mode (Shadcn/ui)  
+🌗 Built-in dark mode (Shadcn/ui)
 
-## Get Started in 3 Steps  
-1. Clone:  
+## Get Started in 4 Steps
+
+1. Clone:
+
 ```bash
 git clone https://github.com/Creative-Geek/cg-blog.git
 ```
 
-2. Set content source in `src/constants.js`:  
+2. Create Content:
+
+- Copy the template folder contents to a new folder and edit the content.
+- Set a build command:
+
+  ```bash
+  node generate-index.js
+  ```
+
+- Deploy to any static serving service.
+
+3. Set content source in `src/constants.js`:
+
 ```js
-// Use GitHub raw URLs, CMS API, or your own server
+// Use any raw URL that provides the files.
 export const BASE_URL = "YOUR_MARKDOWN_FILES_URL";
+export const NAME = "Creative Geek";
 ```
 
-3. Launch:  
+4. Launch:
+
 ```bash
 npm install && npm run dev
 ```
 
-## Content Structure Template  
+## Content Structure Template
+
 ```tree
 Content Server/
-├── Articles
-│   ├── my-post.md     # Body content
-│   ├── my-post.json   # { "title": "...", "date": "2025-01-01", ... }
-│   └── my-post.jpg    # Optional cover
-└── Pages
+├── Articles/
+│   ├── my-post.md     # Article content in markdown
+│   ├── my-post.json   # Article metadata
+│   └── my-post.jpg    # Optional cover image
+└── Pages/
     ├── about.md       # Static page content
-    └── about.json     # { "title": "About Me" }
+    └── about.json     # Page metadata
 ```
 
-## Hosting Strategies  
-**Dynamic Mode (Recommended)**  
-- Frontend: Deploy to Netlify/Vercel  
-- Content: Host MD files on GitHub/S3/Cloudflare  
-*Edits appear live without redeploys*
+### Article JSON Format
 
-**Static Mode**  
-- Place content in `/public` folder  
-- Build with `npm run build`  
-*Requires rebuild on content changes*
+```json
+{
+  "title": "Your Article Title",
+  "image": "optional-cover.jpg",
+  "description": "A brief description of your article",
+  "date": "DD MMM YYYY",
+  "author": "Author Name"
+}
+```
 
-## Configuration Guide  
-- **RTL Support**: Set `"dir": "rtl"` in article JSON  
-- **SEO**: Edit `sitemap-generator.js`  
-- **Styling**: Modify `tailwind.config.js`  
-- **Empty States**: Customize `src/components/placeholder`
+### Page JSON Format
 
-## Why CG Blog?  
-- 🕋 Providing real RTL support to markdown content.  
+```json
+{
+  "title": "Page Title"
+}
+```
+
+## Hosting Strategies
+
+- **Frontend**: Deploy this repo to Vercel/Netlify/Github Pages
+- **Content**: Host MD files on GitHub/S3/Cloudflare  
+  _Edits appear live without redeploys, only new articles need to be added to index using the build command_
+
+## Why CG Blog?
+
+- 🕋 Providing real RTL support to markdown content.
 - 🚀 Content lives separately - no CMS wars
-- 🧩 Tested with 100+ articles (stress-free scroll)  
+- 🧩 Tested with 100+ articles (stress-free scroll)
 
 ```bash
 # Rebuild search index when adding content
 node generate-index.js
 ```
 
-## Contribute  
-Help us improve:  
-- Add content migration guides  
-- Enhance image lazy-loading  
-- Develop Git-based CMS adapter  
+## Contribute
 
-License: MIT  
+Help us improve:
+
+- Develop Git-based CMS adapter
+- Provide feedback!
+
+License: MIT
