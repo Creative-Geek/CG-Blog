@@ -1,0 +1,13 @@
+{
+  "redirects": [
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "www.creative-geek.tech" }],
+      "destination": "https://creative-geek.tech/",
+      "permanent": true
+    }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
+}
