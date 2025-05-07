@@ -16,7 +16,8 @@ template/
     ├── about.json        # About page metadata
     ├── about.jpg         # About page image (optional)
     ├── cover.jpg         # Homepage cover image
-    └── profile.jpg       # Your profile picture
+    ├── profile.jpg       # Your profile picture
+    └── resume.pdf        # Your resume/CV (optional)
 ```
 
 ## File Descriptions
@@ -44,6 +45,7 @@ template/
 - `about.json`: About page metadata
 - `cover.jpg`: Large image for homepage background
 - `profile.jpg`: Your profile picture
+- `resume.pdf`: Your professional resume/CV (optional)
 
 ## Getting Started
 
@@ -51,7 +53,8 @@ template/
 2. Replace the example content with your own
 3. Update the metadata in JSON files
 4. Add your images
-5. Run the build command to generate the index:
+5. Add your resume.pdf if desired
+6. Run the build command to generate the index:
    ```bash
    node generate-index.js
    ```
