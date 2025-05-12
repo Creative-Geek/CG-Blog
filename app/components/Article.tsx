@@ -4,7 +4,7 @@ import { startsWithArabic, containsArabic, extractText } from "~/lib/utils";
 import { BASE_URL, NAME } from "~/config/constants";
 import type { Components } from "react-markdown";
 import type { ReactNode, JSX } from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import slugify from "@sindresorhus/slugify";
 import { useToast } from "./ui/Toast";
 import { Button } from "./ui/button";
@@ -26,6 +26,9 @@ const components: Components = {
   p: ({ children, ...props }): JSX.Element => {
     const text = extractText(children);
     const isRTL = startsWithArabic(text);
+
+    // We'll handle paragraph spacing in list items through the li component instead
+
     return (
       <p
         {...props}
@@ -160,7 +163,7 @@ const components: Components = {
     );
   },
 
-  // Updated list item component:
+  // List item component
   li: ({ children, ...props }): JSX.Element => {
     const isRTL = containsArabic(children);
     return (
@@ -417,6 +420,29 @@ export function Article(props: ArticleProps): JSX.Element {
             />
           </div>
         )}
+
+        {/* Add a style tag to fix list item paragraph spacing */}
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+          /* Fix for list items with paragraphs */
+          .prose li p:first-of-type {
+            margin-bottom: 0 !important;
+            display: inline !important;
+          }
+
+          .prose li p:not(:first-of-type) {
+            margin-top: 0.5rem !important;
+            margin-bottom: 0.5rem !important;
+          }
+
+          /* Fix for nested lists */
+          .prose li ul, .prose li ol {
+            margin-top: 0.5rem !important;
+          }
+        `,
+          }}
+        />
 
         <div className="prose prose-neutral dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-img:rounded-lg">
           <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
