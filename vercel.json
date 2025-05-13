@@ -1,20 +1,20 @@
 {
   "redirects": [
     {
-      "source": "/",
+      "source": "/(.*)",
       "has": [
         {
           "type": "host",
           "value": "www.creative-geek.tech"
         }
       ],
-      "destination": "https://creative-geek.tech/",
+      "destination": "https://creative-geek.tech/$1",
       "permanent": true
     }
   ],
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/((?!api/).*)",
       "destination": "/index.html"
     }
   ]
