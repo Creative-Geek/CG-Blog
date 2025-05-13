@@ -31,7 +31,7 @@ export function Toast({
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -50 }}
-          className="fixed top-4 left-1/2 transform -translate-x-1/2  border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground  text-white px-4 py-2 rounded-md z-50"
+          className="fixed top-4 left-1/2 transform -translate-x-1/2 border border-input bg-card shadow-md text-foreground px-4 py-2 rounded-md z-50 transition-all duration-200"
         >
           {message}
         </motion.div>
