@@ -127,7 +127,7 @@
 
   /* Code block styling */
   .prose pre {
-    @apply p-4 rounded-lg bg-muted;
+    @apply p-4 rounded-lg bg-muted overflow-x-auto;
   }
 
   /* Inline code styling */
@@ -216,4 +216,36 @@
 
 * {
   transition: all 100ms ease;
+}
+
+/* Scrollbar styling for code blocks */
+.scrollbar-themed::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+.scrollbar-themed::-webkit-scrollbar-track {
+  background: var(--secondary);
+  border-radius: 4px;
+}
+
+.scrollbar-themed::-webkit-scrollbar-thumb {
+  background: var(--muted-foreground);
+  border-radius: 4px;
+}
+
+.scrollbar-themed::-webkit-scrollbar-thumb:hover {
+  background: var(--foreground/60);
+}
+
+/* Ensure code blocks with long lines don't overflow */
+.prose pre {
+  max-width: 100%;
+  word-wrap: normal;
+}
+
+.prose pre code {
+  white-space: pre;
+  word-break: normal;
+  word-wrap: normal;
 }

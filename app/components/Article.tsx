@@ -278,7 +278,7 @@ const components: Components = {
             </svg>
           )}
         </button>
-        <pre {...props} className="mb-4">
+        <pre {...props} className="mb-4 overflow-x-auto scrollbar-themed">
           {children}
         </pre>
       </div>
@@ -299,7 +299,9 @@ const components: Components = {
       <code
         {...props}
         onClick={handleClick}
-        className={isInPre ? "" : "cursor-pointer hover:bg-foreground/10"}
+        className={
+          isInPre ? "whitespace-pre" : "cursor-pointer hover:bg-foreground/10"
+        }
       >
         {children}
       </code>
@@ -421,7 +423,7 @@ export function Article(props: ArticleProps): JSX.Element {
           </div>
         )}
 
-        {/* Add a style tag to fix list item paragraph spacing */}
+        {/* Add a style tag to fix list item paragraph spacing and code blocks */}
         <style
           dangerouslySetInnerHTML={{
             __html: `
@@ -439,6 +441,15 @@ export function Article(props: ArticleProps): JSX.Element {
           /* Fix for nested lists */
           .prose li ul, .prose li ol {
             margin-top: 0.5rem !important;
+          }
+
+          /* Ensure code blocks with long lines are scrollable */
+          .prose pre {
+            overflow-x: auto !important;
+          }
+
+          .prose pre code {
+            white-space: pre !important;
           }
         `,
           }}
