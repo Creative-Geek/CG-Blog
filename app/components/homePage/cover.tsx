@@ -6,7 +6,7 @@ interface CoverProps {
   mainTitle?: string;
   mainSubtitle?: string;
   coverImage?: string;
-  hasProjects?: boolean; // Add this prop
+  hasProjects?: boolean;
 }
 
 export default function Cover({
@@ -43,22 +43,23 @@ export default function Cover({
         <div>
           <h1 className="text-4xl md:text-5xl font-bold mb-4">{mainTitle}</h1>
           <p className="text-xl md:text-2xl mb-4">{mainSubtitle}</p>
-          {hasProjects ? (
-            <Button
-              className="cursor-pointer"
-              onClick={() => {
-                document.getElementById("projects-section")?.scrollIntoView({
-                  behavior: "smooth",
-                });
-              }}
-            >
-              View My Work
-            </Button>
-          ) : (
+          <div className="flex justify-center space-x-4">
+            {hasProjects && (
+              <Button
+                className="cursor-pointer"
+                onClick={() => {
+                  document.getElementById("projects-section")?.scrollIntoView({
+                    behavior: "smooth",
+                  });
+                }}
+              >
+                View My Work
+              </Button>
+            )}
             <Button asChild>
               <Link to="/blog">View My Blog</Link>
             </Button>
-          )}
+          </div>
         </div>
       </div>
     </section>
