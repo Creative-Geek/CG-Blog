@@ -5,6 +5,7 @@ import {
   NavigationMenuList,
   NavigationMenuContent,
   NavigationMenuTrigger,
+  ClickOnlyNavigationMenuTrigger,
 } from "../components/ui/navigation-menu";
 import { Button } from "../components/ui/button";
 import { Download, Github, Linkedin, Menu, Search, X } from "lucide-react";
@@ -109,7 +110,10 @@ export function Navbar() {
         </div>
 
         {/* Desktop Navigation - center section */}
-        <NavigationMenu className="hidden md:flex md:w-[33%] md:justify-center">
+        <NavigationMenu
+          className="hidden md:flex md:w-[33%] md:justify-center"
+          delayDuration={99999999}
+        >
           <NavigationMenuList className="flex gap-6">
             <NavigationMenuItem>
               <Link to="/" className="text-sm font-medium">
@@ -122,9 +126,9 @@ export function Navbar() {
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuTrigger className="text-sm font-medium">
+              <ClickOnlyNavigationMenuTrigger className="text-sm font-medium">
                 About
-              </NavigationMenuTrigger>
+              </ClickOnlyNavigationMenuTrigger>
               <NavigationMenuContent>
                 <div className="w-[200px] p-2">
                   <Link

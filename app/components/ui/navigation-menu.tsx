@@ -5,6 +5,37 @@ import { ChevronDown } from "lucide-react"
 
 import { cn } from "~/lib/utils"
 
+// Prevents triggering on hover by stopping pointer events
+const ClickOnlyNavigationMenuTrigger = React.forwardRef<
+  React.ElementRef<typeof NavigationMenuPrimitive.Trigger>,
+  React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Trigger>
+>(({ className, children, ...props }, ref) => {
+  const preventHover = (e: React.MouseEvent | React.PointerEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  return (
+    <NavigationMenuPrimitive.Trigger
+      ref={ref}
+      className={cn(navigationMenuTriggerStyle(), "group", className)}
+      onMouseEnter={preventHover}
+      onMouseLeave={preventHover}
+      onPointerEnter={preventHover}
+      onPointerLeave={preventHover}
+      onMouseOver={preventHover}
+      {...props}
+    >
+      {children}{" "}
+      <ChevronDown
+        className="relative top-[1px] ml-1 h-3 w-3 transition duration-300 group-data-[state=open]:rotate-180"
+        aria-hidden="true"
+      />
+    </NavigationMenuPrimitive.Trigger>
+  );
+})
+ClickOnlyNavigationMenuTrigger.displayName = "ClickOnlyNavigationMenuTrigger"
+
 const NavigationMenu = React.forwardRef<
   React.ElementRef<typeof NavigationMenuPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Root>
@@ -125,4 +156,5 @@ export {
   NavigationMenuLink,
   NavigationMenuIndicator,
   NavigationMenuViewport,
+  ClickOnlyNavigationMenuTrigger,
 }
