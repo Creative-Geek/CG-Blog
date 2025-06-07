@@ -354,6 +354,7 @@ export function Article(props: ArticleProps): JSX.Element {
     }
   }, [props.path]);
 
+
   if (loading) {
     return (
       <div className="container mx-auto max-w-3xl px-4 py-8 animate-pulse">
@@ -380,7 +381,7 @@ export function Article(props: ArticleProps): JSX.Element {
   return (
     <>
       <title>{article.title ? `${article.title} - ${NAME}` : NAME}</title>
-      <article className="container mx-auto max-w-3xl px-4 py-8">
+      <article id="article-content" className="container mx-auto max-w-3xl px-4 py-8">
         <header className="mb-8">
           {article.title && (
             <h1
