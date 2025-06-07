@@ -53,11 +53,11 @@ export default function Cover({
                   });
                 }}
               >
-                View My Work
+                Projects
               </Button>
             )}
             <Button asChild>
-              <Link to="/blog">View My Blog</Link>
+              <Link to="/blog">Blog</Link>
             </Button>
           </div>
         </div>
