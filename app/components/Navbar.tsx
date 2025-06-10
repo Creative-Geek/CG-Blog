@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { HoverBorderGradient } from "./ui/hover-border-gradient";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -164,20 +165,33 @@ export function Navbar() {
         {/* Theme Toggle and Search - right section */}
         <div className="w-full md:w-[33%] flex justify-end items-center gap-2">
           {resumeExists && (
-            <Button>
-              <a
-                href={`${BASE_URL}/Pages/resume.pdf`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex"
-              >
-                <span className="md:hidden">Résumé</span>
-                <span className="hidden md:flex items-center">
-                  <Download className="mr-2 h-4 w-4" />
-                  Download My Resume
-                </span>
-              </a>
-            </Button>
+            // <Button>
+            //   <a
+            //     href={`${BASE_URL}/Pages/resume.pdf`}
+            //     target="_blank"
+            //     rel="noopener noreferrer"
+            //     className="flex"
+            //   >
+            //     <span className="md:hidden">Résumé</span>
+            //     <span className="hidden md:flex items-center">
+            //       <Download className="mr-2 h-4 w-4" />
+            //       Download My Resume
+            //     </span>
+            //   </a>
+            // </Button>
+
+            <HoverBorderGradient
+              containerClassName="rounded-md"
+              as="a"
+              href={`${BASE_URL}/Pages/resume.pdf`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2 h-9 px-4 py-2 text-sm"
+            >
+              <Download className="h-4 w-4" />
+              <span className="md:hidden">Résumé</span>
+              <span className="hidden md:inline">Download My Resume</span>
+            </HoverBorderGradient>
           )}
           <ThemeToggle />
           <SearchCommand />
