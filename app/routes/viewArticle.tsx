@@ -109,22 +109,24 @@ export default function ViewArticle() {
   }, [location.pathname]);
 
   // Function to download article as PDF (single long page)
-  const handleDownloadPDF = async (fileName: string = 'article') => {
+  const handleDownloadPDF = async (fileName: string = "article") => {
     if (!articleRef.current) return;
-    
+
     try {
       setIsPdfGenerating(true);
       showToast("Generating PDF...");
-      
+
       // Find the article content element
-      const articleElement = articleRef.current.querySelector('#article-content') as HTMLElement;
+      const articleElement = articleRef.current.querySelector(
+        "#article-content",
+      ) as HTMLElement;
       if (!articleElement) return;
-      
+
       // Create a clone of the article to manipulate without affecting the displayed version
       const clone = articleElement.cloneNode(true) as HTMLElement;
-      
+
       // Apply light mode styles to the clone
-      const tempStyles = document.createElement('style');
+      const tempStyles = document.createElement("style");
       tempStyles.textContent = `
         .article-pdf-container {
           background-color: white !important;
@@ -167,85 +169,85 @@ export default function ViewArticle() {
         }
       `;
       document.head.appendChild(tempStyles);
-      
-      clone.classList.add('article-pdf-container');
-      
+
+      clone.classList.add("article-pdf-container");
+
       // Add clone to the document but make it invisible
       document.body.appendChild(clone);
-      clone.style.position = 'absolute';
-      clone.style.left = '-9999px';
-      clone.style.top = '0';
-      
+      clone.style.position = "absolute";
+      clone.style.left = "-9999px";
+      clone.style.top = "0";
+
       // Force any images to load completely
-      const images = Array.from(clone.querySelectorAll('img'));
+      const images = Array.from(clone.querySelectorAll("img"));
       await Promise.all(
-        images.map(img => {
+        images.map((img) => {
           if (img.complete) return Promise.resolve();
-          return new Promise(resolve => {
+          return new Promise((resolve) => {
             img.onload = resolve;
             img.onerror = resolve;
           });
-        })
+        }),
       );
-      
+
       // Render HTML to canvas
       const canvas = await html2canvas(clone, {
         scale: 2,
         useCORS: true,
         allowTaint: true,
-        backgroundColor: '#ffffff',
+        backgroundColor: "#ffffff",
         logging: false,
         windowWidth: 800,
       });
-      
+
       // Create PDF with custom dimensions to fit content (single long page)
       const imgWidth = canvas.width;
       const imgHeight = canvas.height;
-      
+
       // Create PDF with dimensions matching the content
       const pdf = new jsPDF({
-        orientation: imgHeight > imgWidth ? 'portrait' : 'landscape',
-        unit: 'px',
+        orientation: imgHeight > imgWidth ? "portrait" : "landscape",
+        unit: "px",
         format: [imgWidth / 2, imgHeight / 2], // Divide by 2 due to scale factor
-        compress: true
+        compress: true,
       });
-      
-      const imgData = canvas.toDataURL('image/jpeg', 0.95);
-      
+
+      const imgData = canvas.toDataURL("image/jpeg", 0.95);
+
       // Add the entire content as a single page
-      pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth / 2, imgHeight / 2);
-      
+      pdf.addImage(imgData, "JPEG", 0, 0, imgWidth / 2, imgHeight / 2);
+
       // Save the PDF with better filename sanitization
-      let safeName = 'article';
+      let safeName = "article";
       if (fileName) {
         safeName = fileName
           // Replace unsafe filename characters
-          .replace(/[/\\:*?"<>|]/g, '')
+          .replace(/[/\\:*?"<>|]/g, "")
           // Replace spaces and multiple whitespace with single dash
-          .replace(/\s+/g, '-')
+          .replace(/\s+/g, "-")
           // Remove any remaining problematic characters but keep Unicode letters/numbers
-          .replace(/[^\p{L}\p{N}\-_.]/gu, '')
+          .replace(/[^\p{L}\p{N}\-_.]/gu, "")
           // Collapse multiple consecutive dashes
-          .replace(/-+/g, '-')
+          .replace(/-+/g, "-")
           // Remove dashes from start and end
-          .replace(/^-+|-+$/g, '')
+          .replace(/^-+|-+$/g, "")
           // Limit length
           .substring(0, 100);
-        
+
         // Fallback if sanitization resulted in empty string
-        if (!safeName || safeName === '') {
-          safeName = 'article';
+        if (!safeName || safeName === "") {
+          safeName = "article";
         }
       }
       pdf.save(`${safeName}.pdf`);
-      
+
       // Clean up
       document.body.removeChild(clone);
       document.head.removeChild(tempStyles);
-      
+
       showToast("PDF downloaded successfully!");
     } catch (err) {
-      console.error('Error generating PDF:', err);
+      console.error("Error generating PDF:", err);
       showToast("Failed to generate PDF. Please try again.");
     } finally {
       setIsPdfGenerating(false);
@@ -270,12 +272,12 @@ export default function ViewArticle() {
       }}
     >
       <Article {...articleData} />
-      
+
       <div className="container mx-auto max-w-3xl px-4 pb-8">
         <div className="flex justify-center">
-          <Button 
+          <Button
             variant="outline"
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 cursor-pointer"
             onClick={() => handleDownloadPDF(articleData.title)}
             disabled={isPdfGenerating}
             aria-label="Download article as PDF"
