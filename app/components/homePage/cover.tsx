@@ -1,5 +1,6 @@
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
+import { FolderOpen, BookOpen } from "lucide-react";
 
 interface CoverProps {
   loading?: boolean;
@@ -53,11 +54,15 @@ export default function Cover({
                   });
                 }}
               >
+                <FolderOpen className="mr-2 h-4 w-4" />
                 Projects
               </Button>
             )}
             <Button asChild>
-              <Link to="/blog">Blog</Link>
+              <Link to="/blog">
+                <BookOpen className="mr-2 h-4 w-4" />
+                Blog
+              </Link>
             </Button>
           </div>
         </div>
