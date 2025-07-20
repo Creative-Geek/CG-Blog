@@ -79,6 +79,8 @@ export function meta({ data, location }: any) {
       ? window.location.origin
       : "https://creative-geek-blog.vercel.app"
   }${location.pathname}`;
+
+  // Use the image URL from the loader (already constructed) or fallback
   const imageUrl = data.image || `${BASE_URL}/Pages/cover.jpg`;
 
   return [
@@ -316,7 +318,7 @@ export default function ViewArticle() {
   const structuredData = generateArticleStructuredData({
     title: articleData.title,
     description: articleData.description,
-    image: articleData.image,
+    image: articleData.image || `${BASE_URL}/Pages/cover.jpg`,
     author: articleData.author || NAME,
     date: articleData.date,
     url: typeof window !== "undefined" ? window.location.href : "",
