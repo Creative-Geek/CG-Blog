@@ -4,6 +4,7 @@ import { useLocation, useLoaderData } from "react-router-dom";
 import ArticleCard from "../components/articleCard";
 import { BASE_URL, NAME } from "~/config/constants";
 import { motion } from "framer-motion";
+import { generateBlogStructuredData } from "~/utils/structuredData";
 
 interface Article {
   name: string;
@@ -69,6 +70,52 @@ export async function loader() {
   } catch (error) {
     throw new Error("Failed to load articles");
   }
+}
+
+export function meta({ location }: { location: any }) {
+  const url =
+    typeof window !== "undefined"
+      ? window.location.origin
+      : "https://creative-geek-blog.vercel.app";
+  const description = `Browse all articles by ${NAME}. Discover insights on software engineering, web development, AI integration, and digital innovation.`;
+  const imageUrl = `${BASE_URL}/Pages/cover.jpg`;
+
+  return [
+    // Basic meta tags
+    { title: `Blog - ${NAME}` },
+    { name: "description", content: description },
+    { name: "author", content: NAME },
+    {
+      name: "keywords",
+      content: `${NAME}, blog, articles, software engineering, web development, AI, technology`,
+    },
+
+    // Open Graph meta tags
+    { property: "og:title", content: `Blog - ${NAME}` },
+    { property: "og:description", content: description },
+    { property: "og:image", content: imageUrl },
+    { property: "og:image:alt", content: `${NAME}'s blog articles` },
+    { property: "og:image:width", content: "1200" },
+    { property: "og:image:height", content: "630" },
+    { property: "og:url", content: `${url}${location.pathname}` },
+    { property: "og:type", content: "website" },
+    { property: "og:site_name", content: `${NAME}'s Blog` },
+
+    // Twitter Card meta tags
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: `Blog - ${NAME}` },
+    { name: "twitter:description", content: description },
+    { name: "twitter:image", content: imageUrl },
+    { name: "twitter:image:alt", content: `${NAME}'s blog articles` },
+    {
+      name: "twitter:creator",
+      content: `@${NAME.replace(/\s+/g, "").toLowerCase()}`,
+    },
+    {
+      name: "twitter:site",
+      content: `@${NAME.replace(/\s+/g, "").toLowerCase()}`,
+    },
+  ];
 }
 
 function BlogContent() {
@@ -211,8 +258,24 @@ function BlogContent() {
 }
 
 export default function Blog() {
+  // Generate structured data
+  const blogStructuredData = generateBlogStructuredData({
+    name: `${NAME}'s Blog`,
+    description: `Browse all articles by ${NAME}. Discover insights on software engineering, web development, AI integration, and digital innovation.`,
+    url:
+      typeof window !== "undefined"
+        ? window.location.origin
+        : "https://creative-geek-blog.vercel.app",
+  });
+
   return (
     <>
+      {/* Structured Data (JSON-LD) */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogStructuredData) }}
+      />
+
       <title>{`${NAME}'s Blog`}</title>
       <motion.div
         initial={{ opacity: 0 }}

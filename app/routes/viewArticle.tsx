@@ -8,6 +8,7 @@ import { Button } from "../components/ui/button";
 import { useToast } from "../components/ui/Toast";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
+import { generateArticleStructuredData } from "~/utils/structuredData";
 
 interface ArticleData {
   title: string;
@@ -65,10 +66,63 @@ export async function loader({ params }: { params: { path: string } }) {
   }
 }
 
-export function meta({ data }: any) {
+export function meta({ data, location }: any) {
+  if (!data) {
+    return [
+      { title: NAME },
+      { name: "description", content: `Welcome to ${NAME}'s Blog!` },
+    ];
+  }
+
+  const url = `${
+    typeof window !== "undefined"
+      ? window.location.origin
+      : "https://creative-geek-blog.vercel.app"
+  }${location.pathname}`;
+  const imageUrl = data.image || `${BASE_URL}/Pages/cover.jpg`;
+
   return [
-    { title: data?.title ? `${data.title} - ${NAME}` : NAME },
-    { name: "description", content: data?.description },
+    // Basic meta tags
+    { title: `${data.title} - ${NAME}` },
+    { name: "description", content: data.description },
+    { name: "author", content: data.author || NAME },
+    {
+      name: "keywords",
+      content: `${data.title}, ${NAME}, blog, article, technology`,
+    },
+
+    // Open Graph meta tags
+    { property: "og:title", content: data.title },
+    { property: "og:description", content: data.description },
+    { property: "og:image", content: imageUrl },
+    { property: "og:image:alt", content: `Cover image for ${data.title}` },
+    { property: "og:image:width", content: "1200" },
+    { property: "og:image:height", content: "630" },
+    { property: "og:url", content: url },
+    { property: "og:type", content: "article" },
+    { property: "og:site_name", content: `${NAME}'s Blog` },
+    { property: "article:author", content: data.author || NAME },
+    {
+      property: "article:published_time",
+      content: data.date
+        ? new Date(data.date).toISOString()
+        : new Date().toISOString(),
+    },
+
+    // Twitter Card meta tags
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: data.title },
+    { name: "twitter:description", content: data.description },
+    { name: "twitter:image", content: imageUrl },
+    { name: "twitter:image:alt", content: `Cover image for ${data.title}` },
+    {
+      name: "twitter:creator",
+      content: `@${NAME.replace(/\s+/g, "").toLowerCase()}`,
+    },
+    {
+      name: "twitter:site",
+      content: `@${NAME.replace(/\s+/g, "").toLowerCase()}`,
+    },
   ];
 }
 
@@ -118,7 +172,7 @@ export default function ViewArticle() {
 
       // Find the article content element
       const articleElement = articleRef.current.querySelector(
-        "#article-content",
+        "#article-content"
       ) as HTMLElement;
       if (!articleElement) return;
 
@@ -187,7 +241,7 @@ export default function ViewArticle() {
             img.onload = resolve;
             img.onerror = resolve;
           });
-        }),
+        })
       );
 
       // Render HTML to canvas
@@ -258,43 +312,61 @@ export default function ViewArticle() {
     return <LoadingArticle />;
   }
 
-  return (
-    <motion.div
-      ref={articleRef}
-      initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 50 }}
-      transition={{
-        type: "spring",
-        stiffness: 100,
-        damping: 20,
-        duration: 0.6,
-      }}
-    >
-      <Article {...articleData} />
+  // Generate structured data for the article
+  const structuredData = generateArticleStructuredData({
+    title: articleData.title,
+    description: articleData.description,
+    image: articleData.image,
+    author: articleData.author || NAME,
+    date: articleData.date,
+    url: typeof window !== "undefined" ? window.location.href : "",
+  });
 
-      <div className="container mx-auto max-w-3xl px-4 pb-8">
-        <div className="flex justify-center">
-          <Button
-            variant="outline"
-            className="flex items-center gap-2 cursor-pointer"
-            onClick={() => handleDownloadPDF(articleData.title)}
-            disabled={isPdfGenerating}
-            aria-label="Download article as PDF"
-          >
-            {isPdfGenerating ? (
-              <>
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                <span>Generating PDF...</span>
-              </>
-            ) : (
-              <>
-                <FileDown className="h-4 w-4" /> Download as PDF
-              </>
-            )}
-          </Button>
+  return (
+    <>
+      {/* Structured Data (JSON-LD) */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+
+      <motion.div
+        ref={articleRef}
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 50 }}
+        transition={{
+          type: "spring",
+          stiffness: 100,
+          damping: 20,
+          duration: 0.6,
+        }}
+      >
+        <Article {...articleData} />
+
+        <div className="container mx-auto max-w-3xl px-4 pb-8">
+          <div className="flex justify-center">
+            <Button
+              variant="outline"
+              className="flex items-center gap-2 cursor-pointer"
+              onClick={() => handleDownloadPDF(articleData.title)}
+              disabled={isPdfGenerating}
+              aria-label="Download article as PDF"
+            >
+              {isPdfGenerating ? (
+                <>
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                  <span>Generating PDF...</span>
+                </>
+              ) : (
+                <>
+                  <FileDown className="h-4 w-4" /> Download as PDF
+                </>
+              )}
+            </Button>
+          </div>
         </div>
-      </div>
-    </motion.div>
+      </motion.div>
+    </>
   );
 }
