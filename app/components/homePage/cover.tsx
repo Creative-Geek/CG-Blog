@@ -8,6 +8,10 @@ interface CoverProps {
   mainSubtitle?: string;
   coverImage?: string;
   hasProjects?: boolean;
+  links?: Array<{
+    title: string;
+    url: string;
+  }>;
 }
 
 export default function Cover({
@@ -16,6 +20,7 @@ export default function Cover({
   mainSubtitle,
   coverImage,
   hasProjects = true, // Default to true
+  links,
 }: CoverProps) {
   if (loading) {
     return (
@@ -44,7 +49,7 @@ export default function Cover({
         <div>
           <h1 className="text-4xl md:text-5xl font-bold mb-4">{mainTitle}</h1>
           <p className="text-xl md:text-2xl mb-4">{mainSubtitle}</p>
-          <div className="flex justify-center space-x-4">
+          <div className="flex justify-center space-x-4 flex-wrap gap-2">
             {hasProjects && (
               <Button
                 className="cursor-pointer"
@@ -64,6 +69,14 @@ export default function Cover({
                 Blog
               </Link>
             </Button>
+            {links &&
+              links.map((link, index) => (
+                <Button key={index} asChild>
+                  <a href={link.url} target="_blank" rel="noopener noreferrer">
+                    {link.title}
+                  </a>
+                </Button>
+              ))}
           </div>
         </div>
       </div>

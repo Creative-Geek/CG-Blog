@@ -17,6 +17,10 @@ interface HomeData {
   mainTitle: string;
   mainSubtitle: string;
   coverImage: string;
+  links?: Array<{
+    title: string;
+    url: string;
+  }>;
   about: {
     image: string;
     text: string;
@@ -189,6 +193,7 @@ export default function Home() {
           mainSubtitle={homeData.mainSubtitle}
           coverImage={homeData.coverImage}
           hasProjects={homeData.projects && homeData.projects.length > 0}
+          links={homeData.links}
         />
       </FadeInSection>
       <div className="container mx-auto px-4">
