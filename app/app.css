@@ -34,6 +34,11 @@
   --chart-4: hsl(43 74% 66%);
   --chart-5: hsl(27 87% 67%);
   --radius: 0.6rem;
+
+  /* Configurable accent colors - can be overridden via CSS custom properties */
+  --accent-primary: hsl(220, 90%, 56%);
+  --accent-secondary: hsl(220, 90%, 66%);
+  --accent-hover: hsl(220, 90%, 46%);
 }
 
 [data-theme="dark"] {
@@ -56,6 +61,11 @@
   --border: hsl(0 0% 14.9%);
   --input: hsl(0 0% 14.9%);
   --ring: hsl(0 0% 83.1%);
+
+  /* Dark mode accent colors */
+  --accent-primary: hsl(220, 90%, 66%);
+  --accent-secondary: hsl(220, 90%, 76%);
+  --accent-hover: hsl(220, 90%, 56%);
 }
 
 @theme inline {
@@ -87,6 +97,11 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* Accent color utilities for Tailwind */
+  --color-accent-primary: var(--accent-primary);
+  --color-accent-secondary: var(--accent-secondary);
+  --color-accent-hover: var(--accent-hover);
 }
 
 @layer base {
@@ -99,7 +114,7 @@
   .prose {
     /* Headers */
     --tw-prose-headings: theme("colors.foreground");
-    --tw-prose-links: theme("colors.blue.600");
+    --tw-prose-links: var(--accent-primary);
 
     /* Body text */
     --tw-prose-body: theme("colors.foreground/80");
@@ -120,7 +135,7 @@
     /* Dark mode */
     --tw-prose-invert-body: theme("colors.foreground/80");
     --tw-prose-invert-headings: theme("colors.foreground");
-    --tw-prose-invert-links: theme("colors.blue.400");
+    --tw-prose-invert-links: var(--accent-primary);
     --tw-prose-invert-bold: theme("colors.foreground");
     --tw-prose-invert-quotes: theme("colors.foreground/80");
   }
@@ -193,7 +208,12 @@
 }
 
 .prose a {
-  @apply text-blue-600 hover:underline dark:text-blue-400;
+  color: var(--accent-primary);
+  @apply hover:underline transition-colors;
+}
+
+.prose a:hover {
+  color: var(--accent-hover);
 }
 
 ::view-transition-old(root),

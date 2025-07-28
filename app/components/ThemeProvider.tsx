@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { applyThemeConfig } from "~/utils/theme";
 
 type Theme = "light" | "dark";
 
@@ -32,6 +33,9 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     const root = window.document.documentElement;
     root.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
+
+    // Apply theme configuration from constants
+    applyThemeConfig();
   }, [theme]);
 
   return (
