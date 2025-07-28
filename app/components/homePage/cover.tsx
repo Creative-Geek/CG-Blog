@@ -1,6 +1,6 @@
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
-import { FolderOpen, BookOpen } from "lucide-react";
+import { FolderOpen, BookOpen, ExternalLink } from "lucide-react";
 
 interface CoverProps {
   loading?: boolean;
@@ -96,6 +96,7 @@ export default function Cover({
                   className="transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
                 >
                   <a href={link.url} target="_blank" rel="noopener noreferrer">
+                    <ExternalLink className="mr-2 h-5 w-5" />
                     {link.title}
                   </a>
                 </Button>
