@@ -46,18 +46,38 @@ interface HomeData {
 
 function FadeInSection({ children }: { children: React.ReactNode }) {
   const ref = React.useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.3 });
+  const [fallbackVisible, setFallbackVisible] = React.useState(false);
+
+  // More mobile-friendly intersection observer settings
+  const isInView = useInView(ref, {
+    once: true,
+    amount: 0.1, // Reduced from 0.3 to 0.1 for better mobile compatibility
+    margin: "0px 0px -100px 0px", // Trigger animation earlier
+  });
+
+  // Fallback mechanism for mobile devices where intersection observer might fail
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!isInView) {
+        setFallbackVisible(true);
+      }
+    }, 2000); // Show content after 2 seconds if animation hasn't triggered
+
+    return () => clearTimeout(timer);
+  }, [isInView]);
+
+  const shouldShow = isInView || fallbackVisible;
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 50 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+      initial={{ opacity: 0, y: 30 }} // Reduced y offset for smoother mobile experience
+      animate={shouldShow ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
       transition={{
         type: "spring",
-        stiffness: 100,
-        damping: 20,
-        duration: 0.6,
+        stiffness: 120,
+        damping: 25,
+        duration: 0.5,
       }}
     >
       {children}
