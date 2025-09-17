@@ -9,12 +9,7 @@ interface ContactProps {
   buttonLink?: string;
 }
 
-export default function Contact({
-  loading,
-  title,
-  text,
-  buttonLink,
-}: ContactProps) {
+export default function Contact({ loading, title, text, buttonLink }: ContactProps) {
   if (loading) {
     return (
       <section className="container py-16">
@@ -34,7 +29,7 @@ export default function Contact({
       <div className="mx-auto max-w-3xl text-center space-y-6">
         <h2 className="text-3xl font-bold tracking-tighter">{title}</h2>
         <p className="text-lg text-muted-foreground">{text}</p>
-        <Button variant="accent" asChild size="lg">
+        <Button asChild size="lg">
           <a href={buttonLink}>Contact Me</a>
         </Button>
       </div>

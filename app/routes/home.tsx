@@ -7,10 +7,6 @@ import ProjectsSection from "~/components/homePage/projectsSection";
 import BlogSection from "~/components/homePage/blogSection";
 import Contact from "~/components/homePage/contact";
 import ExperienceSection from "~/components/homePage/experienceSection";
-import {
-  SectionDivider,
-  DecorativeDivider,
-} from "~/components/ui/section-divider";
 import { motion, useInView } from "framer-motion";
 import {
   generateWebsiteStructuredData,
@@ -227,33 +223,25 @@ export default function Home() {
             text={homeData.about.text}
           />
         </FadeInSection>
-
-        <SectionDivider variant="gradient" />
-
+        <hr />
         <FadeInSection>
           <ProjectsSection projects={homeData.projects} />
         </FadeInSection>
-
-        <DecorativeDivider />
-
+        <hr />
         <FadeInSection>
           <ExperienceSection
             experience={homeData.experience}
             skills={homeData.skills}
           />
         </FadeInSection>
-
-        <SectionDivider variant="dots" />
-
+        <hr />
         <FadeInSection>
           <BlogSection
             articles={articles}
             featuredArticles={homeData.featuredArticles}
           />
         </FadeInSection>
-
-        <SectionDivider variant="wave" />
-
+        <hr />
         <FadeInSection>
           <Contact {...homeData.contact} />
         </FadeInSection>

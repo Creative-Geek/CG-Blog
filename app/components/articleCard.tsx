@@ -100,17 +100,14 @@ const ArticleCard = ({
 
   if (loading) {
     return (
-      <Card className="overflow-hidden group hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-        <div className="h-48 w-full bg-muted animate-pulse" />
-        <CardHeader className="space-y-2">
-          <div className="h-6 w-3/4 bg-muted animate-pulse rounded" />
-          <div className="h-4 w-1/2 bg-muted animate-pulse rounded" />
-        </CardHeader>
-        <CardContent>
-          <div className="h-4 w-full bg-muted animate-pulse rounded mb-2" />
-          <div className="h-4 w-2/3 bg-muted animate-pulse rounded" />
-        </CardContent>
-      </Card>
+      <div className="block no-underline transition-transform hover:scale-[1.02]">
+        <div className="h-48 w-full bg-gray-200 animate-pulse" />
+        <div className="p-4 space-y-2">
+          <div className="h-6 w-3/4 bg-gray-200 animate-pulse rounded" />
+          <div className="h-4 w-1/2 bg-gray-200 animate-pulse rounded" />
+          <div className="h-4 w-full bg-gray-200 animate-pulse rounded" />
+        </div>
+      </div>
     );
   }
 
@@ -121,8 +118,10 @@ const ArticleCard = ({
 
   return (
     <Card
-      className={`overflow-hidden relative group border-0 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-2 bg-gradient-to-br from-card to-card/95 ${
-        isNavigating ? "opacity-70 pointer-events-none scale-[1.04]" : ""
+      className={`overflow-hidden relative ${
+        isNavigating
+          ? "opacity-70 pointer-events-none scale-[1.04] "
+          : "transition-transform hover:scale-[1.02]"
       }`}
     >
       <Link
@@ -132,19 +131,17 @@ const ArticleCard = ({
         prefetch="intent"
       >
         {metadata.image && (
-          <div className="relative overflow-hidden">
+          <div className="relative">
             <img
               src={metadata.image}
               alt={metadata.title}
               className={cn(
-                "h-48 w-full object-cover transition-all duration-500 group-hover:scale-110",
+                "h-48 w-full object-cover transition-opacity duration-300",
                 isNavigating ? "blur-[1px]" : "",
                 imageLoaded ? "opacity-100" : "opacity-0"
               )}
               onLoad={() => setImageLoaded(true)}
             />
-            {/* Gradient overlay on hover */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           </div>
         )}
         {isNavigating && (
@@ -152,27 +149,20 @@ const ArticleCard = ({
             <Loader2 className="h-8 w-8 animate-spin text-foreground" />
           </div>
         )}
-        <CardHeader className="space-y-2 pb-3">
-          <CardTitle
-            className="text-xl group-hover:text-accent-primary transition-colors duration-200"
-            dir="auto"
-          >
+        <CardHeader className="space-y-1">
+          <CardTitle className="text-xl" dir="auto">
             {metadata.title}
           </CardTitle>
           <CardDescription
             dir="auto"
             className="flex items-center text-sm text-muted-foreground"
           >
-            <span className="bg-accent-primary/10 text-accent-primary px-2 py-1 rounded-full text-xs font-medium">
-              {metadata.author}
-            </span>
-            <span className="mx-2">•</span>
-            <span>{metadata.date}</span>
+            {metadata.author} • {metadata.date}
           </CardDescription>
         </CardHeader>
-        <CardContent className="flex items-start gap-4 pt-0">
+        <CardContent className="flex items-start gap-4">
           <p
-            className="text-sm text-muted-foreground flex-1 leading-relaxed"
+            className="text-sm text-muted-foreground flex-1"
             dir="auto"
             style={{
               textAlign: "inherit",
@@ -182,9 +172,10 @@ const ArticleCard = ({
           </p>
           <div className="flex-shrink-0">
             {isNavigating ? (
-              <Loader2 className="h-5 w-5 animate-spin text-accent-primary" />
+              // <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+              <ArrowRight className="h-5 w-5 text-muted-foreground" />
             ) : (
-              <ArrowRight className="h-5 w-5 text-muted-foreground group-hover:text-accent-primary group-hover:translate-x-1 transition-all duration-200" />
+              <ArrowRight className="h-5 w-5 text-muted-foreground" />
             )}
           </div>
         </CardContent>
