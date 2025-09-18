@@ -185,8 +185,8 @@ export default function ExperienceSection({
               <div className="space-y-8">
                 {experience.map((job, index) => (
                   <div key={index} className="relative">
-                    {/* Timeline dot */}
-                    <div className="absolute left-2 md:left-1/2 md:transform md:-translate-x-1/2 w-4 h-4 bg-primary rounded-full border-4 border-background shadow-lg z-10"></div>
+                    {/* Timeline dot - positioned at the vertical center of the card */}
+                    <div className="absolute left-2 md:left-1/2 md:transform md:-translate-x-1/2 top-1/2 transform -translate-y-1/2 w-4 h-4 bg-primary rounded-full border-4 border-background shadow-lg z-10"></div>
 
                     {/* Content */}
                     <div
