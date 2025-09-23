@@ -1,97 +1,20 @@
 import { Badge } from "../ui/badge";
 
 interface SkillCategory {
-  name: string;
+  category: string;
   skills: string[];
   icon?: string;
 }
 
 interface ExperienceSectionProps {
   loading?: boolean;
-  skills?: string[] | SkillCategory[];
+  skills?: SkillCategory[];
   experience?: Array<{
     title: string;
     date: string;
     description: string;
     link?: string;
   }>;
-}
-
-// Helper function to auto-categorize skills if they're provided as a flat array
-function categorizeSkills(skills: string[]): SkillCategory[] {
-  const categories: { [key: string]: string[] } = {
-    Frontend: [],
-    Backend: [],
-    Design: [],
-    Tools: [],
-    Other: [],
-  };
-
-  const categoryMappings: { [key: string]: string } = {
-    // Frontend
-    JavaScript: "Frontend",
-    React: "Frontend",
-    Vue: "Frontend",
-    Angular: "Frontend",
-    HTML: "Frontend",
-    CSS: "Frontend",
-    TypeScript: "Frontend",
-    "Next.js": "Frontend",
-    Svelte: "Frontend",
-
-    // Backend
-    "Node.js": "Backend",
-    Nodejs: "Backend",
-    Python: "Backend",
-    Flask: "Backend",
-    Django: "Backend",
-    Express: "Backend",
-    PHP: "Backend",
-    Java: "Backend",
-    "C#": "Backend",
-    Ruby: "Backend",
-    Go: "Backend",
-
-    // Design
-    "UI/UX": "Design",
-    "Web Design": "Design",
-    "Graphic Design": "Design",
-    Figma: "Design",
-    "Adobe XD": "Design",
-    Photoshop: "Design",
-    Illustrator: "Design",
-    "After Effects": "Design",
-    "Premiere Pro": "Design",
-
-    // Tools
-    Git: "Tools",
-    Docker: "Tools",
-    AWS: "Tools",
-    Firebase: "Tools",
-    MongoDB: "Tools",
-    PostgreSQL: "Tools",
-    MySQL: "Tools",
-    WordPress: "Tools",
-    Linux: "Tools",
-  };
-
-  skills.forEach((skill) => {
-    const category = categoryMappings[skill] || "Other";
-    categories[category].push(skill);
-  });
-
-  // Filter out empty categories and return as SkillCategory array
-  return Object.entries(categories)
-    .filter(([_, skills]) => skills.length > 0)
-    .map(([name, skills]) => ({ name, skills }));
-}
-
-function isSkillCategoryArray(
-  skills: string[] | SkillCategory[]
-): skills is SkillCategory[] {
-  return (
-    skills.length > 0 && typeof skills[0] === "object" && "name" in skills[0]
-  );
 }
 
 export default function ExperienceSection({
@@ -139,37 +62,29 @@ export default function ExperienceSection({
             <h2 className="text-3xl font-bold tracking-tighter text-center">
               Skills
             </h2>
-            {(() => {
-              const skillCategories = isSkillCategoryArray(skills)
-                ? skills
-                : categorizeSkills(skills);
-
-              return (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {skillCategories.map((category, categoryIndex) => (
-                    <div
-                      key={categoryIndex}
-                      className="bg-card border rounded-lg p-4 hover:shadow-md transition-shadow"
-                    >
-                      <h3 className="text-lg font-semibold mb-3 text-primary">
-                        {category.name}
-                      </h3>
-                      <div className="flex flex-wrap gap-2">
-                        {category.skills.map((skill, skillIndex) => (
-                          <Badge
-                            key={skillIndex}
-                            variant="secondary"
-                            className="text-sm py-1 px-3 hover:bg-primary/10 transition-colors"
-                          >
-                            {skill}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {skills.map((category, categoryIndex) => (
+                <div
+                  key={categoryIndex}
+                  className="bg-card border rounded-lg p-4 hover:shadow-md transition-shadow"
+                >
+                  <h3 className="text-lg font-semibold mb-3 text-primary">
+                    {category.category}
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {category.skills.map((skill, skillIndex) => (
+                      <Badge
+                        key={skillIndex}
+                        variant="secondary"
+                        className="text-sm py-1 px-3 hover:bg-primary/10 transition-colors"
+                      >
+                        {skill}
+                      </Badge>
+                    ))}
+                  </div>
                 </div>
-              );
-            })()}
+              ))}
+            </div>
           </div>
         )}
 

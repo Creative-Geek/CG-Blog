@@ -18,11 +18,26 @@
         }
     ],
     "skills": [
-        "Skill 1",
-        "Skill 2",
-        "Skill 3",
-        "Skill 4",
-        "Skill 5"
+        {
+          "category": "Frontend Development",
+          "skills": ["React", "JavaScript", "HTML/CSS"]
+        },
+        {
+          "category": "Backend Development",
+          "skills": ["Node.js", "Flask", "REST APIs"]
+        },
+        {
+          "category": "Python & AI/ML",
+          "skills": ["Python", "AI Integration", "Deep Learning"]
+        },
+        {
+          "category": "Databases",
+          "skills": ["PostgreSQL", "MongoDB"]
+        },
+        {
+          "category": "Tools & Platforms",
+          "skills": ["Git & GitHub", "Docker", "Wordpress"]
+        }
     ],
     "experience": [
         {
