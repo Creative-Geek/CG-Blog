@@ -17,6 +17,12 @@ import {
   generatePersonStructuredData,
 } from "~/utils/structuredData";
 
+interface SkillCategory {
+  category: string;
+  skills: string[];
+  icon?: string;
+}
+
 interface HomeData {
   mainTitle: string;
   mainSubtitle: string;
@@ -30,7 +36,7 @@ interface HomeData {
     text: string;
   };
   projects: Array<{ path: string }>;
-  skills: string[];
+  skills: SkillCategory[];
   experience: Array<{
     title: string;
     date: string;
