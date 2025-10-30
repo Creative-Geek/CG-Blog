@@ -6,9 +6,16 @@ import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { Button } from "../components/ui/button";
 import { useToast } from "../components/ui/Toast";
-import { jsPDF } from "jspdf";
-import html2canvas from "html2canvas";
 import { generateArticleStructuredData } from "~/utils/structuredData";
+
+// Lazy load PDF generation libraries
+const loadPdfLibraries = async () => {
+  const [{ jsPDF }, html2canvas] = await Promise.all([
+    import("jspdf"),
+    import("html2canvas"),
+  ]);
+  return { jsPDF, html2canvas: html2canvas.default };
+};
 
 interface ArticleData {
   title: string;
@@ -171,6 +178,9 @@ export default function ViewArticle() {
     try {
       setIsPdfGenerating(true);
       showToast("Generating PDF...");
+
+      // Lazy load PDF libraries only when needed
+      const { jsPDF, html2canvas } = await loadPdfLibraries();
 
       // Find the article content element
       const articleElement = articleRef.current.querySelector(

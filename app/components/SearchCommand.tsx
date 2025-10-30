@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { Search } from "lucide-react";
 import { Button } from "./ui/button";
-import SearchDialog from "./SearchDialog";
+
+// Lazy load SearchDialog to reduce initial bundle
+const SearchDialog = lazy(() => import("./SearchDialog"));
 
 export default function SearchCommand() {
   const [open, setOpen] = useState(false);
@@ -35,7 +37,11 @@ export default function SearchCommand() {
         <Search className="h-4 w-4" />
       </Button>
 
-      <SearchDialog open={open} onOpenChange={setOpen} />
+      {open && (
+        <Suspense fallback={null}>
+          <SearchDialog open={open} onOpenChange={setOpen} />
+        </Suspense>
+      )}
     </>
   );
 }

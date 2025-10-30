@@ -22,25 +22,44 @@ import { useState, useEffect } from "react";
 import SearchCommand from "./SearchCommand";
 import { BASE_URL } from "../config/constants";
 
+// Cache resume check result for the session
+let resumeCheckCache: boolean | null = null;
+let resumeCheckPromise: Promise<boolean> | null = null;
+
+async function checkResumeExists(): Promise<boolean> {
+  if (resumeCheckCache !== null) {
+    return resumeCheckCache;
+  }
+
+  if (resumeCheckPromise) {
+    return resumeCheckPromise;
+  }
+
+  resumeCheckPromise = (async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/Pages/resume.pdf`, {
+        method: "HEAD",
+      });
+      resumeCheckCache = response.ok;
+      return resumeCheckCache;
+    } catch (error) {
+      console.error("Error checking resume:", error);
+      resumeCheckCache = false;
+      return false;
+    } finally {
+      resumeCheckPromise = null;
+    }
+  })();
+
+  return resumeCheckPromise;
+}
+
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const [resumeExists, setResumeExists] = useState(false);
 
   useEffect(() => {
-    // Check if resume file exists
-    const checkResumeExists = async () => {
-      try {
-        const response = await fetch(`${BASE_URL}/Pages/resume.pdf`, {
-          method: "HEAD",
-        });
-        setResumeExists(response.ok);
-      } catch (error) {
-        console.error("Error checking resume:", error);
-        setResumeExists(false);
-      }
-    };
-
-    checkResumeExists();
+    checkResumeExists().then(setResumeExists);
   }, []);
 
   return (

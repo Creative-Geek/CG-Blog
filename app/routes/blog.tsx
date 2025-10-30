@@ -10,6 +10,33 @@ interface Article {
   name: string;
 }
 
+// Server-side cache for article metadata (lasts for the lifetime of the server process)
+const metadataCache = new Map<string, any>();
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+const cacheTimestamps = new Map<string, number>();
+
+async function fetchWithCache(url: string) {
+  const now = Date.now();
+  const cached = metadataCache.get(url);
+  const timestamp = cacheTimestamps.get(url);
+
+  // Return cached if exists and not expired
+  if (cached && timestamp && now - timestamp < CACHE_TTL) {
+    return cached;
+  }
+
+  // Fetch fresh data
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`Failed to fetch ${url}`);
+  const data = await response.json();
+
+  // Update cache
+  metadataCache.set(url, data);
+  cacheTimestamps.set(url, now);
+
+  return data;
+}
+
 interface BlogState {
   scrollRatio: number;
   displayedArticles: Article[];
@@ -60,13 +87,49 @@ const restoreScrollFromRatio = (ratio: number) => {
   window.scrollTo(0, targetScroll);
 };
 
+interface ArticleWithMetadata extends Article {
+  title?: string;
+  description?: string;
+  image?: string;
+  date?: string;
+  author?: string;
+}
+
 export async function loader() {
   try {
-    const response = await fetch(`${BASE_URL}/Articles/index.json`);
-    if (!response.ok) throw new Error("Failed to fetch articles");
-    const articles: Article[] = await response.json();
-    const initialArticles = articles.slice(0, 5);
-    return { initialArticles, totalArticles: articles };
+    // Fetch index.json which now contains all metadata (single request!)
+    const articles: any[] = await fetchWithCache(
+      `${BASE_URL}/Articles/index.json`
+    );
+
+    // Process articles to ensure image paths are correct
+    const articlesWithMetadata = articles.map((article) => {
+      // Determine image path
+      let imagePath = article.image;
+      if (imagePath && !imagePath.startsWith("http")) {
+        imagePath = `${BASE_URL}/Articles/${imagePath}`;
+      } else if (!imagePath) {
+        // Default to .jpg if no image specified
+        imagePath = `${BASE_URL}/Articles/${article.name}.jpg`;
+      }
+
+      return {
+        name: article.name,
+        title: article.title || "Untitled",
+        description: article.description || "",
+        image: imagePath,
+        date: article.date || "",
+        author: article.author || "Unknown",
+      };
+    });
+
+    // Return initial 5 articles and all article data for lazy loading
+    const initialArticles = articlesWithMetadata.slice(0, 5);
+
+    return {
+      initialArticles,
+      allArticles: articlesWithMetadata,
+    };
   } catch (error) {
     throw new Error("Failed to load articles");
   }
@@ -119,16 +182,18 @@ export function meta({ location }: { location: any }) {
 }
 
 function BlogContent() {
-  const { initialArticles, totalArticles } = useLoaderData() as {
-    initialArticles: Article[];
-    totalArticles: Article[];
+  const { initialArticles, allArticles } = useLoaderData() as {
+    initialArticles: ArticleWithMetadata[];
+    allArticles: ArticleWithMetadata[];
   };
 
   const [isClient, setIsClient] = useState(false);
   const savedState = useRef(getBlogState());
   const contentRef = useRef<HTMLDivElement>(null);
 
-  const [displayedArticles, setDisplayedArticles] = useState<Article[]>(
+  const [displayedArticles, setDisplayedArticles] = useState<
+    ArticleWithMetadata[]
+  >(
     savedState.current.displayedArticles.length > 0
       ? savedState.current.displayedArticles
       : initialArticles
@@ -137,7 +202,7 @@ function BlogContent() {
   const [error, setError] = useState("");
   const [page, setPage] = useState(savedState.current.page);
   const [hasMore, setHasMore] = useState(
-    totalArticles.length > displayedArticles.length
+    allArticles.length > displayedArticles.length
   );
   const articlesPerPage = 5;
 
@@ -176,34 +241,44 @@ function BlogContent() {
     saveBlogState(currentState);
   }, [isClient, displayedArticles, page]);
 
-  // Update scroll position on scroll
+  // Update scroll position on scroll with throttling
   useEffect(() => {
     if (!isClient) return;
 
+    let scrollTimeout: NodeJS.Timeout;
     const handleScroll = () => {
-      const currentState = getBlogState();
-      saveBlogState({
-        ...currentState,
-        scrollRatio: getScrollRatio(),
-      });
+      // Throttle scroll updates to reduce re-renders
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        const currentState = getBlogState();
+        saveBlogState({
+          ...currentState,
+          scrollRatio: getScrollRatio(),
+        });
+      }, 150); // Update every 150ms instead of every scroll event
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      clearTimeout(scrollTimeout);
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, [isClient]);
 
   const loadMore = () => {
     if (!hasMore || loading) return;
 
     setLoading(true);
+
     const start = page * articlesPerPage;
     const end = start + articlesPerPage;
-    const newArticles = totalArticles.slice(start, end);
+    const newArticles = allArticles.slice(start, end);
 
-    if (newArticles.length < articlesPerPage || end >= totalArticles.length) {
+    if (newArticles.length < articlesPerPage || end >= allArticles.length) {
       setHasMore(false);
     }
 
+    // No need to fetch - we already have all metadata from the loader!
     setDisplayedArticles((prev) => [...prev, ...newArticles]);
     setPage((prev) => prev + 1);
     setLoading(false);
@@ -228,6 +303,11 @@ function BlogContent() {
           {displayedArticles.map((article, index) => (
             <ArticleCard
               key={`${article.name}-${index}`}
+              title={article.title}
+              description={article.description}
+              image={article.image}
+              date={article.date}
+              author={article.author}
               path={`Articles/${article.name}`}
             />
           ))}

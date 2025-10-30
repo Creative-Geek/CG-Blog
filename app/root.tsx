@@ -15,11 +15,16 @@ import { ThemeProvider } from "./components/ThemeProvider";
 import { ToastProvider } from "./components/ui/Toast";
 
 export const links: Route.LinksFunction = () => [
+  // Preconnect to external domains for faster loading
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
     rel: "preconnect",
     href: "https://fonts.gstatic.com",
     crossOrigin: "anonymous",
+  },
+  {
+    rel: "preconnect",
+    href: "https://cg-blog-articles.pages.dev",
   },
   {
     rel: "stylesheet",
@@ -63,12 +68,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {/* Route-specific meta tags */}
         <Meta />
         <Links />
-
-        <script
-          data-goatcounter="https://cg-blog.goatcounter.com/count"
-          async
-          src="//gc.zgo.at/count.js"
-        ></script>
       </head>
       <body>
         <ThemeProvider>
@@ -79,6 +78,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <Analytics />
           </ToastProvider>
         </ThemeProvider>
+        <script
+          data-goatcounter="https://cg-blog.goatcounter.com/count"
+          async
+          src="//gc.zgo.at/count.js"
+        ></script>
       </body>
     </html>
   );

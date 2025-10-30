@@ -46,6 +46,13 @@ const ArticleCard = ({
     navigation.location?.pathname === `/blog/${articlePath}`;
 
   useEffect(() => {
+    // If all metadata is provided, skip fetching
+    if (title && description && image && date && author) {
+      setMetadata({ title, description, image, date, author });
+      setLoading(false);
+      return;
+    }
+
     async function fetchMetadata() {
       if (!path) return;
       try {
@@ -62,17 +69,8 @@ const ArticleCard = ({
         }
 
         if (!data.image) {
-          const extensions = [".jpg", ".jpeg", ".png", ".webp"];
-          for (const ext of extensions) {
-            const url = `${BASE_URL}/${path}${ext}`;
-            try {
-              const response = await fetch(url);
-              if (response.ok) {
-                data.image = url;
-                break;
-              }
-            } catch (_) {}
-          }
+          // Default to .jpg instead of probing multiple extensions
+          data.image = `${BASE_URL}/${path}.jpg`;
         }
 
         setMetadata({
