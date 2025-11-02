@@ -1,6 +1,6 @@
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
-import { FolderOpen, BookOpen, ExternalLink } from "lucide-react";
+import { FolderOpen, BookOpen, ExternalLink, ChevronsDown } from "lucide-react";
 
 interface CoverProps {
   loading?: boolean;
@@ -24,7 +24,7 @@ export default function Cover({
 }: CoverProps) {
   if (loading) {
     return (
-      <section className="relative w-full h-[90vh] bg-gray-100 animate-pulse">
+      <section className="relative w-full h-[90vh] md:h-[60vh] bg-gray-100 animate-pulse">
         <div className="absolute inset-0 bg-black/40" />
         <div className="relative flex items-center justify-center h-full text-center text-white p-4">
           <div className="space-y-4">
@@ -39,7 +39,7 @@ export default function Cover({
   if (!mainTitle || !mainSubtitle || !coverImage) return null;
 
   return (
-    <section className="relative w-full h-[90vh]">
+    <section className="relative w-full h-[90vh] md:h-[60vh]">
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: `url(${coverImage})` }}
@@ -47,7 +47,9 @@ export default function Cover({
       <div className="absolute inset-0 bg-black/40" />
       <div className="relative flex items-center justify-center h-full text-center text-white p-4">
         <div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">{mainTitle}</h1>
+          <h1 className="text-5xl md:text-6xl lg:text-7xl leading-tight font-bold mb-4 mt-[10vh]">
+            {mainTitle}
+          </h1>
           <p className="text-xl md:text-2xl mb-4">{mainSubtitle}</p>
           <div className="flex justify-center space-x-4 flex-wrap gap-2">
             {hasProjects && (
@@ -79,6 +81,23 @@ export default function Cover({
                 </Button>
               ))}
           </div>
+          {hasProjects && (
+            <div className=" flex justify-center mt-[10vh]">
+              <button
+                type="button"
+                className="group inline-flex flex-col items-center text-white/80 hover:text-white"
+                onClick={() => {
+                  document.getElementById("about-section")?.scrollIntoView({
+                    behavior: "smooth",
+                  });
+                }}
+                aria-label="Scroll to projects"
+              >
+                <span className="text-sm mb-1">Scroll</span>
+                <ChevronsDown className="h-6 w-6 animate-bounce" />
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </section>

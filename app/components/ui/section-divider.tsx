@@ -6,11 +6,11 @@ interface SectionDividerProps {
   className?: string;
 }
 
-export function SectionDivider({ 
-  variant = "default", 
-  className 
+export function SectionDivider({
+  variant = "default",
+  className,
 }: SectionDividerProps) {
-  const baseClasses = "w-full my-16 flex items-center justify-center";
+  const baseClasses = "w-full flex items-center justify-center";
 
   switch (variant) {
     case "gradient":
@@ -72,11 +72,13 @@ export function SectionDivider({
 // Alternative decorative divider with more visual interest
 export function DecorativeDivider({ className }: { className?: string }) {
   return (
-    <div className={cn("w-full my-20 flex items-center justify-center", className)}>
+    <div
+      className={cn("w-full my-20 flex items-center justify-center", className)}
+    >
       <div className="relative">
         {/* Background glow effect */}
         <div className="absolute inset-0 bg-primary/10 blur-xl rounded-full w-32 h-8" />
-        
+
         {/* Main decorative element */}
         <div className="relative flex items-center space-x-3">
           <div className="w-8 h-px bg-gradient-to-r from-transparent to-primary/50" />
