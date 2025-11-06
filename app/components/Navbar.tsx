@@ -20,7 +20,7 @@ import {
 } from "../components/ui/sheet";
 import { useState, useEffect } from "react";
 import SearchCommand from "./SearchCommand";
-import { BASE_URL } from "../config/constants";
+import { BASE_URL, RESUME_URL, CHECK_RESUME_EXISTS } from "../config/constants";
 
 // Cache resume check result for the session
 let resumeCheckCache: boolean | null = null;
@@ -37,7 +37,7 @@ async function checkResumeExists(): Promise<boolean> {
 
   resumeCheckPromise = (async () => {
     try {
-      const response = await fetch(`${BASE_URL}/Pages/resume.pdf`, {
+      const response = await fetch(RESUME_URL, {
         method: "HEAD",
       });
       resumeCheckCache = response.ok;
@@ -56,10 +56,12 @@ async function checkResumeExists(): Promise<boolean> {
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
-  const [resumeExists, setResumeExists] = useState(false);
+  const [resumeExists, setResumeExists] = useState(!CHECK_RESUME_EXISTS);
 
   useEffect(() => {
-    checkResumeExists().then(setResumeExists);
+    if (CHECK_RESUME_EXISTS) {
+      checkResumeExists().then(setResumeExists);
+    }
   }, []);
 
   return (
@@ -91,6 +93,13 @@ export function Navbar() {
                   onClick={() => setOpen(false)}
                 >
                   Blog
+                </Link>
+                <Link
+                  to="/projects"
+                  className="text-sm font-medium p-2 hover:bg-accent rounded-md transition-colors"
+                  onClick={() => setOpen(false)}
+                >
+                  Projects
                 </Link>
                 <Link
                   to="/about"
@@ -143,6 +152,11 @@ export function Navbar() {
             <NavigationMenuItem>
               <Link to="/blog" className="text-sm font-medium">
                 Blog
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link to="/projects" className="text-sm font-medium">
+                Projects
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
@@ -202,7 +216,7 @@ export function Navbar() {
             <HoverBorderGradient
               containerClassName="rounded-md"
               as="a"
-              href={`${BASE_URL}/Pages/resume.pdf`}
+              href={RESUME_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2 h-9 px-4 py-2 text-sm"

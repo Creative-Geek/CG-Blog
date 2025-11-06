@@ -59,7 +59,11 @@ const ArticleCard = ({
         setLoading(true);
         setImageLoaded(false); // Reset image loaded state when fetching new data
         const res = await fetch(`${BASE_URL}/${path}.json`);
-        if (!res.ok) throw new Error("Failed to fetch metadata");
+        if (!res.ok) {
+          // Silently skip if article doesn't exist (allows future projects)
+          setError("skip");
+          return;
+        }
         const data = await res.json();
 
         if (data.image && !data.image.startsWith("http")) {
@@ -81,10 +85,9 @@ const ArticleCard = ({
           author: data.author || author,
         });
       } catch (err) {
+        // Silently skip failed fetches
         console.error(err);
-        setError(
-          err instanceof Error ? err.message : "Error fetching metadata"
-        );
+        setError("skip");
       } finally {
         setLoading(false);
       }
