@@ -1,6 +1,8 @@
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
 import { FolderOpen, BookOpen, ExternalLink, ChevronsDown } from "lucide-react";
+import DarkVeil from "../DarkVeil";
+import { USE_COVER_IMAGE } from "../../config/constants";
 
 interface CoverProps {
   loading?: boolean;
@@ -36,15 +38,25 @@ export default function Cover({
     );
   }
 
-  if (!mainTitle || !mainSubtitle || !coverImage) return null;
+  if (!mainTitle || !mainSubtitle) return null;
 
   return (
     <section className="relative w-full h-[90vh] md:h-[60vh]">
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${coverImage})` }}
-      />
-      <div className="absolute inset-0 bg-black/40" />
+      {USE_COVER_IMAGE && coverImage ? (
+        // Image background with 40% darkening
+        <>
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: `url(${coverImage})` }}
+          />
+          <div className="absolute inset-0 bg-black/40" />
+        </>
+      ) : (
+        // DarkVeil animated background (no darkening overlay)
+        <div className="absolute inset-0">
+          <DarkVeil />
+        </div>
+      )}
       <div className="relative flex items-center justify-center h-full text-center text-white p-4">
         <div>
           <h1 className="text-5xl md:text-6xl lg:text-7xl leading-tight font-bold mb-4 mt-[10vh]">
