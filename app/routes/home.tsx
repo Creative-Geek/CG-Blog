@@ -227,6 +227,7 @@ export default function Home() {
         />
       </FadeInSection>
       <div className="container mx-auto px-4">
+        <SectionDivider variant="dots" />
         <FadeInSection>
           <Profile
             image={`${BASE_URL}/Pages/${homeData.about.image}`}
