@@ -216,8 +216,21 @@
   z-index: 1;
 }
 
-* {
-  transition: all 100ms ease;
+/* Smooth theme color transitions */
+:root,
+[data-theme="dark"] {
+  transition: background-color 300ms ease, color 300ms ease;
+}
+
+/* Apply theme transitions only to direct children that use theme colors */
+body,
+body > * {
+  transition: background-color 300ms ease, color 300ms ease;
+}
+
+/* Prevent canvas from having transitions (like DarkVeil) */
+canvas {
+  transition: none !important;
 }
 
 /* Scrollbar styling for code blocks */
