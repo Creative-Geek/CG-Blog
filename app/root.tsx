@@ -11,6 +11,7 @@ import { Analytics } from "@vercel/analytics/react";
 import type { Route } from "./+types/root";
 import "./app.css";
 import { Navbar } from "./components/Navbar";
+import { NavigationProgress } from "./components/NavigationProgress";
 import { ThemeProvider } from "./components/ThemeProvider";
 import { ToastProvider } from "./components/ui/Toast";
 
@@ -72,6 +73,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body>
         <ThemeProvider>
           <ToastProvider>
+            <NavigationProgress />
             {children}
             <ScrollRestoration />
             <Scripts />

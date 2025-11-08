@@ -65,7 +65,7 @@ export function Navbar() {
   }, []);
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-background/20 backdrop-blur-lg px-6 py-4">
+    <nav className="sticky top-0 z-30 w-full bg-background/20 backdrop-blur-lg px-6 py-4">
       <div className="flex items-center justify-between">
         {/* Mobile Menu Button - only visible on mobile */}
         <div className="md:hidden">
