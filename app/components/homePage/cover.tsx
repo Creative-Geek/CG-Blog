@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { FolderOpen, BookOpen, ExternalLink, ChevronsDown } from "lucide-react";
 import DarkVeil from "../DarkVeil";
 import { USE_COVER_IMAGE } from "../../config/constants";
+import { useTheme } from "../ThemeProvider";
 // @ts-ignore - JSX file with TS declaration
 import SplitText from "../SplitText.tsx";
 
@@ -26,6 +27,11 @@ export default function Cover({
   hasProjects = true, // Default to true
   links,
 }: CoverProps) {
+  const { theme } = useTheme();
+  const isLightMode = theme === "light";
+  const shouldHideAnimation = !USE_COVER_IMAGE && isLightMode;
+  const textColorClass = shouldHideAnimation ? "text-black" : "text-white";
+
   if (loading) {
     return (
       <section className="relative w-full h-[90hv] md:h-[90hv] bg-gray-100 animate-pulse">
@@ -55,11 +61,16 @@ export default function Cover({
         </>
       ) : (
         // DarkVeil animated background (no darkening overlay)
-        <div className="absolute inset-0">
+        // Hidden in light mode when USE_COVER_IMAGE is false
+        <div
+          className={`absolute inset-0 ${shouldHideAnimation ? "hidden" : ""}`}
+        >
           <DarkVeil />
         </div>
       )}
-      <div className="relative flex items-center justify-center h-full text-center text-white p-4 pt-24">
+      <div
+        className={`relative flex items-center justify-center h-full text-center p-4 pt-24 ${textColorClass}`}
+      >
         <div className="w-full">
           <div className="block mb-4 mt-10">
             <SplitText
@@ -127,7 +138,11 @@ export default function Cover({
             <div className=" flex justify-center mt-[3vh]">
               <button
                 type="button"
-                className="group inline-flex flex-col items-center text-white/80 hover:text-white"
+                className={`group inline-flex flex-col items-center ${
+                  shouldHideAnimation
+                    ? "text-black/60 hover:text-black"
+                    : "text-white/80 hover:text-white"
+                }`}
                 onClick={() => {
                   document.getElementById("about-section")?.scrollIntoView({
                     behavior: "smooth",

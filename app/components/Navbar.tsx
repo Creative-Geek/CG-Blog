@@ -57,6 +57,7 @@ async function checkResumeExists(): Promise<boolean> {
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const [resumeExists, setResumeExists] = useState(!CHECK_RESUME_EXISTS);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     if (CHECK_RESUME_EXISTS) {
@@ -64,8 +65,24 @@ export function Navbar() {
     }
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0);
+    };
+
+    // Check initial scroll position
+    handleScroll();
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <nav className="sticky top-0 z-30 w-full bg-background/20 backdrop-blur-lg px-6 py-4">
+    <nav
+      className={`sticky top-0 z-30 w-full px-6 py-4 ${
+        isScrolled ? "navbar-scrolled" : "navbar-top"
+      }`}
+    >
       <div className="flex items-center justify-between">
         {/* Mobile Menu Button - only visible on mobile */}
         <div className="md:hidden">
@@ -160,59 +177,44 @@ export function Navbar() {
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <ClickOnlyNavigationMenuTrigger className="text-sm font-medium">
+              <Link to="/about" className="text-sm font-medium">
                 About
-              </ClickOnlyNavigationMenuTrigger>
-              <NavigationMenuContent>
-                <div className="w-[200px] p-2">
-                  <Link
-                    to="/about"
-                    className="block p-2 hover:bg-accent rounded-md"
-                  >
-                    About Me
-                  </Link>
-                  <a
-                    href="https://github.com/Creative-Geek"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 p-2 hover:bg-accent rounded-md"
-                  >
-                    <Github className="h-4 w-4" />
-                    <span>GitHub Profile</span>
-                  </a>
-                  <a
-                    href="https://www.linkedin.com/in/ahmed-taha-thecg"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 p-2 hover:bg-accent rounded-md"
-                  >
-                    <Linkedin className="h-4 w-4" />
-                    <span>LinkedIn Profile</span>
-                  </a>
-                </div>
-              </NavigationMenuContent>
+              </Link>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
 
         {/* Theme Toggle and Search - right section */}
         <div className="w-full md:w-[33%] flex justify-end items-center gap-2">
+          <Button
+            variant="outline"
+            size="icon"
+            className="hidden md:flex w-9 h-9"
+            asChild
+          >
+            <a
+              href="https://github.com/Creative-Geek"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Github className="h-4 w-4" />
+            </a>
+          </Button>
+          <Button
+            variant="outline"
+            size="icon"
+            className="hidden md:flex w-9 h-9"
+            asChild
+          >
+            <a
+              href="https://www.linkedin.com/in/ahmed-taha-thecg"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Linkedin className="h-4 w-4" />
+            </a>
+          </Button>
           {resumeExists && (
-            // <Button>
-            //   <a
-            //     href={`${BASE_URL}/Pages/resume.pdf`}
-            //     target="_blank"
-            //     rel="noopener noreferrer"
-            //     className="flex"
-            //   >
-            //     <span className="md:hidden">Résumé</span>
-            //     <span className="hidden md:flex items-center">
-            //       <Download className="mr-2 h-4 w-4" />
-            //       Download My Resume
-            //     </span>
-            //   </a>
-            // </Button>
-
             <HoverBorderGradient
               containerClassName="rounded-md"
               as="a"
