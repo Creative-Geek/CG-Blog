@@ -264,34 +264,3 @@ canvas {
   word-break: normal;
   word-wrap: normal;
 }
-
-/* Navbar scroll animations */
-nav.navbar-top,
-nav.navbar-scrolled {
-  transition: background-color 500ms ease-in-out,
-    backdrop-filter 500ms ease-in-out, -webkit-backdrop-filter 500ms ease-in-out;
-  will-change: background-color, backdrop-filter;
-}
-
-nav.navbar-top {
-  background-color: transparent !important;
-  backdrop-filter: blur(0px) !important;
-  -webkit-backdrop-filter: blur(0px) !important;
-}
-
-nav.navbar-scrolled {
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
-}
-
-/* Light theme - white background */
-:root nav.navbar-scrolled,
-html:not([data-theme="dark"]) nav.navbar-scrolled {
-  background-color: rgba(255, 255, 255, 0.5) !important;
-}
-
-/* Dark theme - black background */
-[data-theme="dark"] nav.navbar-scrolled,
-html[data-theme="dark"] nav.navbar-scrolled {
-  background-color: rgba(0, 0, 0, 0.5) !important;
-}

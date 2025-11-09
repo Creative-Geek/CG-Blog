@@ -79,8 +79,8 @@ export function Navbar() {
 
   return (
     <nav
-      className={`sticky top-0 z-30 w-full px-6 py-4 ${
-        isScrolled ? "navbar-scrolled" : "navbar-top"
+      className={`sticky top-0 z-30 w-full px-6 py-4 transition-all duration-500 ease-in-out ${
+        isScrolled ? "bg-background/20 backdrop-blur-lg" : "bg-transparent"
       }`}
     >
       <div className="flex items-center justify-between">
