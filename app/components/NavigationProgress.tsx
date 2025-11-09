@@ -34,10 +34,12 @@ export function NavigationProgress() {
 
   return (
     <div
-      className="fixed top-0 left-0 right-0 h-1 bg-blue-500 z-50 transition-all duration-300 ease-out"
+      className="fixed top-0 left-0 right-0 h-1 bg-blue-500 z-50 shadow-[0_0_10px_rgba(59,130,246,0.5)] transition-opacity duration-300 ease-out"
       style={{
         width: `${progress}%`,
         opacity: progress === 100 ? 0 : 1,
+        transition:
+          "width 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease-out",
       }}
     />
   );

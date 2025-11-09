@@ -14,7 +14,7 @@ interface SplitTextProps {
   threshold?: number;
   rootMargin?: string;
   textAlign?: "left" | "center" | "right" | "justify";
-  tag?: "p" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+  tag?: "p" | "div" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
   onLetterAnimationComplete?: () => void;
 }
 
@@ -237,6 +237,12 @@ const SplitText: React.FC<SplitTextProps> = ({
           <h6 ref={ref as any} style={style} className={classes}>
             {text}
           </h6>
+        );
+      case "div":
+        return (
+          <div ref={ref as any} style={style} className={classes}>
+            {text}
+          </div>
         );
       default:
         return (

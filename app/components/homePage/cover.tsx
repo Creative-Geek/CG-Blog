@@ -88,10 +88,10 @@ export default function Cover({
               textAlign="center"
             />
           </div>
-          <div className="block mb-4">
+          <div className="block mb-4 text-xl md:text-2xl">
             <SplitText
               text={mainSubtitle}
-              tag="p"
+              tag="div"
               className="text-xl md:text-2xl"
               delay={30}
               duration={0.6}
