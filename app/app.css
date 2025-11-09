@@ -266,31 +266,32 @@ canvas {
 }
 
 /* Navbar scroll animations */
-.navbar-top,
-.navbar-scrolled {
+nav.navbar-top,
+nav.navbar-scrolled {
   transition: background-color 500ms ease-in-out,
-    backdrop-filter 500ms ease-in-out;
+    backdrop-filter 500ms ease-in-out, -webkit-backdrop-filter 500ms ease-in-out;
+  will-change: background-color, backdrop-filter;
 }
 
-.navbar-top {
-  background-color: transparent;
-  backdrop-filter: blur(0px);
-  -webkit-backdrop-filter: blur(0px);
+nav.navbar-top {
+  background-color: transparent !important;
+  backdrop-filter: blur(0px) !important;
+  -webkit-backdrop-filter: blur(0px) !important;
 }
 
-.navbar-scrolled {
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+nav.navbar-scrolled {
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
 }
 
 /* Light theme - white background */
-:root .navbar-scrolled,
-html:not([data-theme="dark"]) .navbar-scrolled {
-  background-color: rgba(255, 255, 255, 0.5);
+:root nav.navbar-scrolled,
+html:not([data-theme="dark"]) nav.navbar-scrolled {
+  background-color: rgba(255, 255, 255, 0.5) !important;
 }
 
 /* Dark theme - black background */
-[data-theme="dark"] .navbar-scrolled,
-html[data-theme="dark"] .navbar-scrolled {
-  background-color: rgba(0, 0, 0, 0.5);
+[data-theme="dark"] nav.navbar-scrolled,
+html[data-theme="dark"] nav.navbar-scrolled {
+  background-color: rgba(0, 0, 0, 0.5) !important;
 }
