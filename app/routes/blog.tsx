@@ -39,7 +39,7 @@ async function fetchWithCache(url: string) {
 }
 
 interface BlogState {
-  scrollRatio: number;
+  scrollPosition: number;
   displayedArticles: Article[];
   page: number;
 }
@@ -47,15 +47,15 @@ interface BlogState {
 // Helper functions for state management
 const getBlogState = (): BlogState => {
   if (typeof window === "undefined")
-    return { scrollRatio: 0, displayedArticles: [], page: 1 };
+    return { scrollPosition: 0, displayedArticles: [], page: 1 };
 
   try {
     const state = sessionStorage.getItem("blogState");
     return state
       ? JSON.parse(state)
-      : { scrollRatio: 0, displayedArticles: [], page: 1 };
+      : { scrollPosition: 0, displayedArticles: [], page: 1 };
   } catch {
-    return { scrollRatio: 0, displayedArticles: [], page: 1 };
+    return { scrollPosition: 0, displayedArticles: [], page: 1 };
   }
 };
 
@@ -68,24 +68,16 @@ const saveBlogState = (state: BlogState) => {
   }
 };
 
-// Helper function to get scroll ratio
-const getScrollRatio = () => {
+// Helper function to get current scroll position in pixels
+const getScrollPosition = () => {
   if (typeof window === "undefined") return 0;
-
-  const scrollHeight =
-    document.documentElement.scrollHeight - window.innerHeight;
-  if (scrollHeight <= 0) return 0;
-  return window.scrollY / scrollHeight;
+  return window.scrollY;
 };
 
-// Helper function to restore scroll position from ratio
-const restoreScrollFromRatio = (ratio: number) => {
+// Helper function to restore scroll position in pixels
+const restoreScrollPosition = (position: number) => {
   if (typeof window === "undefined") return;
-
-  const scrollHeight =
-    document.documentElement.scrollHeight - window.innerHeight;
-  const targetScroll = ratio * scrollHeight;
-  window.scrollTo(0, targetScroll);
+  window.scrollTo(0, position);
 };
 
 interface ArticleWithMetadata extends Article {
@@ -216,26 +208,26 @@ function BlogContent() {
     setIsClient(true);
   }, []);
 
-  // Restore scroll position when component mounts on client and when articles update
+  // Restore scroll position when component mounts on client (only on initial mount)
   useEffect(() => {
     if (!isClient) return;
 
     // Use requestAnimationFrame to ensure the DOM has updated
     const timeoutId = setTimeout(() => {
-      if (savedState.current.scrollRatio > 0) {
-        restoreScrollFromRatio(savedState.current.scrollRatio);
+      if (savedState.current.scrollPosition > 0) {
+        restoreScrollPosition(savedState.current.scrollPosition);
       }
     }, 100); // Small delay to ensure content has rendered
 
     return () => clearTimeout(timeoutId);
-  }, [isClient, displayedArticles]);
+  }, [isClient]); // Only run on mount, not when displayedArticles changes
 
   // Save state when component updates
   useEffect(() => {
     if (!isClient) return;
 
     const currentState: BlogState = {
-      scrollRatio: getScrollRatio(),
+      scrollPosition: getScrollPosition(),
       displayedArticles,
       page,
     };
@@ -254,7 +246,7 @@ function BlogContent() {
         const currentState = getBlogState();
         saveBlogState({
           ...currentState,
-          scrollRatio: getScrollRatio(),
+          scrollPosition: getScrollPosition(),
         });
       }, 150); // Update every 150ms instead of every scroll event
     };
