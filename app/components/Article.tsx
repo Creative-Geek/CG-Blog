@@ -51,10 +51,18 @@ const components: Components = {
       const url = `${window.location.href.split("#")[0]}#${slug}`;
       navigator.clipboard.writeText(url);
       showToast("Link copied!");
-      document.getElementById(slug)?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
+
+      // Scroll to element - the ::before pseudo-element already handles navbar offset
+      const element = document.getElementById(slug);
+      if (element) {
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth",
+        });
+      }
     };
 
     return (
@@ -80,10 +88,18 @@ const components: Components = {
       const url = `${window.location.href.split("#")[0]}#${slug}`;
       navigator.clipboard.writeText(url);
       showToast("Link copied!");
-      document.getElementById(slug)?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
+
+      // Scroll to element - the ::before pseudo-element already handles navbar offset
+      const element = document.getElementById(slug);
+      if (element) {
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth",
+        });
+      }
     };
 
     return (
@@ -109,10 +125,18 @@ const components: Components = {
       const url = `${window.location.href.split("#")[0]}#${slug}`;
       navigator.clipboard.writeText(url);
       showToast("Link copied!");
-      document.getElementById(slug)?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
+
+      // Scroll to element - the ::before pseudo-element already handles navbar offset
+      const element = document.getElementById(slug);
+      if (element) {
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth",
+        });
+      }
     };
 
     return (
@@ -354,7 +378,6 @@ export function Article(props: ArticleProps): JSX.Element {
     }
   }, [props.path]);
 
-
   if (loading) {
     return (
       <div className="container mx-auto max-w-3xl px-4 py-8 animate-pulse">
@@ -381,7 +404,10 @@ export function Article(props: ArticleProps): JSX.Element {
   return (
     <>
       <title>{article.title ? `${article.title} - ${NAME}` : NAME}</title>
-      <article id="article-content" className="container mx-auto max-w-3xl px-4 py-8">
+      <article
+        id="article-content"
+        className="container mx-auto max-w-3xl px-4 py-8"
+      >
         <header className="mb-8">
           {article.title && (
             <h1

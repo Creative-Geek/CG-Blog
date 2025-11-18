@@ -96,6 +96,19 @@
   body {
     @apply bg-background text-foreground;
   }
+  /* Offset in-page heading jumps for sticky navbar using target-side margin */
+  .prose :is(h1, h2, h3, h4, h5, h6) {
+    scroll-margin-top: var(--navbar-offset, 4.5rem);
+  }
+  /* Ensure fragment navigation (#hash) positions account for navbar in all browsers */
+  .prose :is(h1, h2, h3, h4, h5, h6)[id]::before {
+    content: "";
+    display: block;
+    height: var(--navbar-offset, 4.5rem);
+    margin-top: calc(var(--navbar-offset, 4.5rem) * -1);
+    visibility: hidden;
+    pointer-events: none;
+  }
   .prose {
     /* Headers */
     --tw-prose-headings: theme("colors.foreground");
@@ -163,12 +176,10 @@
 
 .prose h2 {
   @apply text-2xl font-bold mt-8 mb-4 text-foreground border-b pb-2 border-border;
-  scroll-margin-top: 4.5rem;
 }
 
 .prose h3 {
   @apply text-xl font-semibold mt-6 mb-3 text-foreground/90;
-  scroll-margin-top: 4.5rem;
 }
 
 .prose p {

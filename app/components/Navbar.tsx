@@ -18,7 +18,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../components/ui/sheet";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import SearchCommand from "./SearchCommand";
 import { BASE_URL, RESUME_URL, CHECK_RESUME_EXISTS } from "../config/constants";
 
@@ -55,6 +55,7 @@ async function checkResumeExists(): Promise<boolean> {
 }
 
 export function Navbar() {
+  const navRef = useRef<HTMLElement | null>(null);
   const [open, setOpen] = useState(false);
   const [resumeExists, setResumeExists] = useState(!CHECK_RESUME_EXISTS);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -77,8 +78,33 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Dynamically set global scroll padding to match navbar height
+  useLayoutEffect(() => {
+    const navEl = navRef.current;
+    if (!navEl) return;
+
+    const setOffset = () => {
+      const h = navEl.offsetHeight;
+      document.documentElement.style.setProperty("--navbar-offset", `${h}px`);
+    };
+
+    setOffset();
+
+    // Observe size changes (e.g., responsive breakpoints, dynamic content)
+    const ro = new ResizeObserver(() => setOffset());
+    ro.observe(navEl);
+
+    // Update on viewport resize as a fallback
+    window.addEventListener("resize", setOffset);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", setOffset);
+    };
+  }, []);
+
   return (
     <nav
+      ref={navRef}
       className={`sticky top-0 z-30 w-full px-6 py-4 transition-all duration-500 ease-in-out ${
         isScrolled ? "bg-background/20 backdrop-blur-lg" : "bg-transparent"
       }`}
