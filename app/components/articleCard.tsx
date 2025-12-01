@@ -102,7 +102,7 @@ const ArticleCard = ({
   if (loading) {
     return (
       <div className="block no-underline transition-transform hover:scale-[1.02]">
-        <div className="h-48 w-full bg-gray-200 animate-pulse" />
+        <div className="h-56 w-full bg-gray-200 animate-pulse" />
         <div className="p-4 space-y-2">
           <div className="h-6 w-3/4 bg-gray-200 animate-pulse rounded" />
           <div className="h-4 w-1/2 bg-gray-200 animate-pulse rounded" />
@@ -137,7 +137,7 @@ const ArticleCard = ({
               src={metadata.image}
               alt={metadata.title}
               className={cn(
-                "h-48 w-full object-cover transition-opacity duration-300",
+                "h-56 w-full object-cover transition-opacity duration-300",
                 isNavigating ? "blur-[1px]" : "",
                 imageLoaded ? "opacity-100" : "opacity-0"
               )}
