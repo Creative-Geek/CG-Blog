@@ -3,6 +3,7 @@ import ArticleCard from "../components/articleCard";
 import { BASE_URL, NAME } from "~/config/constants";
 import { motion } from "framer-motion";
 import { generateBlogStructuredData } from "~/utils/structuredData";
+import { Briefcase, Code2 } from "lucide-react";
 
 interface Project {
   name: string;
@@ -145,9 +146,21 @@ function ProjectsContent() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="mx-auto max-w-3xl px-4 py-8">
-        <h2 className="text-xl font-bold mb-5">My Projects</h2>
-        <div className="space-y-6">
+      <div className="mx-auto max-w-7xl px-4 py-8">
+        {/* Header Section */}
+        <div className="mb-12 text-center">
+          <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-full mb-4">
+            <Code2 className="h-8 w-8 text-primary" />
+          </div>
+          <h1 className="text-4xl font-bold mb-3">My Projects</h1>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            A showcase of applications, tools, and experiments I've built. Each
+            project represents a unique challenge and learning opportunity.
+          </p>
+        </div>
+
+        {/* Projects Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project, index) => (
             <ArticleCard
               key={`${project.name}-${index}`}
@@ -159,13 +172,16 @@ function ProjectsContent() {
               path={project.path}
             />
           ))}
-
-          {projects.length === 0 && (
-            <div className="text-center text-gray-500">
-              No projects available yet.
-            </div>
-          )}
         </div>
+
+        {projects.length === 0 && (
+          <div className="text-center py-12">
+            <Briefcase className="h-16 w-16 text-muted-foreground/50 mx-auto mb-4" />
+            <p className="text-lg text-muted-foreground">
+              No projects available yet. Check back soon!
+            </p>
+          </div>
+        )}
       </div>
     </motion.div>
   );

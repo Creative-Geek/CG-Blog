@@ -6,6 +6,7 @@ import { BASE_URL, NAME } from "~/config/constants";
 import { motion } from "framer-motion";
 import { generateBlogStructuredData } from "~/utils/structuredData";
 import { PageLoadingSpinner } from "~/components/LoadingSpinner";
+import { BookOpen, Rss } from "lucide-react";
 
 interface Article {
   name: string;
@@ -285,6 +286,20 @@ function BlogContent() {
 
   return (
     <div ref={contentRef}>
+      {/* Header Section */}
+      <div className="mb-8 pb-6 border-b">
+        <div className="flex items-center gap-3 mb-3">
+          <div className="inline-flex items-center justify-center p-2 bg-primary/10 rounded-lg">
+            <BookOpen className="h-6 w-6 text-primary" />
+          </div>
+          <h1 className="text-3xl font-bold">Latest Articles</h1>
+        </div>
+        <p className="text-muted-foreground">
+          Insights on software engineering, web development, AI, and technology.
+        </p>
+      </div>
+
+      {/* Articles List */}
       <div className="space-y-6">
         {displayedArticles.map((article, index) => (
           <ArticleCard
@@ -299,13 +314,13 @@ function BlogContent() {
         ))}
 
         {loading && (
-          <div className="text-center">
+          <div className="text-center py-8">
             <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" />
           </div>
         )}
 
         {error && (
-          <div className="text-red-500 text-center">
+          <div className="text-red-500 text-center py-4">
             {error}. Please try refreshing the page.
           </div>
         )}
@@ -313,8 +328,9 @@ function BlogContent() {
         {!loading && !error && hasMore && <div ref={ref} className="h-10" />}
 
         {!hasMore && !error && (
-          <div className="text-center text-gray-500">
-            No more articles to load 🎉
+          <div className="text-center text-muted-foreground py-8 flex items-center justify-center gap-2">
+            <Rss className="h-5 w-5" />
+            <span>You've reached the end! 🎉</span>
           </div>
         )}
       </div>
@@ -351,8 +367,6 @@ export default function Blog() {
       >
         {/* Shell that renders immediately */}
         <div className="mx-auto max-w-3xl px-4 py-8">
-          <h2 className="text-xl font-bold mb-5">Latest Posts</h2>
-
           {/* Suspense boundary for content that requires data loading */}
           <Suspense fallback={<PageLoadingSpinner />}>
             <BlogContent />
