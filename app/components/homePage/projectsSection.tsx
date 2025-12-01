@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 import { BASE_URL } from "~/config/constants";
 import ArticleCard from "../articleCard";
+import { Button } from "~/components/ui/button";
 
 interface Project {
   path: string;
@@ -56,6 +59,17 @@ export default function ProjectsSection({
           <ArticleCard key={index} path={project.path} />
         ))}
       </div>
+
+      {projects.length >= 3 && (
+        <div className="flex justify-center pt-4">
+          <Button asChild size="lg">
+            <Link to="/projects">
+              View All Projects
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
+        </div>
+      )}
     </section>
   );
 }
