@@ -1,4 +1,5 @@
 import { useLoaderData, useNavigation, useLocation } from "react-router-dom";
+import { data } from "react-router";
 import { Article } from "../components/Article";
 import { BASE_URL, NAME } from "~/config/constants";
 import { Loader2, FileDown } from "lucide-react";
@@ -67,7 +68,14 @@ export async function loader({ params }: { params: { path: string } }) {
       }
     }
 
-    return { ...metadata, content };
+    return data(
+      { ...metadata, content },
+      {
+        headers: {
+          "Cache-Control": "public, max-age=60, s-maxage=3600",
+        },
+      }
+    );
   } catch (error) {
     throw new Error("Failed to load article");
   }
