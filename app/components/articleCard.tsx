@@ -129,7 +129,6 @@ const ArticleCard = ({
         to={`/blog/${articlePath}`}
         className="block no-underline"
         aria-disabled={isNavigating}
-        prefetch="intent"
       >
         {metadata.image && (
           <div className="relative">
