@@ -170,7 +170,7 @@ const ArticleCard = ({
           >
             {truncatedDescription}
           </p>
-          <div className="flex-shrink-0">
+          <div className="shrink-0">
             {isNavigating ? (
               // <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
               <ArrowRight className="h-5 w-5 text-muted-foreground" />
