@@ -61,7 +61,9 @@
     ],
     "overrides": {
       "esbuild": ">=0.25.0",
-      "glob": ">=11.1.0"
+      "glob": ">=11.1.0",
+      "mdast-util-to-hast": ">=13.2.1",
+      "valibot": ">=1.2.0"
     }
   }
 }
