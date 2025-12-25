@@ -64,6 +64,10 @@ See `.env.example` for all available options.
 npm install && npm run dev
 ```
 
+Deploy the project to your vercel account:
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FCreative-Geek%2Fcg-blog&env=VITE_BASE_URL,VITE_NAME,VITE_LOGO_TEXT,VITE_GITHUB_URL,VITE_LINKEDIN_URL,VITE_RESUME_URL,VITE_CHECK_RESUME_EXISTS,VITE_USE_COVER_IMAGE&project-name=my-cg-blog&repository-name=my-cg-blog)
+
 ## Content Structure Template
 
 ```tree
