@@ -17,11 +17,11 @@ export const LINKEDIN_URL = import.meta.env.VITE_LINKEDIN_URL || "https://www.li
 
 // External resume URL (Google Drive, Dropbox, etc.)
 // Leave empty or unset if using resume.pdf hosted at BASE_URL/Pages/resume.pdf
-export const RESUME_URL = import.meta.env.VITE_RESUME_URL || "https://drive.google.com/file/d/1DMEWoPBtEwHH9TGDtRDaoqVtwpSpljZL/view?usp=sharing";
+export const RESUME_URL = import.meta.env.VITE_RESUME_URL || "";
 
 // Set to "true" to check if resume.pdf exists at BASE_URL/Pages/resume.pdf
 // Set to "false" if using external link (RESUME_URL) - skips existence check
-export const CHECK_RESUME_EXISTS = import.meta.env.VITE_CHECK_RESUME_EXISTS === "false";
+export const CHECK_RESUME_EXISTS = import.meta.env.VITE_CHECK_RESUME_EXISTS === "true";
 
 // Set to "true" to use cover image as homepage background
 // Set to "false" to use the animated Prism background
