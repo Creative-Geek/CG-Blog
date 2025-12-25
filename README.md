@@ -34,13 +34,29 @@ git clone https://github.com/Creative-Geek/cg-blog.git
 
 - Deploy to any static serving service.
 
-3. Set content source in `src/constants.js`:
+3. Configure via environment variables:
 
-```js
-// Use any raw URL that provides the files.
-export const BASE_URL = "YOUR_MARKDOWN_FILES_URL";
-export const NAME = "Creative Geek";
+Create a `.env` file or set these in your deployment platform (Vercel, Netlify, Cloudflare Pages):
+
+```bash
+# Required: URL where your content is hosted
+VITE_BASE_URL=https://your-content.pages.dev
+
+# Your name/site name (default: "Creative Geek")
+VITE_NAME=Your Name
+
+# Optional: External resume URL (Google Drive, etc.)
+# Leave empty to use BASE_URL/Pages/resume.pdf
+VITE_RESUME_URL=
+
+# Check if resume.pdf exists at BASE_URL (default: false)
+VITE_CHECK_RESUME_EXISTS=true
+
+# Use cover image instead of animated background (default: false)
+VITE_USE_COVER_IMAGE=false
 ```
+
+See `.env.example` for all available options.
 
 4. Launch:
 

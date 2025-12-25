@@ -20,12 +20,14 @@ import {
 } from "../components/ui/sheet";
 import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import SearchCommand from "./SearchCommand";
-import { BASE_URL, CHECK_RESUME_EXISTS } from "../config/constants";
-import * as constantsModule from "../config/constants";
-
-// RESUME_URL is optional - use it if exported, otherwise empty string
-const RESUME_URL =
-  ((constantsModule as Record<string, unknown>).RESUME_URL as string) ?? "";
+import {
+  BASE_URL,
+  CHECK_RESUME_EXISTS,
+  LOGO_TEXT,
+  GITHUB_URL,
+  LINKEDIN_URL,
+  RESUME_URL,
+} from "../config/constants";
 
 // Cache resume check result for the session
 let resumeCheckCache: boolean | null = null;
@@ -165,24 +167,28 @@ export function Navbar() {
                 >
                   About Me
                 </Link>
-                <a
-                  href="https://github.com/Creative-Geek"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-sm font-medium p-2 hover:bg-accent rounded-md transition-colors"
-                >
-                  <Github className="h-4 w-4" />
-                  <span>GitHub Profile</span>
-                </a>
-                <a
-                  href="https://www.linkedin.com/in/ahmed-taha-thecg"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-sm font-medium p-2 hover:bg-accent rounded-md transition-colors"
-                >
-                  <Linkedin className="h-4 w-4" />
-                  <span>LinkedIn Profile</span>
-                </a>
+                {GITHUB_URL && (
+                  <a
+                    href={GITHUB_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-sm font-medium p-2 hover:bg-accent rounded-md transition-colors"
+                  >
+                    <Github className="h-4 w-4" />
+                    <span>GitHub Profile</span>
+                  </a>
+                )}
+                {LINKEDIN_URL && (
+                  <a
+                    href={LINKEDIN_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-sm font-medium p-2 hover:bg-accent rounded-md transition-colors"
+                  >
+                    <Linkedin className="h-4 w-4" />
+                    <span>LinkedIn Profile</span>
+                  </a>
+                )}
               </nav>
             </SheetContent>
           </Sheet>
@@ -191,7 +197,7 @@ export function Navbar() {
         {/* Logo - centered on mobile, left section on desktop */}
         <div className="w-full md:w-[33%] flex justify-center md:justify-start">
           <Link to="/" className="text-xl font-bold">
-            CG Blog
+            {LOGO_TEXT}
           </Link>
         </div>
 
@@ -226,34 +232,30 @@ export function Navbar() {
 
         {/* Theme Toggle and Search - right section */}
         <div className="w-full md:w-[33%] flex justify-end items-center gap-2">
-          <Button
-            variant="outline"
-            size="icon"
-            className="hidden md:flex w-9 h-9"
-            asChild
-          >
-            <a
-              href="https://github.com/Creative-Geek"
-              target="_blank"
-              rel="noopener noreferrer"
+          {GITHUB_URL && (
+            <Button
+              variant="outline"
+              size="icon"
+              className="hidden md:flex w-9 h-9"
+              asChild
             >
-              <Github className="h-4 w-4" />
-            </a>
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            className="hidden md:flex w-9 h-9"
-            asChild
-          >
-            <a
-              href="https://www.linkedin.com/in/ahmed-taha-thecg"
-              target="_blank"
-              rel="noopener noreferrer"
+              <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
+                <Github className="h-4 w-4" />
+              </a>
+            </Button>
+          )}
+          {LINKEDIN_URL && (
+            <Button
+              variant="outline"
+              size="icon"
+              className="hidden md:flex w-9 h-9"
+              asChild
             >
-              <Linkedin className="h-4 w-4" />
-            </a>
-          </Button>
+              <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer">
+                <Linkedin className="h-4 w-4" />
+              </a>
+            </Button>
+          )}
           {resumeExists && (
             <HoverBorderGradient
               containerClassName="rounded-md"

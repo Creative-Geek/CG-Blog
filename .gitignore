@@ -9,3 +9,8 @@ pnpm-lock.yaml
 debug.log
 METADATA_SYSTEM.md
 test-metadata.html
+
+# Environment variables (personal config)
+.env
+.env.local
+.env.*.local
