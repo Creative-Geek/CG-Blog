@@ -2,6 +2,12 @@
     "mainTitle": "Your Name's Portfolio & Blog",
     "mainSubtitle": "Your Main Skills • Areas of Expertise • Professional Focus",
     "coverImage": "cover.jpg",
+    "links": [
+        {
+            "title": "Your External Link",
+            "url": "https://example.com"
+        }
+    ],
     "about": {
         "image": "profile.jpg",
         "text": "Write a brief introduction about yourself, your expertise, and what you do. This will be displayed prominently on your homepage."
@@ -19,24 +25,43 @@
     ],
     "skills": [
         {
-          "category": "Frontend Development",
-          "skills": ["React", "JavaScript", "HTML/CSS"]
+            "category": "Frontend Development",
+            "skills": [
+                "React",
+                "JavaScript",
+                "HTML/CSS"
+            ]
         },
         {
-          "category": "Backend Development",
-          "skills": ["Node.js", "Flask", "REST APIs"]
+            "category": "Backend Development",
+            "skills": [
+                "Node.js",
+                "Flask",
+                "REST APIs"
+            ]
         },
         {
-          "category": "Python & AI/ML",
-          "skills": ["Python", "AI Integration", "Deep Learning"]
+            "category": "Python & AI/ML",
+            "skills": [
+                "Python",
+                "AI Integration",
+                "Deep Learning"
+            ]
         },
         {
-          "category": "Databases",
-          "skills": ["PostgreSQL", "MongoDB"]
+            "category": "Databases",
+            "skills": [
+                "PostgreSQL",
+                "MongoDB"
+            ]
         },
         {
-          "category": "Tools & Platforms",
-          "skills": ["Git & GitHub", "Docker", "Wordpress"]
+            "category": "Tools & Platforms",
+            "skills": [
+                "Git & GitHub",
+                "Docker",
+                "Wordpress"
+            ]
         }
     ],
     "experience": [

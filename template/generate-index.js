@@ -5,8 +5,11 @@ const path = require("path");
 // --- Configuration ---
 const PLACEHOLDER_URL = "__FRONTEND_URL_PLACEHOLDER__"; // Unique placeholder
 const articlesDir = path.join(__dirname, "Articles");
+const pagesDir = path.join(__dirname, "Pages");
 const sitemapTemplatePath = path.join(articlesDir, "sitemap_template.xml"); // Output template here
 const indexPath = path.join(articlesDir, "index.json");
+const projectsSourcePath = path.join(pagesDir, "projects.json");
+const projectsOutputPath = path.join(pagesDir, "projects-generated.json");
 
 // --- Helper Functions ---
 function parseDate(dateStr) {
@@ -156,6 +159,79 @@ ${sitemapEntries.join("")}
   console.log(
     `Included ${sitemapEntries.length} article URLs in sitemap template.`
   );
+
+  // 5. Generate projects-generated.json from projects.json
+  if (fs.existsSync(projectsSourcePath)) {
+    try {
+      console.log("\n--- Processing Projects ---");
+      const projectsContent = fs.readFileSync(projectsSourcePath, "utf8");
+      const projectsData = JSON.parse(projectsContent);
+
+      if (projectsData.projects && Array.isArray(projectsData.projects)) {
+        const enrichedProjects = [];
+
+        for (const projectName of projectsData.projects) {
+          // Handle both string format and object format with path
+          const name =
+            typeof projectName === "string"
+              ? projectName
+              : projectName.path?.split("/").pop();
+
+          if (!name) {
+            console.warn(`Skipping invalid project entry: ${projectName}`);
+            continue;
+          }
+
+          const metadataPath = path.join(articlesDir, `${name}.json`);
+
+          // Silently skip if metadata doesn't exist (allows future projects)
+          if (!fs.existsSync(metadataPath)) {
+            continue;
+          }
+
+          try {
+            const metadata = JSON.parse(fs.readFileSync(metadataPath, "utf8"));
+
+            // Enrich with full metadata
+            enrichedProjects.push({
+              name: name,
+              title: metadata.title || "Untitled Project",
+              description: metadata.description || "",
+              image: metadata.image || `${name}.jpg`,
+              date: metadata.date || "",
+              author: metadata.author || "Unknown",
+              path: `Articles/${name}`,
+              ...metadata, // Include any additional fields from the metadata
+            });
+
+            console.log(`✓ Processed project: ${name}`);
+          } catch (e) {
+            // Silently skip projects with invalid metadata
+            continue;
+          }
+        }
+
+        // Write enriched projects to projects-generated.json
+        fs.writeFileSync(
+          projectsOutputPath,
+          JSON.stringify({ projects: enrichedProjects }, null, 2)
+        );
+        console.log(
+          `\nSuccessfully generated projects file: ${projectsOutputPath}`
+        );
+        console.log(`Processed ${enrichedProjects.length} projects.`);
+      } else {
+        console.warn(
+          `Invalid format in ${projectsSourcePath}: expected {projects: [...]}`
+        );
+      }
+    } catch (error) {
+      console.error("Error processing projects:", error);
+      // Don't exit - projects generation is optional
+    }
+  } else {
+    console.log("\nNo projects.json found, skipping projects generation.");
+  }
 } catch (error) {
   console.error("Error generating index or sitemap template:", error);
   process.exit(1);

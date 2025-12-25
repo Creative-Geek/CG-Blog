@@ -20,7 +20,12 @@ import {
 } from "../components/ui/sheet";
 import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import SearchCommand from "./SearchCommand";
-import { BASE_URL, RESUME_URL, CHECK_RESUME_EXISTS } from "../config/constants";
+import { BASE_URL, CHECK_RESUME_EXISTS } from "../config/constants";
+import * as constantsModule from "../config/constants";
+
+// RESUME_URL is optional - use it if exported, otherwise empty string
+const RESUME_URL =
+  ((constantsModule as Record<string, unknown>).RESUME_URL as string) ?? "";
 
 // Cache resume check result for the session
 let resumeCheckCache: boolean | null = null;
@@ -37,7 +42,16 @@ async function checkResumeExists(): Promise<boolean> {
 
   resumeCheckPromise = (async () => {
     try {
-      const response = await fetch(RESUME_URL, {
+      // When CHECK_RESUME_EXISTS is true, check BASE_URL/Pages/resume.pdf
+      // Otherwise use RESUME_URL directly
+      const urlToCheck = CHECK_RESUME_EXISTS
+        ? `${BASE_URL}/Pages/resume.pdf`
+        : RESUME_URL;
+      if (!urlToCheck) {
+        resumeCheckCache = false;
+        return false;
+      }
+      const response = await fetch(urlToCheck, {
         method: "HEAD",
       });
       resumeCheckCache = response.ok;
@@ -244,7 +258,11 @@ export function Navbar() {
             <HoverBorderGradient
               containerClassName="rounded-md"
               as="a"
-              href={RESUME_URL}
+              href={
+                CHECK_RESUME_EXISTS
+                  ? `${BASE_URL}/Pages/resume.pdf`
+                  : RESUME_URL
+              }
               target="_blank"
               rel="noopener noreferrer"
               className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2 h-9 px-4 py-2 text-sm"
