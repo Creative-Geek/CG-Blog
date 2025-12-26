@@ -261,7 +261,7 @@ canvas {
 }
 
 .scrollbar-themed::-webkit-scrollbar-thumb:hover {
-  background: var(--foreground/60);
+  background: color-mix(in srgb, var(--foreground) 60%, transparent);
 }
 
 /* Ensure code blocks with long lines don't overflow */
