@@ -412,7 +412,7 @@ export function Article(props: ArticleProps): JSX.Element {
           {article.title && (
             <h1
               className="text-3xl font-bold mb-4 text-center text-foreground"
-              dir="auto"
+              dir={isRTLTitle ? "rtl" : "ltr"}
             >
               {article.title}
             </h1>
