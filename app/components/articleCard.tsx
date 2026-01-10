@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigation } from "react-router-dom";
+import { Link, useNavigation } from "react-router";
 import { ArrowRight, Loader2 } from "lucide-react";
 import {
   Card,

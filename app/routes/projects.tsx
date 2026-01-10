@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData } from "react-router";
 import ArticleCard from "../components/articleCard";
 import { BASE_URL, NAME } from "~/config/constants";
 import { motion } from "framer-motion";

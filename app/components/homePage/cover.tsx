@@ -1,5 +1,5 @@
 import { Button } from "../ui/button";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { FolderOpen, BookOpen, ExternalLink, ChevronsDown } from "lucide-react";
 import DarkVeil from "../DarkVeil";
 import { USE_COVER_IMAGE } from "../../config/constants";

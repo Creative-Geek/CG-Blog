@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData } from "react-router";
 import React from "react";
 import { NAME, BASE_URL } from "../config/constants";
 import Cover from "~/components/homePage/cover";

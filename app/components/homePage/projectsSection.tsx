@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { ArrowRight } from "lucide-react";
 import { BASE_URL } from "~/config/constants";
 import ArticleCard from "../articleCard";

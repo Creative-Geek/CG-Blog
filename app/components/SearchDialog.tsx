@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, Fragment } from "react";
 import type { KeyboardEvent, ReactNode } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router";
 import { searchArticles } from "~/services/searchService";
 import type { Article } from "~/services/searchService";
 import {
@@ -25,7 +25,7 @@ export default function SearchDialog({
   // Function to highlight matched text in strings
   const highlightMatches = (
     text: string | undefined,
-    query: string,
+    query: string
   ): React.ReactNode => {
     if (!text || !query.trim()) return <>{text}</>;
 
@@ -105,7 +105,7 @@ export default function SearchDialog({
   // Extract matching content snippet with highlighted match
   const getContentSnippet = (
     content: string,
-    searchQuery: string,
+    searchQuery: string
   ): string | null => {
     if (!content || !searchContent) return null;
 
@@ -118,7 +118,7 @@ export default function SearchDialog({
     const startIndex = Math.max(0, matchIndex - 50);
     const endIndex = Math.min(
       content.length,
-      matchIndex + searchQuery.length + 50,
+      matchIndex + searchQuery.length + 50
     );
     let snippet = content.substring(startIndex, endIndex);
 

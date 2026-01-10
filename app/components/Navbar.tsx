@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { HoverBorderGradient } from "./ui/hover-border-gradient";
 import {
   NavigationMenu,

@@ -1,4 +1,4 @@
-import { useLoaderData, useNavigation, useLocation } from "react-router-dom";
+import { useLoaderData, useNavigation, useLocation } from "react-router";
 import { data } from "react-router";
 import { Article } from "../components/Article";
 import { BASE_URL, NAME } from "~/config/constants";
