@@ -127,7 +127,7 @@ export default function ExperienceSection({
                         {/* Circular logo - half inside, half outside */}
                         {job.logo && (
                           <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 top-0 z-20">
-                            <div className="w-20 h-20 rounded-full border-4 border-background bg-white dark:bg-card shadow-lg overflow-hidden">
+                            <div className="w-20 h-20 rounded-full border-4 border-background bg-white dark:bg-black overflow-hidden">
                               <img
                                 src={resolveLogoUrl(job.logo)}
                                 alt={`${job.company || job.title} logo`}
@@ -143,7 +143,11 @@ export default function ExperienceSection({
                             </div>
                           </div>
                         )}
-                        <div className="bg-card border rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-200 hover:border-primary/20">
+                        <div
+                          className={`bg-card border rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-200 hover:border-primary/20 ${
+                            job.logo ? "pt-12" : ""
+                          }`}
+                        >
                           <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-2 mb-3">
                             <div>
                               {job.link ? (

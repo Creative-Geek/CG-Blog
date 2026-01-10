@@ -31,6 +31,12 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   useEffect(() => {
     const root = window.document.documentElement;
     root.setAttribute("data-theme", theme);
+    // Also toggle .dark class for Tailwind's dark: variant utilities
+    if (theme === "dark") {
+      root.classList.add("dark");
+    } else {
+      root.classList.remove("dark");
+    }
     localStorage.setItem("theme", theme);
   }, [theme]);
 
