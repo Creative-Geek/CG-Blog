@@ -127,7 +127,7 @@ export default function ExperienceSection({
                         {/* Circular logo - half inside, half outside */}
                         {job.logo && (
                           <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 top-0 z-20">
-                            <div className="w-20 h-20 rounded-full border-4 border-background bg-white dark:bg-black overflow-hidden">
+                            <div className="w-20 h-20 rounded-full border-4 border-background bg-white {/*dark:bg-black*/} overflow-hidden">
                               <img
                                 src={resolveLogoUrl(job.logo)}
                                 alt={`${job.company || job.title} logo`}

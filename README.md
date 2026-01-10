@@ -61,8 +61,29 @@ See `.env.example` for all available options.
 4. Launch:
 
 ```bash
-npm install && npm run dev
+pnpm install
 ```
+
+**Development with production content:**
+
+```bash
+pnpm dev
+```
+
+This uses the `VITE_BASE_URL` from your `.env` file (pointing to your production/deployed content server).
+
+**Development with local content:**
+
+```bash
+pnpm dev:full
+```
+
+This starts **both**:
+
+- A local content server at `http://localhost:4000` serving your local content directory
+- The dev server at `http://localhost:3000` configured to use the local content
+
+By default, it serves from `../CG-Blog-Articles` relative to the project. You can modify `.env.fulldev` or the script arguments to change the content directory.
 
 Deploy the project to your vercel account:
 
