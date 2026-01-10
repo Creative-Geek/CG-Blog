@@ -66,13 +66,16 @@
     ],
     "experience": [
         {
-            "title": "Your Job Title - Company Name",
+            "title": "Your Job Title",
+            "company": "Company Name",
+            "logo": "https://example.com/logo.png",
             "date": "Month Year - Present",
             "description": "Brief description of your role and achievements.",
             "link": "https://company-website.com/"
         },
         {
-            "title": "Previous Job Title - Previous Company",
+            "title": "Previous Job Title",
+            "company": "Previous Company",
             "date": "Month Year - Month Year",
             "description": "Description of your responsibilities and accomplishments.",
             "link": "https://previous-company.com/"

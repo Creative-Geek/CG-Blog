@@ -11,6 +11,8 @@ interface ExperienceSectionProps {
   skills?: SkillCategory[];
   experience?: Array<{
     title: string;
+    company?: string;
+    logo?: string;
     date: string;
     description: string;
     link?: string;
@@ -111,31 +113,60 @@ export default function ExperienceSection({
                           : "md:ml-auto md:pl-8"
                       }`}
                     >
-                      <div className="bg-card border rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-200 hover:border-primary/20">
-                        <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-2 mb-3">
-                          {job.link ? (
-                            <a
-                              href={job.link}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="hover:opacity-80 transition-opacity"
-                            >
-                              <h3 className="text-xl font-semibold text-primary hover:text-primary/80 transition-colors">
-                                {job.title}
-                              </h3>
-                            </a>
-                          ) : (
-                            <h3 className="text-xl font-semibold text-primary">
-                              {job.title}
-                            </h3>
-                          )}
-                          <span className="text-sm text-muted-foreground bg-muted px-3 py-1 rounded-full whitespace-nowrap">
-                            {job.date}
-                          </span>
+                      {/* Wrapper for logo overflow */}
+                      <div className={`relative ${job.logo ? "pt-7" : ""}`}>
+                        {/* Circular logo - half inside, half outside */}
+                        {job.logo && (
+                          <div className="absolute left-1/2 transform -translate-x-1/2 -top-7 z-20">
+                            <div className="w-14 h-14 rounded-full border-4 border-background bg-white dark:bg-card shadow-lg overflow-hidden">
+                              <img
+                                src={job.logo}
+                                alt={`${job.company || job.title} logo`}
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                  // Hide logo container if image fails to load
+                                  (
+                                    e.target as HTMLImageElement
+                                  ).parentElement!.parentElement!.style.display =
+                                    "none";
+                                }}
+                              />
+                            </div>
+                          </div>
+                        )}
+                        <div className="bg-card border rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-200 hover:border-primary/20">
+                          <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-2 mb-3">
+                            <div>
+                              {job.link ? (
+                                <a
+                                  href={job.link}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="hover:opacity-80 transition-opacity"
+                                >
+                                  <h3 className="text-xl font-semibold text-primary hover:text-primary/80 transition-colors">
+                                    {job.title}
+                                  </h3>
+                                </a>
+                              ) : (
+                                <h3 className="text-xl font-semibold text-primary">
+                                  {job.title}
+                                </h3>
+                              )}
+                              {job.company && (
+                                <p className="text-sm italic text-muted-foreground/80 mt-0.5">
+                                  {job.company}
+                                </p>
+                              )}
+                            </div>
+                            <span className="text-sm text-muted-foreground bg-muted px-3 py-1 rounded-full whitespace-nowrap">
+                              {job.date}
+                            </span>
+                          </div>
+                          <p className="text-muted-foreground leading-relaxed">
+                            {job.description}
+                          </p>
                         </div>
-                        <p className="text-muted-foreground leading-relaxed">
-                          {job.description}
-                        </p>
                       </div>
                     </div>
                   </div>
