@@ -1,4 +1,13 @@
 import { Badge } from "../ui/badge";
+import { BASE_URL } from "~/config/constants";
+
+// Resolve logo URL - replaces ~ prefix with BASE_URL
+const resolveLogoUrl = (logo: string): string => {
+  if (logo.startsWith("~")) {
+    return logo.replace("~", BASE_URL);
+  }
+  return logo;
+};
 
 interface SkillCategory {
   category: string;
@@ -120,7 +129,7 @@ export default function ExperienceSection({
                           <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 top-0 z-20">
                             <div className="w-20 h-20 rounded-full border-4 border-background bg-white dark:bg-card shadow-lg overflow-hidden">
                               <img
-                                src={job.logo}
+                                src={resolveLogoUrl(job.logo)}
                                 alt={`${job.company || job.title} logo`}
                                 className="w-full h-full object-cover"
                                 onError={(e) => {
