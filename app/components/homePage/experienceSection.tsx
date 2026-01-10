@@ -114,11 +114,11 @@ export default function ExperienceSection({
                       }`}
                     >
                       {/* Wrapper for logo overflow */}
-                      <div className={`relative ${job.logo ? "pt-7" : ""}`}>
+                      <div className="relative">
                         {/* Circular logo - half inside, half outside */}
                         {job.logo && (
-                          <div className="absolute left-1/2 transform -translate-x-1/2 -top-7 z-20">
-                            <div className="w-14 h-14 rounded-full border-4 border-background bg-white dark:bg-card shadow-lg overflow-hidden">
+                          <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 top-0 z-20">
+                            <div className="w-20 h-20 rounded-full border-4 border-background bg-white dark:bg-card shadow-lg overflow-hidden">
                               <img
                                 src={job.logo}
                                 alt={`${job.company || job.title} logo`}
