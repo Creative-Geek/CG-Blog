@@ -117,9 +117,9 @@ export default function ExperienceSection({
                     {/* Content */}
                     <div
                       className={`ml-12 md:ml-0 md:w-5/12 ${
-                        index % 2 === 0
-                          ? "md:mr-auto md:pr-8"
-                          : "md:ml-auto md:pl-8"
+                        index % 2 === 0 ?
+                          "md:mr-auto md:pr-8"
+                        : "md:ml-auto md:pl-8"
                       }`}
                     >
                       {/* Wrapper for logo overflow */}
@@ -150,7 +150,7 @@ export default function ExperienceSection({
                         >
                           <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-2 mb-3">
                             <div>
-                              {job.link ? (
+                              {job.link ?
                                 <a
                                   href={job.link}
                                   target="_blank"
@@ -161,11 +161,10 @@ export default function ExperienceSection({
                                     {job.title}
                                   </h3>
                                 </a>
-                              ) : (
-                                <h3 className="text-xl font-semibold text-primary">
+                              : <h3 className="text-xl font-semibold text-primary">
                                   {job.title}
                                 </h3>
-                              )}
+                              }
                               {job.company && (
                                 <p className="text-sm italic text-muted-foreground/80 mt-0.5">
                                   {job.company}
@@ -176,7 +175,7 @@ export default function ExperienceSection({
                               {job.date}
                             </span>
                           </div>
-                          <p className="text-muted-foreground leading-relaxed">
+                          <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
                             {job.description}
                           </p>
                         </div>
