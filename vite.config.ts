@@ -33,6 +33,9 @@ export default defineConfig({
             if (id.includes('jspdf')) {
               return 'jspdf';
             }
+            if (id.includes('mermaid')) {
+              return 'mermaid';
+            }
           }
         },
       },

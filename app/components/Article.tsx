@@ -8,6 +8,7 @@ import React, { useState, useEffect } from "react";
 import slugify from "@sindresorhus/slugify";
 import { useToast } from "./ui/Toast";
 import { Button } from "./ui/button";
+import { MermaidDiagram } from "./ui/MermaidDiagram";
 import { Maximize2 } from "lucide-react";
 import { ImageModal, useImageModal } from "./ui/ImageModal";
 
@@ -253,6 +254,36 @@ const components: Components = {
     </a>
   ),
   pre: ({ children, ...props }): JSX.Element => {
+    const codeChild = React.Children.toArray(children).find((child) => {
+      return React.isValidElement(child) && child.type === "code";
+    }) as React.ReactElement<{
+      className?: string;
+      children?: ReactNode;
+      node?: {
+        properties?: {
+          className?: string | string[];
+        };
+      };
+    }> | null;
+
+    const codeClassName = codeChild?.props?.className || "";
+    const nodeClassName = codeChild?.props?.node?.properties?.className;
+    const mergedClassNames = [
+      codeClassName,
+      ...(Array.isArray(nodeClassName) ? nodeClassName : [nodeClassName || ""]),
+    ]
+      .join(" ")
+      .trim();
+
+    const isMermaid = mergedClassNames
+      .split(/\s+/)
+      .some((className) => className.trim() === "language-mermaid");
+
+    if (isMermaid) {
+      const chart = extractText(codeChild?.props?.children).trim();
+      return <MermaidDiagram chart={chart} />;
+    }
+
     const [copied, setCopied] = useState(false);
 
     const handleCopy = async () => {
@@ -271,7 +302,7 @@ const components: Components = {
           className="absolute right-2 top-2 p-2 rounded bg-foreground/10 hover:bg-foreground/20 transition-colors"
           aria-label="Copy code"
         >
-          {copied ? (
+          {copied ?
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -285,8 +316,7 @@ const components: Components = {
             >
               <polyline points="20 6 9 17 4 12"></polyline>
             </svg>
-          ) : (
-            <svg
+          : <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
               height="16"
@@ -300,7 +330,7 @@ const components: Components = {
               <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
               <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
             </svg>
-          )}
+          }
         </button>
         <pre {...props} className="mb-4 overflow-x-auto scrollbar-themed">
           {children}
@@ -310,7 +340,8 @@ const components: Components = {
   },
   code: ({ children, ...props }): JSX.Element => {
     const { showToast } = useToast();
-    const isInPre = props.className?.includes("language-");
+    const originalClassName = props.className || "";
+    const isInPre = originalClassName.includes("language-");
 
     const handleClick = async () => {
       if (isInPre) return;
@@ -324,7 +355,9 @@ const components: Components = {
         {...props}
         onClick={handleClick}
         className={
-          isInPre ? "whitespace-pre" : "cursor-pointer hover:bg-foreground/10"
+          isInPre ?
+            `${originalClassName} whitespace-pre`
+          : "cursor-pointer hover:bg-foreground/10"
         }
       >
         {children}
