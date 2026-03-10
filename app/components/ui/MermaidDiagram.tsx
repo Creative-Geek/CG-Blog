@@ -37,11 +37,11 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
         }
       } catch (err) {
         if (!isCancelled) {
-          setError(
+          const errorMsg =
             err instanceof Error ?
               err.message
-            : "Failed to render Mermaid diagram",
-          );
+            : "Failed to render Mermaid diagram";
+          setError(errorMsg);
           setSvg("");
         }
       } finally {

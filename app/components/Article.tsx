@@ -254,33 +254,18 @@ const components: Components = {
     </a>
   ),
   pre: ({ children, ...props }): JSX.Element => {
-    const codeChild = React.Children.toArray(children).find((child) => {
-      return React.isValidElement(child) && child.type === "code";
-    }) as React.ReactElement<{
-      className?: string;
-      children?: ReactNode;
-      node?: {
-        properties?: {
-          className?: string | string[];
-        };
-      };
-    }> | null;
-
-    const codeClassName = codeChild?.props?.className || "";
-    const nodeClassName = codeChild?.props?.node?.properties?.className;
-    const mergedClassNames = [
-      codeClassName,
-      ...(Array.isArray(nodeClassName) ? nodeClassName : [nodeClassName || ""]),
-    ]
-      .join(" ")
-      .trim();
-
-    const isMermaid = mergedClassNames
-      .split(/\s+/)
-      .some((className) => className.trim() === "language-mermaid");
+    // Extract language from code child's properties, not pre node
+    const node = (props as any).node;
+    const codeNode = node?.children?.[0];
+    const classNames = codeNode?.properties?.className || [];
+    const lang =
+      classNames
+        .find((c: string) => c.startsWith("language-"))
+        ?.replace("language-", "") || "";
+    const isMermaid = lang === "mermaid";
 
     if (isMermaid) {
-      const chart = extractText(codeChild?.props?.children).trim();
+      const chart = codeNode?.value || extractText(children).trim();
       return <MermaidDiagram chart={chart} />;
     }
 
