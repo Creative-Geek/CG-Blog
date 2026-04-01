@@ -11,6 +11,7 @@ import {
 
 import { BASE_URL } from "~/config/constants";
 import { cn } from "~/lib/utils";
+import { usePostHog } from "@posthog/react";
 
 interface ArticleCardProps {
   title?: string;
@@ -44,6 +45,7 @@ const ArticleCard = ({
   const isNavigating =
     navigation.state !== "idle" &&
     navigation.location?.pathname === `/blog/${articlePath}`;
+  const posthog = usePostHog();
 
   useEffect(() => {
     // If all metadata is provided, skip fetching
@@ -129,6 +131,14 @@ const ArticleCard = ({
         to={`/blog/${articlePath}`}
         className="block no-underline"
         aria-disabled={isNavigating}
+        onClick={() =>
+          posthog.capture("article_card_clicked", {
+            title: metadata.title,
+            author: metadata.author,
+            date: metadata.date,
+            path: articlePath,
+          })
+        }
       >
         {metadata.image && (
           <div className="relative">

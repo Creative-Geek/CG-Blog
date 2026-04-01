@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import { Button } from "../components/ui/button";
 import { useToast } from "../components/ui/Toast";
 import { generateArticleStructuredData } from "~/utils/structuredData";
+import { usePostHog } from "@posthog/react";
 
 // Lazy load PDF generation libraries
 const loadPdfLibraries = async () => {
@@ -172,10 +173,22 @@ export default function ViewArticle() {
   const [isPdfGenerating, setIsPdfGenerating] = useState(false);
   const articleRef = useRef<HTMLDivElement>(null);
   const { showToast } = useToast();
+  const posthog = usePostHog();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       setUrl(`${window.location.origin}${location.pathname}`);
+    }
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (articleData?.title) {
+      posthog.capture("article_viewed", {
+        title: articleData.title,
+        author: articleData.author,
+        date: articleData.date,
+        path: location.pathname,
+      });
     }
   }, [location.pathname]);
 
@@ -319,6 +332,11 @@ export default function ViewArticle() {
       document.body.removeChild(clone);
       document.head.removeChild(tempStyles);
 
+      posthog.capture("article_pdf_downloaded", {
+        title: articleData.title,
+        author: articleData.author,
+        path: location.pathname,
+      });
       showToast("PDF downloaded successfully!");
     } catch (err) {
       console.error("Error generating PDF:", err);

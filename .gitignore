@@ -15,3 +15,7 @@ test-metadata.html
 .env.local
 .env.*.local
 .env.fulldev
+.agents
+.claude
+.pnpm-store
+posthog-setup-report.md

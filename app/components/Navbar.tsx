@@ -28,6 +28,7 @@ import {
   LINKEDIN_URL,
   RESUME_URL,
 } from "../config/constants";
+import { usePostHog } from "@posthog/react";
 
 // Cache resume check result for the session
 let resumeCheckCache: boolean | null = null;
@@ -75,6 +76,7 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const [resumeExists, setResumeExists] = useState(!CHECK_RESUME_EXISTS);
   const [isScrolled, setIsScrolled] = useState(false);
+  const posthog = usePostHog();
 
   useEffect(() => {
     if (CHECK_RESUME_EXISTS) {
@@ -173,6 +175,12 @@ export function Navbar() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 text-sm font-medium p-2 hover:bg-accent rounded-md transition-colors"
+                    onClick={() =>
+                      posthog.capture("social_link_clicked", {
+                        platform: "github",
+                        location: "mobile_menu",
+                      })
+                    }
                   >
                     <Github className="h-4 w-4" />
                     <span>GitHub Profile</span>
@@ -184,6 +192,12 @@ export function Navbar() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 text-sm font-medium p-2 hover:bg-accent rounded-md transition-colors"
+                    onClick={() =>
+                      posthog.capture("social_link_clicked", {
+                        platform: "linkedin",
+                        location: "mobile_menu",
+                      })
+                    }
                   >
                     <Linkedin className="h-4 w-4" />
                     <span>LinkedIn Profile</span>
@@ -239,7 +253,17 @@ export function Navbar() {
               className="hidden md:flex w-9 h-9"
               asChild
             >
-              <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
+              <a
+                href={GITHUB_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() =>
+                  posthog.capture("social_link_clicked", {
+                    platform: "github",
+                    location: "navbar",
+                  })
+                }
+              >
                 <Github className="h-4 w-4" />
               </a>
             </Button>
@@ -251,7 +275,17 @@ export function Navbar() {
               className="hidden md:flex w-9 h-9"
               asChild
             >
-              <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer">
+              <a
+                href={LINKEDIN_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() =>
+                  posthog.capture("social_link_clicked", {
+                    platform: "linkedin",
+                    location: "navbar",
+                  })
+                }
+              >
                 <Linkedin className="h-4 w-4" />
               </a>
             </Button>
@@ -268,6 +302,7 @@ export function Navbar() {
               target="_blank"
               rel="noopener noreferrer"
               className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2 h-9 px-4 py-2 text-sm"
+              onClick={() => posthog.capture("resume_downloaded")}
             >
               <Download className="h-4 w-4" />
               <span className="md:hidden">Résumé</span>

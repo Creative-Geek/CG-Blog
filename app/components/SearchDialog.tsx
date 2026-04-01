@@ -12,6 +12,7 @@ import {
 import { Input } from "~/components/ui/input";
 import { Switch } from "~/components/ui/switch";
 import { Search, Loader2, FileText } from "lucide-react";
+import { usePostHog } from "@posthog/react";
 
 interface SearchDialogProps {
   open: boolean;
@@ -58,6 +59,7 @@ export default function SearchDialog({
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const navigate = useNavigate();
   const resultRefs = useRef<(HTMLAnchorElement | null)[]>([]);
+  const posthog = usePostHog();
 
   // Perform search when query changes or search content option changes
   useEffect(() => {
@@ -72,6 +74,11 @@ export default function SearchDialog({
         const { articles, error } = await searchArticles(query, searchContent);
         setResults(articles);
         setError(error);
+        posthog.capture("article_searched", {
+          query,
+          search_content: searchContent,
+          result_count: articles.length,
+        });
       } catch (err) {
         setError("Failed to search articles");
         setResults([]);
@@ -153,6 +160,13 @@ export default function SearchDialog({
       e.preventDefault();
       const selectedArticle = results[selectedIndex];
       if (selectedArticle) {
+        posthog.capture("search_result_clicked", {
+          query,
+          article_name: selectedArticle.name,
+          article_title: selectedArticle.title,
+          result_index: selectedIndex,
+          via: "keyboard",
+        });
         onOpenChange(false);
         navigate(`/blog/${selectedArticle.name}`);
       }
@@ -231,7 +245,16 @@ export default function SearchDialog({
                         resultRefs.current[index] = el;
                       }}
                       to={`/blog/${article.name}`}
-                      onClick={() => onOpenChange(false)}
+                      onClick={() => {
+                        posthog.capture("search_result_clicked", {
+                          query,
+                          article_name: article.name,
+                          article_title: article.title,
+                          result_index: index,
+                          via: "click",
+                        });
+                        onOpenChange(false);
+                      }}
                       className={`block p-3 rounded-md border transition-colors ${
                         selectedIndex === index
                           ? "bg-accent/70 border-primary/50"

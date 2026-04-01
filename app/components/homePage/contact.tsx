@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { BASE_URL } from "~/config/constants";
 import { Button } from "~/components/ui/button";
+import { usePostHog } from "@posthog/react";
 
 interface ContactProps {
   loading?: boolean;
@@ -10,6 +11,8 @@ interface ContactProps {
 }
 
 export default function Contact({ loading, title, text, buttonLink }: ContactProps) {
+  const posthog = usePostHog();
+
   if (loading) {
     return (
       <section className="container py-16">
@@ -30,7 +33,14 @@ export default function Contact({ loading, title, text, buttonLink }: ContactPro
         <h2 className="text-3xl font-bold tracking-tighter">{title}</h2>
         <p className="text-lg text-muted-foreground">{text}</p>
         <Button asChild size="lg">
-          <a href={buttonLink}>Contact Me</a>
+          <a
+            href={buttonLink}
+            onClick={() =>
+              posthog.capture("contact_clicked", { button_link: buttonLink })
+            }
+          >
+            Contact Me
+          </a>
         </Button>
       </div>
     </section>
