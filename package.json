@@ -17,8 +17,8 @@
     "@radix-ui/react-navigation-menu": "^1.2.14",
     "@radix-ui/react-slot": "^1.2.4",
     "@radix-ui/react-switch": "^1.2.6",
-    "@react-router/node": "^7.9.6",
-    "@react-router/serve": "^7.9.6",
+    "@react-router/node": "^7.12.0",
+    "@react-router/serve": "^7.12.0",
     "@sindresorhus/slugify": "^2.2.1",
     "@types/lodash": "^4.17.20",
     "@vercel/analytics": "^1.5.0",
@@ -29,7 +29,7 @@
     "gsap": "^3.13.0",
     "html2canvas": "^1.4.1",
     "isbot": "^5.1.32",
-    "jspdf": "^4.0.0",
+    "jspdf": "^4.2.1",
     "lucide-react": "^0.470.0",
     "mermaid": "^11.13.0",
     "motion": "^12.23.24",
@@ -39,13 +39,13 @@
     "react-intersection-observer": "^9.16.0",
     "react-markdown": "^9.1.0",
     "react-router": "^7.12.0",
-    "react-router-dom": "^7.9.6",
+    "react-router-dom": "^7.12.0",
     "remark-gfm": "^4.0.1",
     "tailwind-merge": "^3.4.0",
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
-    "@react-router/dev": "^7.9.6",
+    "@react-router/dev": "^7.12.0",
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.1.17",
     "@types/node": "^20.19.25",
@@ -67,12 +67,21 @@
     ],
     "overrides": {
       "diff": ">=5.2.2",
+      "dompurify": ">=3.3.3",
       "esbuild": ">=0.25.0",
       "glob": ">=11.1.0",
-      "lodash": ">=4.17.23",
+      "lodash": ">=4.18.0",
+      "lodash-es": ">=4.18.0",
       "mdast-util-to-hast": ">=13.2.1",
+      "minimatch@9": "9.0.9",
+      "minimatch@10": "10.2.5",
+      "path-to-regexp": "0.1.13",
+      "picomatch": ">=4.0.4",
       "qs": ">=6.14.1",
-      "valibot": ">=1.2.0"
+      "react-router": ">=7.12.0",
+      "rollup": ">=4.59.0",
+      "valibot": ">=1.2.0",
+      "yaml@1": "1.10.3"
     }
   }
 }
